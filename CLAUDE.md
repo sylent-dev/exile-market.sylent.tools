@@ -126,7 +126,7 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 - Before committing, make sure `npm run check` passes:
   - the formatter (Prettier) and the linters (`astro check`, ESLint, Stylelint);
   - the production build, without errors or warnings;
-  - linkinator on the built site, and `scripts/check-urls.mjs`: every former URL resolves (page or redirect), the redirect, not-found and sitemap are right, every page has its Open Graph tags;
+  - linkinator on the built site, and `scripts/check-urls.mjs`: every former URL resolves (page or redirect), the redirect, not-found and sitemap are right, every page has its Open Graph tags, every link to another site opens in a new tab and says so to screen readers;
   - `scripts/check-overflow.mjs`: no page is wider than a phone or computer screen, and no element marked `data-one-line` breaks on two lines.
   - `scripts/check-button-line.mjs`: the red line of the outlined buttons covers their border under the pointer.
 - The same checks run in CI (`.github/workflows/ci.yml`) on every pull request.

@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5d. The donation banner
+
+Pull request: [#27](https://github.com/sylent-dev/exile-market.sylent.tools/pull/27).
+
+The line above the header of the home page and of the legal notice, as designed (`docs/branding.md`, Components), its words in `src/i18n/`, the link to Ko-fi chosen by step 18 of the application, Ko-fi and the reply of Grinding Gear Games in `docs/external-services.md`. Turned on at once by the owner, before the legal notice follows article 1-1, I (step 5e), on 2026-11-14. Tools: build, code review.
+
 ## Fix. The border of the buttons under the pointer
 
 Pull request: [#26](https://github.com/sylent-dev/exile-market.sylent.tools/pull/26).

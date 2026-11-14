@@ -7,18 +7,22 @@
 // on one line (src/styles/tokens.css, --first-screen-rest). An aside, named for screen readers.
 import { donationPage } from "../lib/application";
 import { type Lang, ui } from "../lib/i18n";
+import ExternalLink from "./external-link.astro";
 
 interface Props {
   lang: Lang;
 }
 
-const { donation } = ui(Astro.props.lang);
+const { lang } = Astro.props;
+const { donation } = ui(lang);
 ---
 
 <aside class="donation-banner" aria-label={donation.label}>
   <p data-one-line="360">
     <span>{donation.free}</span>
-    <a href={donationPage}>{donation.support}</a>
+    <ExternalLink href={donationPage} pageLang={lang}>
+      {donation.support}
+    </ExternalLink>
   </p>
 </aside>
 

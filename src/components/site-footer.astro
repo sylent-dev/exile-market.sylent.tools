@@ -4,6 +4,7 @@
 // not-found page, which holds both languages and has no twin, keeps only the name and the author.
 import { repository } from "../lib/application";
 import { type Lang, type PageId, routes, ui } from "../lib/i18n";
+import ExternalLink from "./external-link.astro";
 import { href } from "../lib/url";
 
 interface Props {
@@ -24,12 +25,17 @@ const texts = ui(lang);
             <a href={href(routes.legal[lang])}>{texts.footer.legal}</a>
           </li>
           <li>
-            <a href={repository}>{texts.footer.sourceCode}</a>
+            <ExternalLink href={repository} pageLang={lang}>
+              {texts.footer.sourceCode}
+            </ExternalLink>
           </li>
           <li>
-            <a href={`${repository}/blob/main/LICENSE`}>
+            <ExternalLink
+              href={`${repository}/blob/main/LICENSE`}
+              pageLang={lang}
+            >
               {texts.footer.license}
-            </a>
+            </ExternalLink>
           </li>
         </ul>
         <p>{texts.footer.disclaimer}</p>
@@ -37,9 +43,14 @@ const texts = ui(lang);
     )}
     <p class:list={["site-brand", "footer-brand", { "is-alone": !page }]}>
       {texts.site.name}
-      <a class="footer-by" href="https://sylent.art" hreflang="fr">
+      <ExternalLink
+        class="footer-by"
+        href="https://sylent.art"
+        hreflang="fr"
+        pageLang={lang}
+      >
         {texts.footer.author}
-      </a>
+      </ExternalLink>
     </p>
   </div>
 </footer>

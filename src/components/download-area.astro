@@ -4,13 +4,16 @@
 // before the first paint, so that a phone never sees the buttons appear then leave.
 import type en from "../content/en/home.json";
 import { downloads, downloadsOpen, releases } from "../lib/application";
+import type { Lang } from "../lib/i18n";
+import ExternalLink from "./external-link.astro";
 import OutlineButton from "./outline-button.astro";
 
 interface Props {
+  lang: Lang;
   texts: (typeof en)["download"];
 }
 
-const { texts } = Astro.props;
+const { lang, texts } = Astro.props;
 ---
 
 {downloadsOpen ? (
@@ -24,7 +27,9 @@ const { texts } = Astro.props;
       </div>
       <ul class="download-links">
         <li>
-          <a href={releases}>{texts.versions}</a>
+          <ExternalLink href={releases} pageLang={lang}>
+            {texts.versions}
+          </ExternalLink>
         </li>
         <li>
           <a href="#risk">{texts.risk}</a>
@@ -49,7 +54,9 @@ const { texts } = Astro.props;
             <a href="#risk">{texts.risk}</a>
           </li>
           <li>
-            <a href={releases}>{texts.versions}</a>
+            <ExternalLink href={releases} pageLang={lang}>
+              {texts.versions}
+            </ExternalLink>
           </li>
         </ul>
       </template>

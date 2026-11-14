@@ -12,13 +12,17 @@
 //   engines (hreflang), and links to the other language, each page pointing back to the other;
 // - every GitHub link leads to the repository of src/lib/application.ts, or to an address of
 //   `otherGithubLinks`: linkinator skips the external links, so an account renamed and claimed
-//   by someone else would go unnoticed.
+//   by someone else would go unnoticed;
+// - every link to another site opens in a new tab and says so to screen readers, in the language
+//   of the page (src/lib/external-link.ts), except the download buttons, which start a file.
 // Run after `npm run build`, or on a build under a base: `node scripts/check-urls.mjs <folder> <base>`.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import notFoundEn from "../src/content/en/not-found.json" with { type: "json" };
 import notFoundFr from "../src/content/fr/not-found.json" with { type: "json" };
 import urls from "../src/data/urls.json" with { type: "json" };
+import uiEn from "../src/i18n/en.json" with { type: "json" };
+import uiFr from "../src/i18n/fr.json" with { type: "json" };
 
 const [dist = "dist", base = ""] = process.argv.slice(2);
 
@@ -31,6 +35,33 @@ if (!repository) throw new Error("no repository in src/lib/application.ts");
 const otherGithubLinks = [
   "https://github.com/mrdoob/three.js/blob/dev/LICENSE",
 ];
+
+/** What a screen reader hears at the end of a link to another site, in each language. */
+const newTabNotes = { en: uiEn.newTab, fr: uiFr.newTab };
+
+/** The links of a page to another site that don't open in a new tab, announced. */
+const newTabErrors = (file, html, siteOrigin) => {
+  const lang = html.match(/<html[^>]* lang="([^"]+)"/)?.[1];
+  const note = `(${newTabNotes[lang]})`;
+  const found = [];
+  for (const [, attributes, text] of html.matchAll(
+    /<a\b([^>]*)>([\s\S]*?)<\/a>/g,
+  )) {
+    const link = attributes.match(/href="(https?:\/\/[^"]+)"/)?.[1];
+    if (!link || new URL(link).origin === siteOrigin) continue;
+    if (link.includes("/releases/latest/download/")) continue;
+    const opensNewTab =
+      / target="_blank"/.test(attributes) && / rel="noopener"/.test(attributes);
+    // The note ends the link, hidden from the screen: screen readers only hear it.
+    const hiddenNote = `<span class="visually-hidden"> ${note}</span>`;
+    if (!opensNewTab || !text.trim().endsWith(hiddenNote)) {
+      found.push(
+        `${file}: ${link} must open in a new tab and end with « ${note} » for screen readers only`,
+      );
+    }
+  }
+  return found;
+};
 
 /** The file that GitHub Pages serves for a URL path, as written by Astro. */
 const fileOf = (path) => join(dist, path, "index.html");
@@ -202,6 +233,7 @@ for (const file of htmlFiles) {
       errors.push(`${file}: ${link} leads outside ${repository}`);
     }
   }
+  if (image) errors.push(...newTabErrors(file, html, new URL(image).origin));
   if (file === "404.html") notFoundErrors(file, html);
   else languageErrors(file, html, canonical);
 }
