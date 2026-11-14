@@ -18,7 +18,6 @@ export const downloadsOpen: boolean = true;
 // The donation page of the application (its step 18): Ko-fi, under the name « Sylent ».
 export const donationPage = "https://ko-fi.com/sylentdev";
 
-// The banner above the header links to it once this is true. It stays false as long as the legal
-// notice says the site is published on a non-professional basis: the donations are revenue of the
-// owner's individual business (docs/external-services.md, Legal notice).
-export const donationsOpen: boolean = false;
+// The banner above the header links to it while this is true (docs/external-services.md, Legal
+// notice, for the notice it calls for).
+export const donationsOpen: boolean = true;

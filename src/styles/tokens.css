@@ -114,16 +114,19 @@
   --grid-fade: linear-gradient(to bottom, #000000 20%, transparent 50%);
 
   /* What the first screen holds besides the video, and the title of the next block. The sizes of
-     the still image (home-page.astro) repeat these two values and the gutters, since an HTML
+     the still image (hero-video.astro) repeat these values and the gutters, since an HTML
      attribute can't read a variable: change them together. */
-  --first-screen-rest: 380px;
+  --first-screen-base: 380px;
+  --first-screen-rest: var(--first-screen-base);
   --video-ceiling: 960px;
 }
 
 /* The donation banner and its border take their height from the video, so that the title of the
    next block stays on the first screen. */
 :root:has(.donation-banner) {
-  --first-screen-rest: calc(380px + var(--height-donation-banner) + 1px);
+  --first-screen-rest: calc(
+    var(--first-screen-base) + var(--height-donation-banner) + 1px
+  );
 }
 
 @media (width <= 720px) {

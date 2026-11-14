@@ -2,7 +2,9 @@
 // The donation banner, one thin line above the header (docs/branding.md, Components): the
 // sentence in grey, then the link to the donation page in red, white under the pointer or the
 // keyboard focus. Its 700 weight, not only its hue, tells the link from the text around it
-// (WCAG 1.4.1). On a screen too narrow for one line, the link goes to a second one, whole.
+// (WCAG 1.4.1). On a screen too narrow for one line, the link goes to a second one, whole: from
+// 360 px, scripts/check-overflow.mjs fails if it does, since the height of the first screen counts
+// on one line (src/styles/tokens.css, --first-screen-rest). An aside, named for screen readers.
 import { donationPage } from "../lib/application";
 import { type Lang, ui } from "../lib/i18n";
 
@@ -13,12 +15,12 @@ interface Props {
 const { donation } = ui(Astro.props.lang);
 ---
 
-<div class="donation-banner">
-  <p>
+<aside class="donation-banner" aria-label={donation.label}>
+  <p data-one-line="360">
     <span>{donation.free}</span>
     <a href={donationPage}>{donation.support}</a>
   </p>
-</div>
+</aside>
 
 <style>
   .donation-banner {
@@ -50,7 +52,10 @@ const { donation } = ui(Astro.props.lang);
     white-space: nowrap;
   }
 
+  /* A taller target for a finger, without a taller banner. */
   a {
+    margin-block: calc(-1 * var(--space-2));
+    padding-block: var(--space-2);
     color: var(--color-accent);
     font-weight: 700;
     text-decoration: none;
