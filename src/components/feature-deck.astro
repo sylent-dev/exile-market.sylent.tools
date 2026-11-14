@@ -10,6 +10,7 @@ import copyFr from "../assets/screens/fr/copy.png";
 import filtersFr from "../assets/screens/fr/filters.png";
 import priceFr from "../assets/screens/fr/price.png";
 import type en from "../content/en/home.json";
+import { withNewTabs } from "../lib/external-link";
 import type { Lang } from "../lib/i18n";
 
 interface Props {
@@ -52,7 +53,7 @@ const inFront = 1;
     {cards.map(({ title, body }, index) => (
       <div class="deck-text" hidden={index !== inFront} data-deck-text>
         <h3>{title}</h3>
-        <p set:html={body} />
+        <p set:html={withNewTabs(body, lang)} />
       </div>
     ))}
   </div>

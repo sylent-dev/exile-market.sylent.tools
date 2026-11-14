@@ -1,0 +1,20 @@
+---
+// A link to another site: it opens in a new tab and says so to screen readers
+// (src/lib/external-link.ts).
+import type { HTMLAttributes } from "astro/types";
+import { newTab, newTabNote } from "../lib/external-link";
+import type { Lang } from "../lib/i18n";
+
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+  lang: Lang;
+}
+
+// The language of the page, not of the link: a link may carry its own (hreflang).
+const { lang, ...attributes } = Astro.props;
+---
+
+<a {...attributes} {...newTab}>
+  <slot />
+  <Fragment set:html={newTabNote(lang)} />
+</a>

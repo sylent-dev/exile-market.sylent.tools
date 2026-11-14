@@ -80,8 +80,8 @@ const widest = async (page) => {
 
 // The elements marked data-one-line that take more than one line or whose text is cut, at the
 // widths where they must hold. An element kept on one line by CSS can't wrap: its text then runs
-// past its box, so the text is measured, against the first ancestor that clips it. Runs in the
-// page.
+// past its box, so the text is measured, against the first ancestor that clips it; the text for
+// screen readers only (.visually-hidden) isn't drawn, so it isn't measured. Runs in the page.
 const wrapped = () =>
   [...document.querySelectorAll("[data-one-line]")].flatMap((element) => {
     const screen = document.documentElement.clientWidth;
@@ -93,7 +93,14 @@ const wrapped = () =>
     const text = element.textContent.trim();
     if (lines > 1) return [`« ${text} » on ${lines} lines`];
     const range = document.createRange();
-    range.selectNodeContents(element);
+    let right = 0;
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      if (walker.currentNode.parentElement.closest(".visually-hidden"))
+        continue;
+      range.selectNodeContents(walker.currentNode);
+      right = Math.max(right, range.getBoundingClientRect().right);
+    }
     let limit = screen;
     for (let box = element.parentElement; box; box = box.parentElement) {
       if (getComputedStyle(box).overflowX !== "visible") {
@@ -101,9 +108,7 @@ const wrapped = () =>
         break;
       }
     }
-    return range.getBoundingClientRect().right > limit
-      ? [`« ${text} » cut at ${Math.round(limit)} px`]
-      : [];
+    return right > limit ? [`« ${text} » cut at ${Math.round(limit)} px`] : [];
   });
 
 const pages = pagesOf(dist);

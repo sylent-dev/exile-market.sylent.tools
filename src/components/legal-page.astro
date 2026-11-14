@@ -7,6 +7,7 @@ import en from "../content/en/legal.json";
 import fr from "../content/fr/legal.json";
 import SiteLayout from "../layouts/site-layout.astro";
 import { issues } from "../lib/application";
+import { withNewTabs } from "../lib/external-link";
 import { type Lang, routes } from "../lib/i18n";
 import { href } from "../lib/url";
 import OutlineButton from "./outline-button.astro";
@@ -38,7 +39,12 @@ const page = pages[lang];
           <section>
             <h2>{heading}</h2>
             {lines.map((line) => (
-              <p set:html={line.replaceAll("{issues}", issues)} />
+              <p
+                set:html={withNewTabs(
+                  line.replaceAll("{issues}", issues),
+                  lang,
+                )}
+              />
             ))}
           </section>
         ))}

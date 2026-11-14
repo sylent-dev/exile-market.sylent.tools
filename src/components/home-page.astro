@@ -6,8 +6,10 @@ import en from "../content/en/home.json";
 import fr from "../content/fr/home.json";
 import SiteLayout from "../layouts/site-layout.astro";
 import { issues } from "../lib/application";
+import { withNewTabs } from "../lib/external-link";
 import type { Lang } from "../lib/i18n";
 import DownloadArea from "./download-area.astro";
+import ExternalLink from "./external-link.astro";
 import FeatureDeck from "./feature-deck.astro";
 import HeroBurst from "./hero-burst.astro";
 import HeroVideo from "./hero-video.astro";
@@ -36,7 +38,7 @@ const page = pages[lang];
           <span class="hero-price">{page.headline.end}</span>
         </h1>
         <p class="hero-subtitle">{page.subtitle}</p>
-        <DownloadArea texts={page.download} />
+        <DownloadArea lang={lang} texts={page.download} />
         <HeroVideo lang={lang} texts={page.video} />
       </section>
     </div>
@@ -73,7 +75,7 @@ const page = pages[lang];
         <h2 class="band-heading">{page.computer.heading}</h2>
         <ul class="trust-list">
           {page.computer.items.map((item) => (
-            <li set:html={item} />
+            <li set:html={withNewTabs(item, lang)} />
           ))}
         </ul>
       </div>
@@ -85,7 +87,7 @@ const page = pages[lang];
               <h3>{question}</h3>
               <div class:list={{ "risk-text": id === "risk" }}>
                 {answers.map((answer) => (
-                  <p set:html={answer} />
+                  <p set:html={withNewTabs(answer, lang)} />
                 ))}
               </div>
             </div>
@@ -101,7 +103,9 @@ const page = pages[lang];
       <p class="band-statement is-help">
         <span>{page.help.question}</span>{" "}
         <span>
-          <a href={issues}>{page.help.link}</a>
+          <ExternalLink href={issues} lang={lang}>
+            {page.help.link}
+          </ExternalLink>
           {page.help.rest}
         </span>
       </p>
