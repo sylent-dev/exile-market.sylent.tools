@@ -7,6 +7,10 @@
   },
   "languageName": "English",
   "skipLink": "Skip to content",
+  "donation": {
+    "free": "Exile Market is free.",
+    "support": "Support it on Ko-fi"
+  },
   "footer": {
     "legal": "Legal notice",
     "sourceCode": "Source code",

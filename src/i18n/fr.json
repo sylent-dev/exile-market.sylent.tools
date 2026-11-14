@@ -7,6 +7,10 @@
   },
   "languageName": "Français",
   "skipLink": "Aller au contenu",
+  "donation": {
+    "free": "Exile Market est gratuit.",
+    "support": "Soutenez-le sur Ko-fi"
+  },
   "footer": {
     "legal": "Mentions légales",
     "sourceCode": "Code source",

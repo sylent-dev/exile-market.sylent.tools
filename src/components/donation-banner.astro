@@ -1,0 +1,63 @@
+---
+// The donation banner, one thin line above the header (docs/branding.md, Components): the
+// sentence in grey, then the link to the donation page in red, white under the pointer or the
+// keyboard focus. Its 700 weight, not only its hue, tells the link from the text around it
+// (WCAG 1.4.1). On a screen too narrow for one line, the link goes to a second one, whole.
+import { donationPage } from "../lib/application";
+import { type Lang, ui } from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { donation } = ui(Astro.props.lang);
+---
+
+<div class="donation-banner">
+  <p>
+    <span>{donation.free}</span>
+    <a href={donationPage}>{donation.support}</a>
+  </p>
+</div>
+
+<style>
+  .donation-banner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--height-donation-banner);
+    padding: var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text-faint);
+    font-size: var(--size-label);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    justify-content: center;
+    margin: 0;
+  }
+
+  span,
+  a {
+    white-space: nowrap;
+  }
+
+  a {
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--color-text);
+  }
+</style>
