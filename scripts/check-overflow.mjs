@@ -56,7 +56,7 @@ const { origin, close } = await serveDist(dist);
 // once: a smooth scrolling would only start a scroll that the next step interrupts. The steps and
 // the waits are driven from here, since a page without JavaScript runs no timer of its own; the
 // functions given to page.evaluate run in the page, with the globals of the browser.
-/* global document, getComputedStyle, innerHeight, scrollTo */
+/* global document, getComputedStyle, innerHeight, NodeFilter, scrollTo */
 const widest = async (page) => {
   await page.evaluate(async () => {
     await document.fonts.ready;
