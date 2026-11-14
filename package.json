@@ -16,7 +16,8 @@
     "lint": "astro check && eslint . && stylelint \"**/*.{css,astro}\"",
     "check:links": "linkinator dist && node scripts/check-urls.mjs",
     "check:overflow": "node scripts/check-overflow.mjs",
-    "check": "npm run format:check && npm run lint && npm run build && npm run check:links && npm run check:overflow",
+    "check:buttons": "node scripts/check-button-line.mjs",
+    "check": "npm run format:check && npm run lint && npm run build && npm run check:links && npm run check:overflow && npm run check:buttons",
     "brand:images": "node scripts/brand-images.mjs"
   },
   "dependencies": {

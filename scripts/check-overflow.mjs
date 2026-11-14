@@ -7,16 +7,10 @@
 // gives the width of the screen from which it must hold (`data-one-line="345"`).
 // Run after `npm run build`: `node scripts/check-overflow.mjs [dist]`. Install the browser once
 // with `npx playwright install --only-shell chromium`.
-import {
-  createReadStream,
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from "node:fs";
-import { createServer } from "node:http";
-import { extname, join, relative, sep } from "node:path";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join, relative, sep } from "node:path";
 import { chromium, devices } from "playwright";
+import { serveDist } from "./serve-dist.mjs";
 
 const [dist = "dist"] = process.argv.slice(2);
 
@@ -40,19 +34,6 @@ const screens = [
   ...desktops.map((width) => ({ width, phone: false, name: `${width} px` })),
 ];
 
-const types = {
-  ".html": "text/html",
-  ".css": "text/css",
-  ".js": "text/javascript",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".webp": "image/webp",
-  ".webm": "video/webm",
-  ".mp4": "video/mp4",
-  ".woff2": "font/woff2",
-};
-
 /**
  * Every page of the site, as its URL path, the not-found page (404.html) included: the redirect
  * pages are left out.
@@ -69,23 +50,7 @@ const pagesOf = (folder) =>
     return [parent ? `/${parent}/` : "/"];
   });
 
-// A static server, as GitHub Pages serves dist/: a folder serves its index.html.
-const server = createServer((request, response) => {
-  let path = join(dist, decodeURIComponent(request.url.split("?")[0]));
-  if (existsSync(path) && statSync(path).isDirectory()) {
-    path = join(path, "index.html");
-  }
-  if (!existsSync(path)) {
-    response.writeHead(404).end();
-    return;
-  }
-  response.writeHead(200, {
-    "content-type": types[extname(path)] ?? "application/octet-stream",
-  });
-  createReadStream(path).pipe(response);
-});
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const origin = `http://127.0.0.1:${server.address().port}`;
+const { origin, close } = await serveDist(dist);
 
 // Scrolls the page down to the bottom and returns the largest width it reached. Each step jumps at
 // once: a smooth scrolling would only start a scroll that the next step interrupts. The steps and
@@ -194,7 +159,7 @@ try {
   }
 } finally {
   await browser.close();
-  server.close();
+  close();
 }
 
 if (errors.length > 0) {
