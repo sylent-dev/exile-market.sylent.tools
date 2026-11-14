@@ -14,8 +14,6 @@ What is noted and not being done: an evolving list, read when the next work is c
 
 ## Edge cases
 
-- A domiciliation address, and the partial diffusion of the owner's record in the public register of companies (INSEE), before the notice goes back to a professional publisher: needed if the donations become revenue of the owner's individual business (`docs/external-services.md`, Legal notice). Depends on: the answer of the tax office on the donations (step 18 of the application). Noted on 2026-11-14.
-
 - The sources of the video out of Git: its card and the ten small screens of its fan are read from `outputs/2026-11-06-video/assets/` (`docs/mockups/video/lib.js`), so the video can't be made again if `outputs/` is emptied. Depends on: the skill for the videos, at the retrospective (step 6). Noted on 2026-11-13.
 
 - The video of the page on a real iPhone and in Safari: it starts, no black flash before its first image, Low Power Mode (if iOS draws its own play triangle, hide it with `::-webkit-media-controls-start-playback-button`). Left out of the launch by the owner on 2026-11-09, since the application doesn't address those visitors. Depends on: access to an iPhone or a Mac. Noted on 2026-11-09.
@@ -23,8 +21,6 @@ What is noted and not being done: an evolving list, read when the next work is c
 - A Windows installer or a bare `.exe` instead of a `.zip`, if players stumble on the archive. Depends on: the feedback on v0.1 and the application's release workflow. Noted on 2026-11-06.
 
 ## Features
-
-- The donation banner, designed and ready to add (owner, 2026-11-08): one thin line above the header. Its design is in `docs/branding.md` (Components), and the mock-up shows it with the tab « Donation banner (later) ». Its words: « Exile Market is free. » and the link « Support it on Ko-fi »; « Exile Market est gratuit. » and the link « Soutenez-le sur Ko-fi ». To add then: the address of the donation page, the words in the content files, the service in `docs/external-services.md`. Depends on: step 18 of the application, which chooses the service (the words change if it isn't Ko-fi), and the conditions written in `roadmap.md` (Donations for its step 18). Noted on 2026-11-08.
 
 - An « I'm interested » button with an anonymous counter (no IP stored, at most a daily-salted hash). Depends on: a back-end or a third-party service, checked in `docs/external-services.md`. Noted on 2026-11-05.
 - A « notify me » email form with two separate unchecked consents (the release of the next versions, the news of the owner's next tools), an unsubscribe link in every mail, a service such as Buttondown, MailerLite or Brevo, and a privacy policy. Depends on: the choice of the service. Noted on 2026-11-05.

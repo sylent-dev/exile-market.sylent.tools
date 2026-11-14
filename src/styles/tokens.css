@@ -82,6 +82,7 @@
      font as in the mock-up (9 and 10 px at 16 px), while the text itself is as wide. */
   --width-text: 42.5em;
   --height-header: 56px;
+  --height-donation-banner: 36px;
   --size-top-button: 48px;
   --size-media-button: 32px;
   --size-media-button-large: 64px;
@@ -113,10 +114,19 @@
   --grid-fade: linear-gradient(to bottom, #000000 20%, transparent 50%);
 
   /* What the first screen holds besides the video, and the title of the next block. The sizes of
-     the still image (home-page.astro) repeat these two values and the gutters, since an HTML
+     the still image (hero-video.astro) repeat these values and the gutters, since an HTML
      attribute can't read a variable: change them together. */
-  --first-screen-rest: 380px;
+  --first-screen-base: 380px;
+  --first-screen-rest: var(--first-screen-base);
   --video-ceiling: 960px;
+}
+
+/* The donation banner and its border take their height from the video, so that the title of the
+   next block stays on the first screen. */
+:root:has(.donation-banner) {
+  --first-screen-rest: calc(
+    var(--first-screen-base) + var(--height-donation-banner) + 1px
+  );
 }
 
 @media (width <= 720px) {

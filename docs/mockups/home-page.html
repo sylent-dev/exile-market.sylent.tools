@@ -364,7 +364,6 @@
   };
   const VARIANTS = {
     page: { label: "Page", options: { home: "Home", legal: "Legal notice", notfound: "Not found" }, fallback: "home" },
-    donate: { label: "Donation banner (later)", options: { hidden: "Hidden (v0.1)", shown: "Shown" }, fallback: "hidden" },
     lang: { label: "Language", options: { en: "English", fr: "Français" }, fallback: "en" },
     device: { label: "Size", options: Object.fromEntries(Object.entries(DEVICES).map(([key, device]) => [key, device.label])), fallback: "laptop" },
     video: { label: "Video", options: { "hot-a2": "The deck", "normal-b": "The guided tour (kept, in case)", alone: "Simulated", grey: "Grey frames" }, fallback: "hot-a2" },
@@ -612,8 +611,8 @@
 
   const heading = title => `<div class="band-heading"><h2>${title}</h2></div>`;
 
-  // The donation banner, designed and kept for step 18 of the application (backlog.md): not built for v0.1, so hidden by default. The address of the Ko-fi page is not known yet.
-  const donateHtml = ({ donate: { free, support } }) => chosen.donate === "hidden" ? "" : `<div class="donate"><span class="donate-text"><span>${free}</span><a class="donate-link" href="#">${support}</a></span></div>`;
+  // The donation banner, built at step 5d: on every page but the not-found one, which holds both languages.
+  const donateHtml = ({ donate: { free, support } }) => chosen.page === "notfound" ? "" : `<div class="donate"><span class="donate-text"><span>${free}</span><a class="donate-link" href="https://ko-fi.com/sylentdev">${support}</a></span></div>`;
 
   // Loads the second font and gives it to the subtitle.
   function applyFont() {
