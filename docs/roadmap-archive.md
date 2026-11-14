@@ -2,6 +2,18 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## Fix. The border of the buttons under the pointer
+
+Pull request: [#26](https://github.com/sylent-dev/exile-market.sylent.tools/pull/26).
+
+An urgent fix, the white border drawn in SVG under the red line, and its check.
+
+## 5c. The downloads open
+
+Pull request: [#25](https://github.com/sylent-dev/exile-market.sylent.tools/pull/25).
+
+Once the tag is out and its archives answer, `downloadsOpen` turned on; `scripts/check-overflow.mjs` loads the phone widths with the identity of an iPhone, for good rather than for one pass (owner, 2026-11-14), so that every pull request measures the sentence of a phone and its address, and once more at 320 px without JavaScript, where the buttons stay and their labels are measured (code review). Tools: launch, code review.
+
 ## 5b3. The new username
 
 Pull request: [#24](https://github.com/sylent-dev/exile-market.sylent.tools/pull/24).
