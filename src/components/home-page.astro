@@ -103,7 +103,7 @@ const page = pages[lang];
       <p class="band-statement is-help">
         <span>{page.help.question}</span>{" "}
         <span>
-          <ExternalLink href={issues} lang={lang}>
+          <ExternalLink href={issues} pageLang={lang}>
             {page.help.link}
           </ExternalLink>
           {page.help.rest}

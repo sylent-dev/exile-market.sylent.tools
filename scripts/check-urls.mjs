@@ -52,8 +52,12 @@ const newTabErrors = (file, html, siteOrigin) => {
     if (link.includes("/releases/latest/download/")) continue;
     const opensNewTab =
       / target="_blank"/.test(attributes) && / rel="noopener"/.test(attributes);
-    if (!opensNewTab || !text.includes(note)) {
-      found.push(`${file}: ${link} must open in a new tab and say « ${note} »`);
+    // The note ends the link, hidden from the screen: screen readers only hear it.
+    const hiddenNote = `<span class="visually-hidden"> ${note}</span>`;
+    if (!opensNewTab || !text.trim().endsWith(hiddenNote)) {
+      found.push(
+        `${file}: ${link} must open in a new tab and end with « ${note} » for screen readers only`,
+      );
     }
   }
   return found;

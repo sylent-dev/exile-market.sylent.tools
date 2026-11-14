@@ -25,12 +25,15 @@ const texts = ui(lang);
             <a href={href(routes.legal[lang])}>{texts.footer.legal}</a>
           </li>
           <li>
-            <ExternalLink href={repository} lang={lang}>
+            <ExternalLink href={repository} pageLang={lang}>
               {texts.footer.sourceCode}
             </ExternalLink>
           </li>
           <li>
-            <ExternalLink href={`${repository}/blob/main/LICENSE`} lang={lang}>
+            <ExternalLink
+              href={`${repository}/blob/main/LICENSE`}
+              pageLang={lang}
+            >
               {texts.footer.license}
             </ExternalLink>
           </li>
@@ -44,7 +47,7 @@ const texts = ui(lang);
         class="footer-by"
         href="https://sylent.art"
         hreflang="fr"
-        lang={lang}
+        pageLang={lang}
       >
         {texts.footer.author}
       </ExternalLink>

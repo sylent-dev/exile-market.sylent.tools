@@ -27,7 +27,7 @@ const { lang, texts } = Astro.props;
       </div>
       <ul class="download-links">
         <li>
-          <ExternalLink href={releases} lang={lang}>
+          <ExternalLink href={releases} pageLang={lang}>
             {texts.versions}
           </ExternalLink>
         </li>
@@ -54,7 +54,7 @@ const { lang, texts } = Astro.props;
             <a href="#risk">{texts.risk}</a>
           </li>
           <li>
-            <ExternalLink href={releases} lang={lang}>
+            <ExternalLink href={releases} pageLang={lang}>
               {texts.versions}
             </ExternalLink>
           </li>
