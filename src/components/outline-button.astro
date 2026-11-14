@@ -1,7 +1,8 @@
 ---
 // An outlined link: the download buttons, and the way back to the home page. Under the pointer or
 // the keyboard focus, a red line with a glow draws itself clockwise over its border. `main` gives
-// it the white border of the main action.
+// it the white border of the main action. The label stays on one line, and the width check
+// (scripts/check-overflow.mjs) fails when it is cut.
 interface Props {
   href: string;
   main?: boolean;
@@ -11,7 +12,9 @@ const { href, main = false } = Astro.props;
 ---
 
 <a class:list={["outline-button", { "is-main": main }]} href={href}>
-  <slot />
+  <span data-one-line>
+    <slot />
+  </span>
   <svg class="button-line is-glow" aria-hidden="true">
     <rect pathLength="1"></rect>
   </svg>

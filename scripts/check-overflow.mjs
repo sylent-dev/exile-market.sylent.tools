@@ -16,7 +16,7 @@ import {
 } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, relative, sep } from "node:path";
-import { chromium } from "playwright";
+import { chromium, devices } from "playwright";
 
 const [dist = "dist"] = process.argv.slice(2);
 
@@ -24,6 +24,21 @@ const [dist = "dist"] = process.argv.slice(2);
 // and a large computer screen.
 const phones = [320, 360, 412];
 const desktops = [1024, 1440];
+
+// The phones call themselves an iPhone, as a real phone tells the page what it is: the download
+// area shows a phone its own sentence instead of the buttons (download-area.astro). A phone
+// without JavaScript keeps the buttons, so the narrowest one is also loaded without it.
+const phoneAgent = devices["iPhone 13 Mini"].userAgent;
+const screens = [
+  ...phones.map((width) => ({ width, phone: true, name: `${width} px` })),
+  {
+    width: phones[0],
+    phone: true,
+    javaScript: false,
+    name: `${phones[0]} px without JavaScript`,
+  },
+  ...desktops.map((width) => ({ width, phone: false, name: `${width} px` })),
+];
 
 const types = {
   ".html": "text/html",
@@ -72,19 +87,28 @@ const server = createServer((request, response) => {
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 const origin = `http://127.0.0.1:${server.address().port}`;
 
-// Scrolls the page down to the bottom and returns the largest width it reached. It runs in the
-// page, with the globals of the browser. Each step jumps at once: a smooth scrolling would only
-// start a scroll that the next step interrupts.
+// Scrolls the page down to the bottom and returns the largest width it reached. Each step jumps at
+// once: a smooth scrolling would only start a scroll that the next step interrupts. The steps and
+// the waits are driven from here, since a page without JavaScript runs no timer of its own; the
+// functions given to page.evaluate run in the page, with the globals of the browser.
 /* global document, getComputedStyle, innerHeight, scrollTo */
-const widest = async () => {
-  await document.fonts.ready;
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const root = document.documentElement;
-  let width = root.scrollWidth;
-  for (let y = 0; y <= root.scrollHeight; y += innerHeight / 2) {
-    scrollTo({ top: y, behavior: "instant" });
-    await wait(50);
-    width = Math.max(width, root.scrollWidth);
+const widest = async (page) => {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
+  const measure = () =>
+    page.evaluate(() => ({
+      width: document.documentElement.scrollWidth,
+      height: document.documentElement.scrollHeight,
+      step: innerHeight / 2,
+    }));
+  let { width, height, step } = await measure();
+  for (let y = 0; y <= height; y += step) {
+    await page.evaluate((top) => scrollTo({ top, behavior: "instant" }), y);
+    await page.waitForTimeout(50);
+    const reached = await measure();
+    width = Math.max(width, reached.width);
+    height = reached.height;
   }
   return width;
 };
@@ -126,13 +150,14 @@ const browser = await chromium.launch();
 const errors = [];
 
 try {
-  for (const width of [...phones, ...desktops]) {
-    const phone = phones.includes(width);
+  for (const { width, phone, javaScript = true, name } of screens) {
     const context = await browser.newContext({
       viewport: { width, height: 800 },
       deviceScaleFactor: phone ? 3 : 1,
       isMobile: phone,
       hasTouch: phone,
+      javaScriptEnabled: javaScript,
+      ...(phone && { userAgent: phoneAgent }),
     });
     // Only the local server is reached: a slow third-party script would fail the check.
     await context.route(
@@ -146,23 +171,21 @@ try {
       const page = await context.newPage();
       let current = "";
       page.on("pageerror", (error) => {
-        errors.push(
-          `${current}: script error at ${width} px, ${error.message}`,
-        );
+        errors.push(`${current}: script error at ${name}, ${error.message}`);
       });
       for (let path; (path = queue.shift());) {
         current = path;
         try {
           await page.goto(`${origin}${path}`, { waitUntil: "load" });
-          const reached = await page.evaluate(widest);
+          const reached = await widest(page);
           if (reached > width) {
-            errors.push(`${path}: ${reached} px wide on a ${width} px screen`);
+            errors.push(`${path}: ${reached} px wide on a screen of ${name}`);
           }
           for (const element of await page.evaluate(wrapped)) {
-            errors.push(`${path}: ${element} at ${width} px`);
+            errors.push(`${path}: ${element} at ${name}`);
           }
         } catch (error) {
-          errors.push(`${path}: not checked at ${width} px, ${error.message}`);
+          errors.push(`${path}: not checked at ${name}, ${error.message}`);
         }
       }
     };
@@ -182,5 +205,5 @@ if (errors.length > 0) {
   process.exit(1);
 }
 console.log(
-  `${pages.length} pages fit a screen of ${[...phones, ...desktops].join(", ")} px.`,
+  `${pages.length} pages fit a screen of ${screens.map(({ name }) => name).join(", ")}.`,
 );
