@@ -1,7 +1,9 @@
 ---
 // An outlined link: the download buttons, and the way back to the home page. Under the pointer or
 // the keyboard focus, a red line with a glow draws itself clockwise over its border. `main` gives
-// it the white border of the main action. The label stays on one line, and the width check
+// it the white border of the main action. The border is drawn in SVG like the red line, so that
+// both land on the same pixels: a CSS border, snapped to the pixel on its own, left a strip of white
+// beside the red line when the button sat between two pixels (owner, 2026-11-14). The label stays on one line, and the width check
 // (scripts/check-overflow.mjs) fails when it is cut.
 interface Props {
   href: string;
@@ -15,6 +17,9 @@ const { href, main = false } = Astro.props;
   <span data-one-line>
     <slot />
   </span>
+  <svg class="button-border" aria-hidden="true">
+    <rect></rect>
+  </svg>
   <svg class="button-line is-glow" aria-hidden="true">
     <rect pathLength="1"></rect>
   </svg>
@@ -26,13 +31,15 @@ const { href, main = false } = Astro.props;
 <style>
   /* isolation keeps the glow behind the text and in front of what is behind the button. */
   .outline-button {
+    --border-color: var(--color-button-line);
+
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: var(--height-button);
     padding: 0 var(--space-6);
-    border: 1px solid var(--color-button-line);
+    border: 1px solid transparent;
     color: var(--color-text);
     font-family: var(--font-title);
     font-weight: 600;
@@ -47,9 +54,12 @@ const { href, main = false } = Astro.props;
   }
 
   .is-main {
-    border-color: var(--color-text);
+    --border-color: var(--color-text);
   }
 
+  /* The border and the red line share one box, the outer edge of the border: an absolute box is
+     placed from the inner edge, 1 px further in. */
+  .button-border,
   .button-line {
     position: absolute;
     inset: -1px;
@@ -66,12 +76,24 @@ const { href, main = false } = Astro.props;
       drop-shadow(0 0 10px var(--color-accent-deep));
   }
 
-  rect {
-    x: 1px;
-    y: 1px;
-    width: calc(100% - 2px);
-    height: calc(100% - 2px);
+  /* The border and the red line follow the same path, the middle of the border: the red line, 2 px
+     wide, covers the border, 1 px wide, with half a pixel to spare on each side, so that no white
+     shows beside it even when the two are rounded to different pixels. */
+  .button-border rect,
+  .button-line rect {
+    x: 0.5px;
+    y: 0.5px;
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
     fill: none;
+  }
+
+  .button-border rect {
+    stroke: var(--border-color);
+    stroke-width: 1px;
+  }
+
+  .button-line rect {
     stroke: var(--color-accent-deep);
     stroke-width: 2px;
     stroke-linecap: square;
@@ -83,8 +105,8 @@ const { href, main = false } = Astro.props;
       opacity 0s linear 0.25s;
   }
 
-  .outline-button:hover rect,
-  .outline-button:focus-visible rect {
+  .outline-button:hover .button-line rect,
+  .outline-button:focus-visible .button-line rect {
     stroke-dashoffset: 0;
     opacity: 1;
     transition:
@@ -93,9 +115,9 @@ const { href, main = false } = Astro.props;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    rect,
-    .outline-button:hover rect,
-    .outline-button:focus-visible rect {
+    .button-line rect,
+    .outline-button:hover .button-line rect,
+    .outline-button:focus-visible .button-line rect {
       transition: none;
     }
   }
