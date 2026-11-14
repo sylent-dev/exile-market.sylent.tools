@@ -2,8 +2,9 @@
 // An outlined link: the download buttons, and the way back to the home page. Under the pointer or
 // the keyboard focus, a red line with a glow draws itself clockwise over its border. `main` gives
 // it the white border of the main action. The border is drawn in SVG like the red line, so that
-// both land on the same pixels: a CSS border, snapped to the pixel on its own, left a strip of white
-// beside the red line when the button sat between two pixels (owner, 2026-11-14). The label stays on one line, and the width check
+// both land on the same pixels: a CSS border, snapped to the pixel on its own, left a strip of
+// white beside the red line when the button sat between two pixels (owner, 2026-11-14; checked
+// by scripts/check-button-line.mjs). The label stays on one line, and the width check
 // (scripts/check-overflow.mjs) fails when it is cut.
 interface Props {
   href: string;
@@ -119,6 +120,14 @@ const { href, main = false } = Astro.props;
     .outline-button:hover .button-line rect,
     .outline-button:focus-visible .button-line rect {
       transition: none;
+    }
+  }
+
+  /* In high contrast mode, the browser forces the colors of a CSS border but not those of an SVG
+     stroke: the border takes the color of the links, as the CSS border did. */
+  @media (forced-colors: active) {
+    .button-border rect {
+      stroke: LinkText;
     }
   }
 </style>

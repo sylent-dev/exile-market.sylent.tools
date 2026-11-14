@@ -108,6 +108,7 @@ The stack above is confirmed for this site. The JavaScript libraries, if any, an
 
 - **Why**: on sylent.art, a large faded word ran past the right edge of the screen; `overflow-x: hidden` on the body hid it on a computer, but Chrome on Android still widened the page and left a black band. Only a browser that lays the page out can see it.
 - **`scripts/check-overflow.mjs`** serves `dist/` as GitHub Pages would, loads every page (the not-found page included, the redirect pages left out) in the Chromium of Playwright as on a phone (320, 360 and 412 px, `isMobile`, with the identity of an iPhone, so that the download area shows the sentence of a phone and its address is measured, and once more at 320 px without JavaScript, which keeps the download buttons, whose labels are marked `data-one-line`), then on a computer (1024 and 1440 px), scrolls it to the bottom, and fails if the page got wider than the screen, if an element marked `data-one-line` (a large title) takes more than one line, or if a script throws. A value on `data-one-line` gives the width of the screen from which the element must hold on one line (`data-one-line="345"`), and an element kept on one line by CSS can't wrap, so its text is also measured, and the check fails when the first ancestor that clips it, or the screen, cuts it. Only the local server is reached.
+- **`scripts/check-button-line.mjs`** hovers each outlined button of the home page, moved by 0, 0.25, 0.5 and 0.75 px, at scales of 1, 1.25 and 2, and fails if the green channel rises above 48 on its edge: the red line must cover the border. A border in CSS and a red line in SVG, each rounded to the pixel its own way, left a strip of white beside the line that the owner saw on 2026-11-14; both are now drawn in SVG on the same path (`outline-button.astro`). A headless Chromium shows the strip only once the button is moved by half a pixel, hence the offsets. Both checks share the static server of `scripts/serve-dist.mjs`.
 - **Playwright** (the library, without its test runner, a development dependency): its Chromium is downloaded apart, headless only, once with `npx playwright install --only-shell chromium` locally, at every run with `--with-deps` in CI. Chromium, since the bug showed on Android, whose browsers are mostly built on it.
 
 ## Brand images
@@ -150,6 +151,7 @@ Run `npm ci` first, and `npx playwright install --only-shell chromium` once. The
 | `npm run lint` | `astro check`, ESLint and Stylelint. |
 | `npm run check:links` | linkinator and `scripts/check-urls.mjs` on `dist/` (after `npm run build`). |
 | `npm run check:overflow` | The width of every page on a phone and a computer (after `npm run build`). |
+| `npm run check:buttons` | The red line of the outlined buttons covers their border under the pointer (after `npm run build`). |
 | `npm run check` | Everything run before a commit and in CI: format, lint, build, links, width. |
 | `npm run brand:images` | The favicon, the iPhone icon and the preview card, from the brand assets. |
 | `python3 docs/mockups/serve.py <port>` | Serves the repository root without cache for the mock-up. The port of this project: `8770`. |

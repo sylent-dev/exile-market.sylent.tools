@@ -128,6 +128,7 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
   - the production build, without errors or warnings;
   - linkinator on the built site, and `scripts/check-urls.mjs`: every former URL resolves (page or redirect), the redirect, not-found and sitemap are right, every page has its Open Graph tags;
   - `scripts/check-overflow.mjs`: no page is wider than a phone or computer screen, and no element marked `data-one-line` breaks on two lines.
+  - `scripts/check-button-line.mjs`: the red line of the outlined buttons covers their border under the pointer.
 - The same checks run in CI (`.github/workflows/ci.yml`) on every pull request.
 - When a bug reaches the owner that a check could have caught, add the check in the same pull request as the fix.
 - Every page has a title, a meta description, a language (`lang="en"` at the root, `lang="fr"` under `/fr/`), the `hreflang` links and the link to the other language (except the not-found page, which holds both), and is usable at phone width. Images have an `alt` text and are served in a light format (WebP, or JPEG for the preview card) at the size they are shown.
