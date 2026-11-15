@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5d2. External links in a new tab
+
+Pull request: [#28](https://github.com/sylent-dev/exile-market.sylent.tools/pull/28).
+
+Every link that leaves the site opens in a new tab, announced to screen readers only (« opens in a new tab », « s’ouvre dans un nouvel onglet »), without an arrow on the screen (owner, 2026-11-14); the download buttons stay as they are, since they start a file without leaving the page; `scripts/check-urls.mjs` fails on an external link without both. Tools: build, code review.
+
 ## 5d. The donation banner
 
 Pull request: [#27](https://github.com/sylent-dev/exile-market.sylent.tools/pull/27).

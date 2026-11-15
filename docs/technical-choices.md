@@ -138,6 +138,17 @@ Three.js (`InstancedMesh`, 420 shards, 110 on a phone), behind the first screen 
 
 The script waits for the `load` event, and downloads nothing without WebGL 2: Three.js is the heaviest file of the page (about 540 kB, 132 kB compressed, with only the parts the burst uses), hence `chunkSizeWarningLimit` in `astro.config.mjs`, since its renderer can't be cut further. The choice of the visitor on motion is read once and then followed by its `change` event: read at every image, Chromium no longer sends that event, and the burst didn't start again when the visitor turned motion back on.
 
+## Lightbox of the screens
+
+Step 5f (`src/components/feature-deck.astro`, `docs/branding.md`, Components):
+
+- **A `<dialog>` opened with `showModal()`**, without a library: the browser keeps the keyboard focus inside it, makes the page behind it inert for screen readers, and announces it with its `aria-label`. The script closes it itself, on Esc too (`keydown`, then `cancel` if the browser sends it), so that the screen can travel back to the deck first; the `close` event puts the page back however it closed: the scroll, the card, the focus on the card in front.
+- **Only with a mouse**, read with `matchMedia("(hover: hover) and (pointer: fine)")` at each click rather than from the width of the screen, which a tablet shares with a laptop. On a touch screen, the tap keeps bringing a card in front, and two fingers zoom; so does a touch on a laptop with a touch screen (`pointerType`), while Enter, whose click has no pointer type, opens it. The cards then say `aria-haspopup="dialog"`, and the title under the screen ends with « (screen 2 of 3) » for screen readers only.
+- **The deck holds still** while the lightbox opens or is open: otherwise the mouse passing over another card during the opening would change the card in front, and the screen would travel from the wrong place (code review).
+- **The larger screen is downloaded only by a visitor with a mouse**: `getImage()` makes a WebP of 840 px for each card (420 px at twice the density, 20 to 68 kB), whose address waits in `data-large`. It is fetched when the mouse brings its card in front, so that the lightbox opens at once, the two others once it is open, for the arrows; and it is decoded before it moves, so that it never travels empty.
+- **The motion is the Web Animations API** (`element.animate()`): the screen starts where the card of the deck is, measured at that moment, and the card hides while it travels. The animations are cancelled once they end, so that the styles of the sheet hold again. Nothing moves when the visitor asked to reduce motion.
+- **The page doesn't scroll under it**: `overflow: hidden` on the root, and a right padding of the width of the scrollbar, so that the page doesn't shift when the bar goes.
+
 ## Commands
 
 Run `npm ci` first, and `npx playwright install --only-shell chromium` once. They are also in the `scripts` of `package.json`.

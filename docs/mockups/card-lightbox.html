@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock-up · Card lightbox</title>
+<!--
+  Mock-up of step 5f (html-mockups skill): the three cards of « What it does » open in a lightbox
+  on a computer, and the visitor goes from one to the next inside it. The band copies the styles
+  of src/components/feature-deck.astro and src/styles/tokens.css; the language in the tabs, the address keeps the choice (?lang=fr).
+
+  Served from the repository root, so that the screens of src/assets/ load:
+    python3 docs/mockups/serve.py 8770
+  then open http://127.0.0.1:8770/docs/mockups/card-lightbox.html
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=block" rel="stylesheet">
+<style>
+  /* The page around the band: neutral, so that it doesn't compete with the site. */
+  body { margin: 0; background: #2a2d31; }
+  .page-tabs { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 10px 16px; background: #1b1d20; border-bottom: 1px solid #3a3f45; font: 14px/1.4 system-ui, sans-serif; }
+  .page-tabs .group { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  .page-tabs .group > span { margin-right: 4px; color: #adb5bd; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  .page-tabs button { padding: 4px 10px; border: 1px solid #3a3f45; border-radius: 4px; background: #24272b; color: #dee2e6; font: inherit; cursor: pointer; }
+  .page-tabs button[aria-pressed="true"] { background: #e9ecef; color: #1b1d20; border-color: #e9ecef; }
+  .page-header { padding: 18px 16px; color: #e9ecef; font: 14px/1.5 system-ui, sans-serif; }
+  .page-header h1 { margin: 0 0 6px; font-size: 20px; }
+  .page-header p { margin: 0 0 6px; max-width: 820px; color: #adb5bd; }
+  .page-header strong { color: #e9ecef; }
+  .page-warning { margin: 0; padding: 10px 16px; background: #8a6a10; color: #fff; font: 14px system-ui, sans-serif; }
+
+  /* The tokens of the site (src/styles/tokens.css), those the band and the lightbox use. */
+  :root {
+    --font-manrope: "Manrope", sans-serif;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+    --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px; --space-20: 80px;
+    --font-text: var(--font-manrope); --font-title: var(--font-manrope);
+    --weight-text: 400; --weight-title: 800; --tracking-title: -0.045em;
+    --size-title: clamp(26px, 2.6vw, 38px); --size-subtitle: 19px; --size-body: 16px; --size-label: 14px;
+    --line-body: 1.55; --line-title: 1.15;
+    --color-background: #0a0a0a; --color-band: #0d0d0d; --color-surface: #1a1a1a; --color-border: #262626;
+    --color-text: #ffffff; --color-text-weak: #a3a3a3; --color-text-faint: #858585; --color-focus: #ffffff;
+    --color-button-line: #404040; --color-accent-deep: #a80f18; --color-accent: #e5383b;
+    --ease-draw: cubic-bezier(0.215, 0.61, 0.355, 1);
+    --width-content: 1120px; --size-top-button: 48px; --gutter: var(--space-5);
+    --band-padding: var(--space-20); --radius-small: 2px;
+    --grid-image: linear-gradient(#ffffff0d 1px, transparent 1px), linear-gradient(90deg, #ffffff0d 1px, transparent 1px);
+    --grid-step: 32px;
+  }
+  @media (width <= 720px) {
+    :root { --size-title: 25px; --size-subtitle: 17px; --band-padding: var(--space-12); }
+  }
+
+  /* The base styles of src/styles/global.css that the band needs. */
+  .site { color-scheme: dark; color: var(--color-text); font: var(--weight-text) var(--size-body) / var(--line-body) var(--font-text); -webkit-font-smoothing: antialiased; }
+  .site *, .site *::before, .site *::after { box-sizing: border-box; }
+  .site img { display: block; max-width: 100%; height: auto; }
+  .site h3 { margin: 0; color: var(--color-text); font-size: var(--size-body); font-weight: 600; line-height: 1.35; }
+  .site p { margin: 0; }
+  .site kbd { padding: 1px 5px; border: 1px solid var(--color-border); border-radius: var(--radius-small); background: var(--color-surface); font: 600 0.84em / 1 var(--font-text); white-space: nowrap; }
+  .site :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+  .wrap { width: min(100% - 2 * var(--gutter), var(--width-content)); margin-inline: auto; }
+  .band { padding-block: var(--band-padding); background: var(--color-background); }
+  .band.is-alt { background: var(--color-band); }
+  .band-placeholder { color: var(--color-text-faint); font-size: var(--size-label); text-align: center; }
+
+  /* The deck (src/components/feature-deck.astro). */
+  .deck { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-12); align-items: center; }
+  .deck-stage { display: grid; justify-items: center; container-type: inline-size; }
+  .deck-cards { --card: clamp(130px, 44cqi, 250px); position: relative; width: calc(var(--card) * 2.1); height: calc(var(--card) * 12 / 7 * 1.05); }
+  .deck-card { position: absolute; z-index: 1; top: 50%; left: calc(50% - var(--card) / 2); width: var(--card); padding: 0; border: 0; background: #000000; box-shadow: 0 18px 40px #000000cc; cursor: pointer; filter: brightness(0.5); transform: translate(calc((var(--i) - 1) * 52%), -50%); transition: transform 0.35s var(--ease-draw), filter 0.3s; }
+  .deck-card:nth-child(2) { z-index: 2; }
+  .deck-card.is-active { z-index: 3; filter: none; transform: translate(calc((var(--i) - 1) * 52%), -50%) scale(1.05); }
+  .deck-card img { width: 100%; height: auto; aspect-ratio: 7 / 12; }
+  .deck-card.is-away { visibility: hidden; }
+  .deck-texts { container-type: inline-size; }
+  .deck-text h3 { font-size: min(var(--size-title), 7.2cqi); white-space: nowrap; }
+  .deck-text p { max-width: 21.25em; margin-top: var(--space-2); color: var(--color-text-weak); font-size: var(--size-subtitle); }
+  @media (width >= 721px) {
+    .deck-texts { display: grid; }
+    .deck-text { grid-area: 1 / 1; }
+    .deck-text[hidden] { display: block; visibility: hidden; }
+  }
+  @media (width <= 720px) {
+    .deck { grid-template-columns: 1fr; gap: var(--space-6); }
+    .deck-texts { justify-self: center; container-type: normal; }
+    .deck-text { min-height: 6.5em; text-align: center; }
+    .deck-text h3 { font-size: inherit; white-space: normal; }
+    .deck-text p { margin-top: var(--space-1); font-size: inherit; }
+  }
+
+  /* New: with a mouse, the card in front says that it opens. */
+  @media (hover: hover) and (pointer: fine) {
+    .deck-card.is-active { cursor: zoom-in; }
+  }
+
+  /* New: the lightbox, a <dialog> over the whole window. */
+  .lb { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: hidden; }
+  .lb::backdrop { background: transparent; }
+  .lb-veil { position: absolute; inset: 0; background: #0a0a0aeb; }
+  .lb-top { position: absolute; z-index: 2; top: 0; right: 0; left: 0; display: flex; align-items: center; justify-content: space-between; padding: var(--space-5); }
+  .lb-counter { color: var(--color-text-faint); font-size: var(--size-label); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .lb-stage { position: absolute; inset: 0; display: grid; place-items: center; }
+  .lb-figure { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); margin: 0; }
+  .lb-row { display: flex; align-items: center; gap: var(--space-8); }
+
+  /* The screen at most at its real size (the window of the application is 420 × 720), smaller on a
+     short screen, so that the caption stays in sight. */
+  .lb-card { --lb-h: min(720px, 100svh - 120px, (100vw - 220px) * 12 / 7); position: relative; width: calc(var(--lb-h) * 7 / 12); height: var(--lb-h); }
+  .lb-card > img { width: 100%; height: 100%; box-shadow: 0 30px 80px #000000e6; }
+
+  .lb-caption { width: min(34em, 100vw - 2 * var(--space-5)); text-align: center; }
+  .lb-caption h3 { font-family: var(--font-title); font-size: 22px; font-weight: var(--weight-title); letter-spacing: var(--tracking-title); line-height: var(--line-title); }
+
+  /* The buttons of the lightbox take the look of the back-to-top button. */
+  .lb-button { display: grid; flex: none; place-items: center; width: var(--size-top-button); height: var(--size-top-button); padding: 0; border: 1px solid var(--color-button-line); background: #0a0a0ab3; color: var(--color-text); cursor: pointer; transition: border-color 0.2s, background-color 0.2s; }
+  .lb-button:hover, .lb-button:focus-visible { border-color: var(--color-text); background: #0a0a0af2; }
+  .lb-button svg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+<p class="page-warning" id="file-warning" hidden>Opened as a file: serve the repository root (see the comment at the top of this page) so that the screens load.</p>
+<nav class="page-tabs" id="tabs" aria-label="Variants"></nav>
+<header class="page-header">
+  <h1>Step 5f · Opening of the cards</h1>
+  <p><strong>Decided (owner, 2026-11-16):</strong> A · Grow, the card leaves the deck and grows from its place to the middle, and goes back there when closed; under the screen, its title only. Set aside: a fade, the card turning over, a red blade, shards, an impact (docs/branding.md).</p>
+  <p><strong>Try it:</strong> move the mouse over a card, then click it (or Tab to a card and press Enter). Inside: ← → or the two buttons go from one screen to the next (the deck behind follows), Esc, the cross or a click beside the screen closes it, and the screen goes back to its place in the deck.</p>
+  <p>The veil, the buttons in the look of the back-to-top button, the title under the screen, the slide from one screen to the next. On a phone or a tablet without a mouse, nothing changes: the tap brings the card in front, and two fingers zoom. With reduced motion, the lightbox appears and goes at once.</p>
+</header>
+<div class="site" id="site">
+  <section class="band is-alt"><div class="wrap"><p class="band-placeholder">↑ The first screen</p></div></section>
+  <section class="band"><div class="wrap" id="deck"></div></section>
+  <section class="band is-alt"><div class="wrap"><p class="band-placeholder">↓ What it does on your computer, Questions</p></div></section>
+
+  <dialog class="lb" id="lightbox">
+    <div class="lb-veil" data-lb-close></div>
+    <div class="lb-top" data-lb-close>
+      <span class="lb-counter" data-lb-ui id="lb-counter"></span>
+      <button class="lb-button" type="button" data-lb-ui id="lb-close"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg></button>
+    </div>
+    <div class="lb-stage" data-lb-close>
+      <figure class="lb-figure" data-lb-close>
+        <div class="lb-row" id="lb-row" data-lb-close>
+          <button class="lb-button" type="button" data-lb-ui id="lb-prev"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4.5L7 10l5.5 5.5"/></svg></button>
+          <div class="lb-card" id="lb-card">
+            <img id="lb-image" alt="">
+          </div>
+          <button class="lb-button" type="button" data-lb-ui id="lb-next"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4.5L13 10l-5.5 5.5"/></svg></button>
+        </div>
+        <figcaption class="lb-caption" data-lb-ui id="lb-caption" aria-live="polite"></figcaption>
+      </figure>
+    </div>
+  </dialog>
+</div>
+<script>
+  const VARIANTS = {
+    lang: { label: "Language", options: { en: "English", fr: "Français" }, fallback: "en" },
+  };
+  const params = new URLSearchParams(location.search);
+  const chosen = Object.fromEntries(Object.entries(VARIANTS).map(([key, variant]) =>
+    [key, params.get(key) in variant.options ? params.get(key) : variant.fallback]));
+
+  // The texts of src/content/<lang>/home.json, and those the lightbox adds.
+  const CONTENT = {
+    en: {
+      cards: [
+        { title: "Copy an item", body: "<kbd>Ctrl + D</kbd>, or <kbd>Ctrl + C</kbd>.", alt: "The window of Exile Market, waiting for an item copied with Ctrl + D" },
+        { title: "See its price", body: "From poe2scout for currencies and uniques, from the trade site for the rest.", alt: "The price of a unique ring in three currencies" },
+        { title: "Refine, read the offers", body: "Its stats and filters, then the offers, in a small window over the game.", alt: "The stats of a rare bow, each one a filter to tick" },
+      ],
+      dialog: "Screens of Exile Market", prev: "Previous screen", next: "Next screen", close: "Close",
+    },
+    fr: {
+      cards: [
+        { title: "Copiez un objet", body: "<kbd>Ctrl + D</kbd>, ou <kbd>Ctrl + C</kbd>.", alt: "La fenêtre d’Exile Market, qui attend un objet copié avec Ctrl + D" },
+        { title: "Voyez son prix", body: "Depuis poe2scout pour les monnaies et les uniques, depuis le site d’échange pour le reste.", alt: "Le prix d’une bague unique en trois monnaies" },
+        { title: "Affinez, lisez les offres", body: "Ses statistiques et ses filtres, puis les offres, dans une petite fenêtre par-dessus le jeu.", alt: "Les statistiques d’un arc rare, chacune un filtre à cocher" },
+      ],
+      dialog: "Écrans d’Exile Market", prev: "Écran précédent", next: "Écran suivant", close: "Fermer",
+    },
+  };
+  const FILES = ["copy", "price", "filters"];
+  const screenSource = (index) => `../../src/assets/screens/${chosen.lang}/${FILES[index]}.png`;
+
+  const withMouse = matchMedia("(hover: hover) and (pointer: fine)");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const $ = (id) => document.getElementById(id);
+  const lightbox = $("lightbox"), veil = lightbox.querySelector(".lb-veil");
+  const lbCard = $("lb-card"), lbImage = $("lb-image");
+  const uiParts = [...lightbox.querySelectorAll("[data-lb-ui]")];
+  let cards = [], texts = [], current = 1, busy = false;
+
+  // ---- The deck, as on the site, plus the opening. ----
+  function renderDeck() {
+    const content = CONTENT[chosen.lang];
+    $("deck").innerHTML = `<div class="deck">
+      <div class="deck-stage"><div class="deck-cards">${content.cards.map((card, index) =>
+        `<button class="deck-card ${index === current ? "is-active" : ""}" type="button" style="--i: ${index}" data-deck-card><img src="${screenSource(index)}" alt="${card.alt}"></button>`).join("")}</div></div>
+      <div class="deck-texts" aria-live="polite">${content.cards.map((card, index) =>
+        `<div class="deck-text" ${index === current ? "" : "hidden"} data-deck-text><h3>${card.title}</h3><p>${card.body}</p></div>`).join("")}</div>
+    </div>`;
+    cards = [...document.querySelectorAll("[data-deck-card]")];
+    texts = [...document.querySelectorAll("[data-deck-text]")];
+    for (const card of cards) {
+      card.addEventListener("pointerover", (event) => { if (event.pointerType === "mouse") bringToFront(card); });
+      card.addEventListener("focus", () => bringToFront(card));
+      card.addEventListener("click", () => {
+        bringToFront(card);
+        if (withMouse.matches) openLightbox();
+      });
+    }
+    $("lb-prev").setAttribute("aria-label", content.prev);
+    $("lb-next").setAttribute("aria-label", content.next);
+    $("lb-close").setAttribute("aria-label", content.close);
+    lightbox.setAttribute("aria-label", content.dialog);
+    document.documentElement.lang = chosen.lang;
+  }
+
+  function bringToFront(chosenCard) {
+    current = cards.indexOf(chosenCard);
+    cards.forEach((card, index) => {
+      card.classList.toggle("is-active", index === current);
+      if (index === current) card.setAttribute("aria-current", "true"); else card.removeAttribute("aria-current");
+    });
+    texts.forEach((text, index) => { text.hidden = index !== current; });
+  }
+
+  // ---- Helpers of the motion. ----
+  const EASE = "cubic-bezier(0.215, 0.61, 0.355, 1)";
+  const EASE_IN = "cubic-bezier(0.55, 0.06, 0.68, 0.19)";
+  const play = (element, keyframes, options) => element.animate(keyframes, { fill: "both", ...options }).finished;
+  const allAnimated = () => [lbCard, lbImage, veil, $("lb-caption"), ...uiParts];
+  const stopAll = () => { for (const element of allAnimated()) for (const animation of element.getAnimations()) animation.cancel(); };
+
+  // The move from the card of the deck to the screen of the lightbox, about their centers.
+  function fromDeck() {
+    const deck = cards[current].getBoundingClientRect(), box = lbCard.getBoundingClientRect();
+    const dx = deck.left + deck.width / 2 - (box.left + box.width / 2);
+    const dy = deck.top + deck.height / 2 - (box.top + box.height / 2);
+    return { dx, dy, s: deck.width / box.width };
+  }
+  const placed = ({ dx, dy, s }) => `translate(${dx}px, ${dy}px) scale(${s})`;
+  const veilIn = (duration = 320) => play(veil, [{ opacity: 0 }, { opacity: 1 }], { duration, easing: "ease-out" });
+  const veilOut = (duration = 260, delay = 0) => play(veil, [{ opacity: 1 }, { opacity: 0 }], { duration, delay, easing: "ease-in" });
+  const uiIn = (delay) => Promise.all(uiParts.map((part) => play(part, [{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay, easing: "ease-out" })));
+  const uiOut = () => Promise.all(uiParts.map((part) => play(part, [{ opacity: 1 }, { opacity: 0 }], { duration: 140, easing: "ease-in" })));
+  const away = (isAway) => cards[current].classList.toggle("is-away", isAway);
+
+  // ---- The opening chosen (A · Grow) and its closing. ----
+  async function openFromDeck() {
+    const from = fromDeck(); away(true); veilIn(360); uiIn(320);
+    await play(lbCard, [{ transform: placed(from) }, { transform: "none" }], { duration: 500, easing: EASE });
+  }
+
+  async function closeToDeck() {
+    const to = fromDeck(); away(true);
+    uiOut(); veilOut(340, 40);
+    await play(lbCard, [{ transform: "none" }, { transform: placed(to) }], { duration: 380, easing: EASE_IN });
+  }
+
+  // ---- The lightbox. ----
+  function fillLightbox() {
+    const card = CONTENT[chosen.lang].cards[current];
+    lbImage.src = screenSource(current);
+    lbImage.alt = card.alt;
+    $("lb-caption").innerHTML = `<h3>${card.title}</h3>`;
+    $("lb-counter").textContent = `${current + 1} / ${cards.length}`;
+  }
+
+  function lockScroll(isLocked) {
+    const root = document.documentElement;
+    root.style.paddingRight = isLocked ? `${innerWidth - root.clientWidth}px` : "";
+    root.style.overflow = isLocked ? "hidden" : "";
+  }
+
+  async function openLightbox() {
+    if (busy || lightbox.open) return;
+    busy = true;
+    fillLightbox();
+    await lbImage.decode().catch(() => {});
+    lockScroll(true);
+    lightbox.showModal();
+    if (!reduced.matches) await openFromDeck();
+    stopAll(); away(false);
+    busy = false;
+  }
+
+  async function closeLightbox() {
+    if (busy || !lightbox.open) return;
+    busy = true;
+    if (!reduced.matches) await closeToDeck();
+    lightbox.close();
+    busy = false;
+  }
+
+  // Also when the browser closes it by itself.
+  lightbox.addEventListener("close", () => {
+    stopAll(); away(false); lockScroll(false);
+    cards[current].focus({ preventScroll: true });
+  });
+
+  async function go(step) {
+    if (busy) return;
+    busy = true;
+    const direction = Math.sign(step);
+    const caption = $("lb-caption");
+    if (!reduced.matches) await Promise.all([
+      play(lbImage, [{ opacity: 1, transform: "none" }, { opacity: 0, transform: `translateX(${-direction * 48}px)` }], { duration: 150, easing: "ease-in" }),
+      play(caption, [{ opacity: 1 }, { opacity: 0 }], { duration: 150 }),
+    ]);
+    bringToFront(cards[(current + step + cards.length) % cards.length]);
+    fillLightbox();
+    await lbImage.decode().catch(() => {});
+    if (!reduced.matches) await Promise.all([
+      play(lbImage, [{ opacity: 0, transform: `translateX(${direction * 48}px)` }, { opacity: 1, transform: "none" }], { duration: 230, easing: EASE }),
+      play(caption, [{ opacity: 0 }, { opacity: 1 }], { duration: 230 }),
+    ]);
+    stopAll();
+    busy = false;
+  }
+
+  $("lb-prev").addEventListener("click", () => go(-1));
+  $("lb-next").addEventListener("click", () => go(1));
+  $("lb-close").addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (event) => { if (event.target.hasAttribute("data-lb-close")) closeLightbox(); });
+  lightbox.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); closeLightbox(); }
+    else if (event.key === "ArrowLeft") { event.preventDefault(); go(-1); }
+    else if (event.key === "ArrowRight") { event.preventDefault(); go(1); }
+  });
+  lightbox.addEventListener("cancel", (event) => { event.preventDefault(); closeLightbox(); });
+
+  // ---- The tabs. ----
+  function renderTabs() {
+    for (const key of Object.keys(VARIANTS)) document.documentElement.dataset[key] = chosen[key];
+    $("tabs").innerHTML = Object.entries(VARIANTS).map(([key, variant]) =>
+      `<div class="group"><span>${variant.label}</span>${Object.entries(variant.options).map(([value, label]) =>
+        `<button type="button" data-variant="${key}" data-value="${value}" aria-pressed="${chosen[key] === value}">${label}</button>`).join("")}</div>`).join("");
+  }
+  $("tabs").addEventListener("click", (event) => {
+    const { variant, value } = event.target.dataset;
+    if (!variant) return;
+    chosen[variant] = value;
+    history.replaceState(null, "", "?" + new URLSearchParams(chosen));
+    renderTabs();
+    if (variant === "lang") renderDeck();
+  });
+
+  $("file-warning").hidden = location.protocol !== "file:";
+  renderTabs();
+  renderDeck();
+</script>
+</body>
+</html>

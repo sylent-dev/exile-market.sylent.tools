@@ -1,8 +1,9 @@
 ---
 // What the tool does: three real screens of the application, overlapping. The card under the
 // mouse, tapped or focused comes in front, and its text shows. Without JavaScript, the three texts
-// are all shown, so that nothing is lost.
-import { Image } from "astro:assets";
+// are all shown, so that nothing is lost. On a computer with a mouse, a click on the card in front
+// opens its screen in a lightbox, larger, where the visitor goes from one screen to the next.
+import { getImage, Image } from "astro:assets";
 import copyEn from "../assets/screens/en/copy.png";
 import filtersEn from "../assets/screens/en/filters.png";
 import priceEn from "../assets/screens/en/price.png";
@@ -15,14 +16,21 @@ import type { Lang } from "../lib/i18n";
 
 interface Props {
   lang: Lang;
-  cards: (typeof en)["features"]["cards"];
+  texts: (typeof en)["features"];
 }
 
-const { lang, cards } = Astro.props;
+const { lang, texts } = Astro.props;
+const { cards, lightbox } = texts;
 const screens = {
   en: [copyEn, priceEn, filtersEn],
   fr: [copyFr, priceFr, filtersFr],
 }[lang];
+
+// The screen of the lightbox at the width of the capture: 420 px on the screen, at twice the
+// density. It is downloaded only when the lightbox opens.
+const large = await Promise.all(
+  screens.map((screen) => getImage({ src: screen, width: 840 })),
+);
 
 // The price is in front until the visitor picks another card.
 const inFront = 1;
@@ -31,13 +39,15 @@ const inFront = 1;
 <div class="deck">
   <div class="deck-stage">
     <div class="deck-cards">
-      {cards.map(({ alt }, index) => (
+      {cards.map(({ alt, title }, index) => (
         <button
           class:list={["deck-card", { "is-active": index === inFront }]}
           type="button"
           style={{ "--i": index }}
           aria-current={index === inFront ? "true" : undefined}
           data-deck-card
+          data-large={large[index]!.src}
+          data-title={title}
         >
           <Image
             src={screens[index]!}
@@ -59,33 +69,345 @@ const inFront = 1;
   </div>
 </div>
 
+<dialog class="lightbox" aria-label={lightbox.label} data-lightbox>
+  <div class="lightbox-veil" data-lightbox-close></div>
+  <div class="lightbox-top" data-lightbox-close>
+    <span class="lightbox-counter" aria-hidden="true" data-lightbox-part></span>
+    <button
+      class="lightbox-button"
+      type="button"
+      aria-label={lightbox.close}
+      data-lightbox-part
+      data-lightbox-button="close"
+    >
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M5 5l10 10M15 5L5 15"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="lightbox-stage" data-lightbox-close>
+    <figure class="lightbox-figure" data-lightbox-close>
+      <div class="lightbox-row" data-lightbox-close>
+        <button
+          class="lightbox-button"
+          type="button"
+          aria-label={lightbox.previous}
+          data-lightbox-part
+          data-lightbox-button="previous"
+        >
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12.5 4.5L7 10l5.5 5.5"></path>
+          </svg>
+        </button>
+        <div class="lightbox-screen" data-lightbox-screen></div>
+        <button
+          class="lightbox-button"
+          type="button"
+          aria-label={lightbox.next}
+          data-lightbox-part
+          data-lightbox-button="next"
+        >
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M7.5 4.5L13 10l-5.5 5.5"></path>
+          </svg>
+        </button>
+      </div>
+      <figcaption
+        class="lightbox-title"
+        aria-live="polite"
+        data-lightbox-part
+        data-lightbox-caption
+        data-position={lightbox.position}
+      >
+        <span data-lightbox-title></span>
+        <span class="visually-hidden" data-lightbox-position></span>
+      </figcaption>
+    </figure>
+  </div>
+</dialog>
+
 <script>
   const cards = [
     ...document.querySelectorAll<HTMLButtonElement>("[data-deck-card]"),
   ];
   const texts = [...document.querySelectorAll<HTMLElement>("[data-deck-text]")];
+  let current = cards.findIndex((card) => card.classList.contains("is-active"));
 
   const bringToFront = (chosen: HTMLButtonElement) => {
-    const position = cards.indexOf(chosen);
+    current = cards.indexOf(chosen);
     cards.forEach((card, index) => {
-      card.classList.toggle("is-active", index === position);
-      if (index === position) card.setAttribute("aria-current", "true");
+      card.classList.toggle("is-active", index === current);
+      if (index === current) card.setAttribute("aria-current", "true");
       else card.removeAttribute("aria-current");
     });
     texts.forEach((text, index) => {
-      text.hidden = index !== position;
+      text.hidden = index !== current;
     });
   };
 
+  // ---- The lightbox, only with a mouse: on a touch screen, the tap brings a card in front, and
+  // two fingers zoom. ----
+  const withMouse = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const lightbox = document.querySelector<HTMLDialogElement>("[data-lightbox]");
+  const screen = lightbox?.querySelector<HTMLElement>("[data-lightbox-screen]");
+  const caption = lightbox?.querySelector<HTMLElement>(
+    "[data-lightbox-caption]",
+  );
+  const title = caption?.querySelector<HTMLElement>("[data-lightbox-title]");
+  const position = caption?.querySelector<HTMLElement>(
+    "[data-lightbox-position]",
+  );
+  const counter = lightbox?.querySelector<HTMLElement>(".lightbox-counter");
+  const veil = lightbox?.querySelector<HTMLElement>(".lightbox-veil");
+  const parts = [
+    ...(lightbox?.querySelectorAll<HTMLElement>("[data-lightbox-part]") ?? []),
+  ];
+  // The image of the screen shown, swapped for the one of the next card.
+  let image = document.createElement("img");
+
+  // What moves starts fast and slows down (--ease-draw), and leaves fast on its way back.
+  const easeOut = getComputedStyle(document.documentElement)
+    .getPropertyValue("--ease-draw")
+    .trim();
+  const easeIn = "cubic-bezier(0.55, 0.06, 0.68, 0.19)";
+  let busy = false;
+
+  const play = (
+    element: HTMLElement,
+    keyframes: Keyframe[],
+    options: KeyframeAnimationOptions,
+  ) => element.animate(keyframes, { fill: "both", ...options }).finished;
+  const fade = (from: number, to: number, options: KeyframeAnimationOptions) =>
+    Promise.all(
+      parts.map((part) =>
+        play(part, [{ opacity: from }, { opacity: to }], options),
+      ),
+    );
+  const stopAll = () => {
+    for (const element of [screen, image, veil, ...parts])
+      for (const animation of element?.getAnimations() ?? [])
+        animation.cancel();
+  };
+
+  // The move from the card of the deck to the screen of the lightbox, about their centers.
+  const fromDeck = () => {
+    const deck = cards[current]!.getBoundingClientRect();
+    const box = screen!.getBoundingClientRect();
+    const x = deck.left + deck.width / 2 - (box.left + box.width / 2);
+    const y = deck.top + deck.height / 2 - (box.top + box.height / 2);
+    return `translate(${x}px, ${y}px) scale(${deck.width / box.width})`;
+  };
+
+  // The card leaves the deck while its screen travels, and comes back once it lands.
+  const away = (isAway: boolean) =>
+    cards[current]?.classList.toggle("is-away", isAway);
+
+  // The larger screen of a card is fetched as soon as the mouse brings it in front, so that the
+  // lightbox opens at once; the others, once it is open, for the arrows. The lightbox shows that
+  // same image, so that it is never asked for twice, whatever the cache says.
+  const screens = new Map<
+    string,
+    { element: HTMLImageElement; ready: Promise<void> }
+  >();
+  const preload = (card: HTMLButtonElement | undefined) => {
+    const address = card?.dataset.large;
+    if (!address || screens.has(address)) return;
+    const element = new Image();
+    element.src = address;
+    element.alt = card.querySelector("img")?.alt ?? "";
+    // The screen is decoded before it moves, so that it never travels empty.
+    screens.set(address, {
+      element,
+      ready: element.decode().catch(() => undefined),
+    });
+  };
+
+  const fill = async () => {
+    const card = cards[current]!;
+    preload(card);
+    const shown = screens.get(card.dataset.large ?? "");
+    await shown?.ready;
+    if (shown && shown.element !== image) {
+      for (const animation of image.getAnimations()) animation.cancel();
+      screen?.replaceChildren(shown.element);
+      image = shown.element;
+    }
+    if (title) title.textContent = card.dataset.title ?? "";
+    if (counter) counter.textContent = `${current + 1} / ${cards.length}`;
+    if (position)
+      position.textContent = ` ${caption?.dataset.position ?? ""}`
+        .replace("{current}", String(current + 1))
+        .replace("{total}", String(cards.length));
+  };
+
+  // The page doesn't scroll under the lightbox, and doesn't move when its scrollbar goes.
+  const lockScroll = (isLocked: boolean) => {
+    const root = document.documentElement;
+    root.style.paddingRight = isLocked
+      ? `${window.innerWidth - root.clientWidth}px`
+      : "";
+    root.style.overflow = isLocked ? "hidden" : "";
+  };
+
+  const open = async () => {
+    if (!lightbox || !screen || busy || lightbox.open) return;
+    busy = true;
+    await fill();
+    lockScroll(true);
+    lightbox.showModal();
+    if (!reducedMotion.matches) {
+      const from = fromDeck();
+      away(true);
+      void play(veil!, [{ opacity: 0 }, { opacity: 1 }], {
+        duration: 360,
+        easing: "ease-out",
+      });
+      await Promise.all([
+        fade(0, 1, { duration: 260, delay: 320, easing: "ease-out" }),
+        play(screen, [{ transform: from }, { transform: "none" }], {
+          duration: 500,
+          easing: easeOut,
+        }).then(() => away(false)),
+      ]);
+    }
+    stopAll();
+    away(false);
+    cards.forEach(preload);
+    busy = false;
+  };
+
+  const close = async () => {
+    if (!lightbox || !screen || busy || !lightbox.open) return;
+    busy = true;
+    if (!reducedMotion.matches) {
+      const to = fromDeck();
+      away(true);
+      void fade(1, 0, { duration: 140, easing: "ease-in" });
+      void play(veil!, [{ opacity: 1 }, { opacity: 0 }], {
+        duration: 340,
+        delay: 40,
+        easing: "ease-in",
+      });
+      await play(screen, [{ transform: "none" }, { transform: to }], {
+        duration: 380,
+        easing: easeIn,
+      });
+    }
+    lightbox.close();
+    busy = false;
+  };
+
+  const go = async (step: number) => {
+    if (busy) return;
+    busy = true;
+    const motion = !reducedMotion.matches;
+    const shift = (sign: number) => `translateX(${sign * step * 48}px)`;
+    if (motion)
+      await Promise.all([
+        play(image, [{ opacity: 1 }, { opacity: 0, transform: shift(-1) }], {
+          duration: 150,
+          easing: "ease-in",
+        }),
+        play(caption!, [{ opacity: 1 }, { opacity: 0 }], { duration: 150 }),
+      ]);
+    bringToFront(cards[(current + step + cards.length) % cards.length]!);
+    await fill();
+    if (motion)
+      await Promise.all([
+        play(image, [{ opacity: 0, transform: shift(1) }, { opacity: 1 }], {
+          duration: 230,
+          easing: easeOut,
+        }),
+        play(caption!, [{ opacity: 0 }, { opacity: 1 }], { duration: 230 }),
+      ]);
+    stopAll();
+    busy = false;
+  };
+
+  // However it closes, the page comes back as it was, the focus on the card in front.
+  lightbox?.addEventListener("close", () => {
+    stopAll();
+    away(false);
+    lockScroll(false);
+    cards[current]?.focus({ preventScroll: true });
+  });
+  lightbox?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const button = target.closest<HTMLElement>("[data-lightbox-button]");
+    if (button?.dataset.lightboxButton === "previous") void go(-1);
+    else if (button?.dataset.lightboxButton === "next") void go(1);
+    else if (button || target.hasAttribute("data-lightbox-close")) void close();
+  });
+  lightbox?.addEventListener("keydown", (event) => {
+    const steps: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1 };
+    if (event.key === "Escape") {
+      event.preventDefault();
+      void close();
+    } else if (event.key in steps) {
+      event.preventDefault();
+      void go(steps[event.key]!);
+    }
+  });
+  lightbox?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    void close();
+  });
+
+  // The deck holds still while the lightbox opens or is open, so that the card that opened it
+  // stays the one in front.
+  const isFrozen = () => busy || Boolean(lightbox?.open);
+
+  // Screen readers hear that the card opens a window, where it does.
+  const markOpening = () => {
+    for (const card of cards) {
+      if (withMouse.matches) card.setAttribute("aria-haspopup", "dialog");
+      else card.removeAttribute("aria-haspopup");
+    }
+  };
+  markOpening();
+  withMouse.addEventListener("change", markOpening);
+
   for (const card of cards) {
     card.addEventListener("pointerover", (event) => {
-      if (event.pointerType === "mouse") bringToFront(card);
-    });
-    card.addEventListener("click", () => {
+      if (event.pointerType !== "mouse" || isFrozen()) return;
       bringToFront(card);
+      preload(card);
+    });
+    // A touch on a laptop with a touch screen brings the card in front, as on a phone; Enter,
+    // whose click has no pointer type, opens it.
+    card.addEventListener("click", (event) => {
+      if (isFrozen()) return;
+      bringToFront(card);
+      const touched =
+        event instanceof PointerEvent && event.pointerType === "touch";
+      if (withMouse.matches && !touched) void open();
     });
     card.addEventListener("focus", () => {
-      bringToFront(card);
+      if (!isFrozen()) bringToFront(card);
     });
   }
 </script>
@@ -143,10 +465,22 @@ const inFront = 1;
     transform: translate(calc((var(--i) - 1) * 52%), -50%) scale(1.05);
   }
 
+  /* While its screen travels to the lightbox or back, the card has left the deck. */
+  .deck-card.is-away {
+    visibility: hidden;
+  }
+
   .deck-card :global(img) {
     width: 100%;
     height: auto;
     aspect-ratio: 7 / 12;
+  }
+
+  /* With a mouse, the card in front says that it opens. */
+  @media (hover: hover) and (pointer: fine) and (scripting: enabled) {
+    .deck-card.is-active {
+      cursor: zoom-in;
+    }
   }
 
   /* On a computer, each title holds on one line: its size follows the width of its column. */
@@ -225,5 +559,122 @@ const inFront = 1;
       margin-top: var(--space-1);
       font-size: inherit;
     }
+  }
+
+  /* The lightbox covers the window; its veil, the page background at 92 %, lets the page show. */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+  }
+
+  .lightbox::backdrop {
+    background: transparent;
+  }
+
+  .lightbox-veil {
+    position: absolute;
+    inset: 0;
+    background: var(--color-veil);
+  }
+
+  .lightbox-top {
+    position: absolute;
+    z-index: 1;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5);
+  }
+
+  .lightbox-counter {
+    color: var(--color-text-faint);
+    font-size: var(--size-label);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .lightbox-stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .lightbox-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    margin: 0;
+  }
+
+  .lightbox-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  /* The screen at most at its real size, the window of the application being 420 × 720, smaller
+     on a short screen, so that its title stays in sight, or on a narrow window, so that its two
+     buttons do. The counter and the cross sit in the corners, beside it. */
+  .lightbox-screen {
+    --screen-height: min(720px, 100svh - 120px, (100vw - 220px) * 12 / 7);
+
+    width: calc(var(--screen-height) * 7 / 12);
+    height: var(--screen-height);
+  }
+
+  .lightbox-screen :global(img) {
+    width: 100%;
+    height: 100%;
+    box-shadow: var(--shadow-screen);
+  }
+
+  .lightbox-title {
+    font-family: var(--font-title);
+    font-size: var(--size-lightbox-title);
+    font-weight: var(--weight-title);
+    letter-spacing: var(--tracking-title);
+    line-height: var(--line-title);
+    text-align: center;
+  }
+
+  /* The look of the back-to-top button, without its transparency: nothing lies under them. */
+  .lightbox-button {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--size-top-button);
+    height: var(--size-top-button);
+    padding: 0;
+    border: 1px solid var(--color-button-line);
+    background: var(--color-control);
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
+  }
+
+  .lightbox-button:hover,
+  .lightbox-button:focus-visible {
+    border-color: var(--color-text);
+    background: var(--color-control-hover);
+  }
+
+  .lightbox-button svg {
+    width: 20px;
+    height: 20px;
   }
 </style>

@@ -31,6 +31,13 @@
   ],
   "features": {
     "heading": "Ce qu'il fait",
+    "lightbox": {
+      "label": "Les écrans d’Exile Market",
+      "previous": "Écran précédent",
+      "next": "Écran suivant",
+      "close": "Fermer",
+      "position": "(écran {current} sur {total})"
+    },
     "cards": [
       {
         "title": "Copiez un objet",
