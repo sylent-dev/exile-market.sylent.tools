@@ -67,6 +67,7 @@ The mock-up (`docs/mockups/home-page.html`, approved by the owner on 2026-11-08)
    - The video was captured from the application after its audit, on 2026-11-13, and is captured again when its interface changes (`docs/technical-choices.md`, Video of the first screen).
 3. **After the download** / **Après le téléchargement**: the sentence of [Main action](#main-action), large and centered, without title and without steps.
 4. **What it does**: no visible title; three real screens of the application overlapping, and the text of the one in front next to them (`docs/branding.md`): copy an item (Ctrl + D, or Ctrl + C), see its price (from poe2scout for currencies and uniques, from the trade site for the rest), its stats and filters, the offers, in a small window over the game.
+   - On a computer with a mouse, a click on the card in front opens its screen in a lightbox, larger, with its title, and the visitor goes from one screen to the next inside it (`docs/branding.md`, Components). On a phone, the tap only brings a card in front: two fingers zoom.
 5. **What it does on your computer** / **Ce qu'il fait sur votre ordinateur** (not « Safety »: the word would promise what the page can't), a short list, to the left of the questions on a computer and above them on a phone:
    - It watches the clipboard while it runs and keeps only what looks like a Path of Exile 2 item.
    - Ctrl + D sends the game the Ctrl + C of one copy, once per press. It doesn't modify the game nor read its memory.

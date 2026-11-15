@@ -31,6 +31,12 @@
   ],
   "features": {
     "heading": "What it does",
+    "lightbox": {
+      "label": "The screens of Exile Market",
+      "previous": "Previous screen",
+      "next": "Next screen",
+      "close": "Close"
+    },
     "cards": [
       {
         "title": "Copy an item",
