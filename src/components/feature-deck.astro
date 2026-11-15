@@ -139,8 +139,12 @@ const inFront = 1;
         class="lightbox-title"
         aria-live="polite"
         data-lightbox-part
-        data-lightbox-title
-      ></figcaption>
+        data-lightbox-caption
+        data-position={lightbox.position}
+      >
+        <span data-lightbox-title></span>
+        <span class="visually-hidden" data-lightbox-position></span>
+      </figcaption>
     </figure>
   </div>
 </dialog>
@@ -170,17 +174,25 @@ const inFront = 1;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const lightbox = document.querySelector<HTMLDialogElement>("[data-lightbox]");
   const screen = lightbox?.querySelector<HTMLElement>("[data-lightbox-screen]");
-  const title = lightbox?.querySelector<HTMLElement>("[data-lightbox-title]");
+  const caption = lightbox?.querySelector<HTMLElement>(
+    "[data-lightbox-caption]",
+  );
+  const title = caption?.querySelector<HTMLElement>("[data-lightbox-title]");
+  const position = caption?.querySelector<HTMLElement>(
+    "[data-lightbox-position]",
+  );
   const counter = lightbox?.querySelector<HTMLElement>(".lightbox-counter");
   const veil = lightbox?.querySelector<HTMLElement>(".lightbox-veil");
   const parts = [
     ...(lightbox?.querySelectorAll<HTMLElement>("[data-lightbox-part]") ?? []),
   ];
-  const image = document.createElement("img");
-  screen?.append(image);
+  // The image of the screen shown, swapped for the one of the next card.
+  let image = document.createElement("img");
 
   // What moves starts fast and slows down (--ease-draw), and leaves fast on its way back.
-  const easeOut = "cubic-bezier(0.215, 0.61, 0.355, 1)";
+  const easeOut = getComputedStyle(document.documentElement)
+    .getPropertyValue("--ease-draw")
+    .trim();
   const easeIn = "cubic-bezier(0.55, 0.06, 0.68, 0.19)";
   let busy = false;
 
@@ -214,14 +226,42 @@ const inFront = 1;
   const away = (isAway: boolean) =>
     cards[current]?.classList.toggle("is-away", isAway);
 
+  // The larger screen of a card is fetched as soon as the mouse brings it in front, so that the
+  // lightbox opens at once; the others, once it is open, for the arrows. The lightbox shows that
+  // same image, so that it is never asked for twice, whatever the cache says.
+  const screens = new Map<
+    string,
+    { element: HTMLImageElement; ready: Promise<void> }
+  >();
+  const preload = (card: HTMLButtonElement | undefined) => {
+    const address = card?.dataset.large;
+    if (!address || screens.has(address)) return;
+    const element = new Image();
+    element.src = address;
+    element.alt = card.querySelector("img")?.alt ?? "";
+    // The screen is decoded before it moves, so that it never travels empty.
+    screens.set(address, {
+      element,
+      ready: element.decode().catch(() => undefined),
+    });
+  };
+
   const fill = async () => {
     const card = cards[current]!;
-    image.src = card.dataset.large ?? "";
-    image.alt = card.querySelector("img")?.alt ?? "";
+    preload(card);
+    const shown = screens.get(card.dataset.large ?? "");
+    await shown?.ready;
+    if (shown && shown.element !== image) {
+      for (const animation of image.getAnimations()) animation.cancel();
+      screen?.replaceChildren(shown.element);
+      image = shown.element;
+    }
     if (title) title.textContent = card.dataset.title ?? "";
     if (counter) counter.textContent = `${current + 1} / ${cards.length}`;
-    // The screen is drawn before it moves, so that it never travels empty.
-    await image.decode().catch(() => undefined);
+    if (position)
+      position.textContent = ` ${caption?.dataset.position ?? ""}`
+        .replace("{current}", String(current + 1))
+        .replace("{total}", String(cards.length));
   };
 
   // The page doesn't scroll under the lightbox, and doesn't move when its scrollbar goes.
@@ -246,14 +286,17 @@ const inFront = 1;
         duration: 360,
         easing: "ease-out",
       });
-      void fade(0, 1, { duration: 260, delay: 320, easing: "ease-out" });
-      await play(screen, [{ transform: from }, { transform: "none" }], {
-        duration: 500,
-        easing: easeOut,
-      });
+      await Promise.all([
+        fade(0, 1, { duration: 260, delay: 320, easing: "ease-out" }),
+        play(screen, [{ transform: from }, { transform: "none" }], {
+          duration: 500,
+          easing: easeOut,
+        }).then(() => away(false)),
+      ]);
     }
     stopAll();
     away(false);
+    cards.forEach(preload);
     busy = false;
   };
 
@@ -289,7 +332,7 @@ const inFront = 1;
           duration: 150,
           easing: "ease-in",
         }),
-        play(title!, [{ opacity: 1 }, { opacity: 0 }], { duration: 150 }),
+        play(caption!, [{ opacity: 1 }, { opacity: 0 }], { duration: 150 }),
       ]);
     bringToFront(cards[(current + step + cards.length) % cards.length]!);
     await fill();
@@ -299,7 +342,7 @@ const inFront = 1;
           duration: 230,
           easing: easeOut,
         }),
-        play(title!, [{ opacity: 0 }, { opacity: 1 }], { duration: 230 }),
+        play(caption!, [{ opacity: 0 }, { opacity: 1 }], { duration: 230 }),
       ]);
     stopAll();
     busy = false;
@@ -334,16 +377,37 @@ const inFront = 1;
     void close();
   });
 
+  // The deck holds still while the lightbox opens or is open, so that the card that opened it
+  // stays the one in front.
+  const isFrozen = () => busy || Boolean(lightbox?.open);
+
+  // Screen readers hear that the card opens a window, where it does.
+  const markOpening = () => {
+    for (const card of cards) {
+      if (withMouse.matches) card.setAttribute("aria-haspopup", "dialog");
+      else card.removeAttribute("aria-haspopup");
+    }
+  };
+  markOpening();
+  withMouse.addEventListener("change", markOpening);
+
   for (const card of cards) {
     card.addEventListener("pointerover", (event) => {
-      if (event.pointerType === "mouse") bringToFront(card);
-    });
-    card.addEventListener("click", () => {
+      if (event.pointerType !== "mouse" || isFrozen()) return;
       bringToFront(card);
-      if (withMouse.matches) void open();
+      preload(card);
+    });
+    // A touch on a laptop with a touch screen brings the card in front, as on a phone; Enter,
+    // whose click has no pointer type, opens it.
+    card.addEventListener("click", (event) => {
+      if (isFrozen()) return;
+      bringToFront(card);
+      const touched =
+        event instanceof PointerEvent && event.pointerType === "touch";
+      if (withMouse.matches && !touched) void open();
     });
     card.addEventListener("focus", () => {
-      bringToFront(card);
+      if (!isFrozen()) bringToFront(card);
     });
   }
 </script>
@@ -520,7 +584,7 @@ const inFront = 1;
   .lightbox-veil {
     position: absolute;
     inset: 0;
-    background: #0a0a0aeb;
+    background: var(--color-veil);
   }
 
   .lightbox-top {
@@ -574,12 +638,12 @@ const inFront = 1;
   .lightbox-screen :global(img) {
     width: 100%;
     height: 100%;
-    box-shadow: 0 30px 80px #000000e6;
+    box-shadow: var(--shadow-screen);
   }
 
   .lightbox-title {
     font-family: var(--font-title);
-    font-size: 22px;
+    font-size: var(--size-lightbox-title);
     font-weight: var(--weight-title);
     letter-spacing: var(--tracking-title);
     line-height: var(--line-title);
@@ -595,7 +659,7 @@ const inFront = 1;
     height: var(--size-top-button);
     padding: 0;
     border: 1px solid var(--color-button-line);
-    background: #0a0a0ab3;
+    background: var(--color-control);
     color: var(--color-text);
     cursor: pointer;
     transition:
@@ -606,7 +670,7 @@ const inFront = 1;
   .lightbox-button:hover,
   .lightbox-button:focus-visible {
     border-color: var(--color-text);
-    background: #0a0a0af2;
+    background: var(--color-control-hover);
   }
 
   .lightbox-button svg {

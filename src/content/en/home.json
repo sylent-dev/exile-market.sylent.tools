@@ -35,7 +35,8 @@
       "label": "The screens of Exile Market",
       "previous": "Previous screen",
       "next": "Next screen",
-      "close": "Close"
+      "close": "Close",
+      "position": "(screen {current} of {total})"
     },
     "cards": [
       {

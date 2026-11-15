@@ -62,6 +62,16 @@
   --color-media-button: #0f1216cc;
   --color-media-button-large: #0f1216e6;
 
+  /* The square buttons that lie over the page: back to top, and those of the lightbox. */
+  --color-control: #0a0a0ab3;
+  --color-control-hover: #0a0a0af2;
+
+  /* The lightbox of the screens: its veil lets the page show a little, and its screen stands
+     above it. */
+  --color-veil: #0a0a0aeb;
+  --shadow-screen: 0 30px 80px #000000e6;
+  --size-lightbox-title: 22px;
+
   /* What moves starts fast and slows down: the line around a download button, the cards. */
   --ease-draw: cubic-bezier(0.215, 0.61, 0.355, 1);
   --draw-in: 0.7s var(--ease-draw);

@@ -35,7 +35,8 @@
       "label": "Les écrans d’Exile Market",
       "previous": "Écran précédent",
       "next": "Écran suivant",
-      "close": "Fermer"
+      "close": "Fermer",
+      "position": "(écran {current} sur {total})"
     },
     "cards": [
       {
