@@ -12,6 +12,8 @@ What is noted and not being done: an evolving list, read when the next work is c
 
 - A new shape for the emblem, for a stronger identity than a new color alone: too long and uncertain before the tag, so step 4g keeps the current shape (owner, 2026-11-09). Depends on: the feedback after v0.1. Noted on 2026-11-09.
 
+- The screens of the deck zoomed with two fingers on a phone: the largest image served is 520 px wide, a little soft once zoomed; a larger one would weigh on every phone. Kind: a small touch. Depends on: players saying so. Noted on 2026-11-16.
+
 ## Edge cases
 
 - The sources of the video out of Git: its card and the ten small screens of its fan are read from `outputs/2026-11-06-video/assets/` (`docs/mockups/video/lib.js`), so the video can't be made again if `outputs/` is emptied. Depends on: the skill for the videos, at the retrospective (step 6). Noted on 2026-11-13.
@@ -31,6 +33,7 @@ What is noted and not being done: an evolving list, read when the next work is c
 - The demo video with the window over the real game, captured by the owner in the game. Depends on: the decision on images of the game on the page (clause 8 of the terms of Grinding Gear Games). Noted on 2026-11-06.
 - Sound for the video of the page, starting with « The deck » (`hot-a`): sound effects rather than music (keys, cards, a thud on each word), the video still starts muted, and a speaker button lets the visitor turn the sound on, reachable with the keyboard and placed next to the pause button. One file can then serve the page, the streams and the social networks, for about 100 KB more on a 10 s video. Effects synthesized by code or from a CC0 sound bank, with their license in `docs/branding.md`, and judged by the owner's ear, since Claude Code can't listen to them. It changes the rule « The video has no sound » of `specs.md`. Depends on: the feedback of the owner's friends and the choice of the video. Noted on 2026-11-06.
 - Not starting the video by itself when the visitor turned on the data saver of their phone (`navigator.connection.saveData`, Chrome on Android only): the still image and the play button, as with reduced motion, to spare them 2.5 MB. Kind: a small touch. Depends on: nothing. Noted on 2026-11-09.
+- A page of patch notes, before 1.0 (2026-12-11), as the owner confirmed: the notes read at build time from `../rust-exile-market/docs/release-notes/` rather than copied, the site rebuilt at each release (a dispatch with a secret token, or a daily build), the notes translated into French by Claude Code in a simplified form, shorter than the pull request bodies. The link is the current version number (« v0.1.2 ») in the header, left of the flag, following the latest release at build time, with an explicit accessible name; to compare in a tab group of the mock-up. A new page type, so specifications, wireframe, mock-up and build, and new addresses (e.g. `/changelog/`, `/fr/notes-de-version/`). Depends on: nothing. Noted on 2026-11-14.
 - A screen of the estimated price of a rare item in the video: both rare items tried found no offer with their default filters. Depends on: a rare item with offers at capture time. Noted on 2026-11-06.
 
 ## Large works
