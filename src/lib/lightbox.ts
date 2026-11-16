@@ -87,8 +87,18 @@ export const createLightbox = ({
     for (const animation of dialog.getAnimations({ subtree: true }))
       animation.cancel();
   };
-  const away = (isAway: boolean) =>
-    origin().classList.toggle("is-away", isAway);
+  // The place left while the traveller moves, remembered: the page may have changed its origin
+  // before it comes back (another card in front of the deck).
+  let left: HTMLElement | undefined;
+  const away = (isAway: boolean) => {
+    if (isAway) {
+      left = origin();
+      left.classList.add("is-away");
+    } else {
+      left?.classList.remove("is-away");
+      left = undefined;
+    }
+  };
 
   // One move at a time: another one is dropped, except a close, which waits for it to end.
   const run = async (task: () => Promise<void>) => {
@@ -155,7 +165,15 @@ export const createLightbox = ({
           easing: easeIn,
         });
       }
+      // Closed by the browser on its way: the close event has put the page back.
+      if (!dialog.open) return;
+      // The page stays still until the close event has put it back, which the browser sends a
+      // moment later: a mouse passing over the deck meanwhile would change the card in front.
+      const done = new Promise((resolve) =>
+        dialog.addEventListener("close", resolve, { once: true }),
+      );
       dialog.close();
+      await done;
     });
   };
 
