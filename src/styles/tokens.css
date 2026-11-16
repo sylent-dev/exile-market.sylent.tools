@@ -66,8 +66,8 @@
   --color-control: #0a0a0ab3;
   --color-control-hover: #0a0a0af2;
 
-  /* The lightbox of the screens: its veil lets the page show a little, and its screen stands
-     above it. */
+  /* The lightbox of the screens and the video: its veil lets the page show a little, and what
+     it shows stands above it. */
   --color-veil: #0a0a0aeb;
   --shadow-screen: 0 30px 80px #000000e6;
   --size-lightbox-title: 22px;

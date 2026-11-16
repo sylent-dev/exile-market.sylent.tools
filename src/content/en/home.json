@@ -20,10 +20,15 @@
     "risk": "Know the risk for your account",
     "alert": "Why does Windows show an alert?"
   },
+  "lightbox": {
+    "close": "Close"
+  },
   "video": {
     "still": "The window of Exile Market, which shows the price of the item in three currencies, under the words “Its price”.",
     "play": "Play the video",
-    "pause": "Pause the video"
+    "pause": "Pause the video",
+    "enlarge": "Enlarge the video",
+    "lightbox": "The video of Exile Market"
   },
   "afterDownload": [
     "Do not forget to set the game in",
@@ -35,7 +40,6 @@
       "label": "The screens of Exile Market",
       "previous": "Previous screen",
       "next": "Next screen",
-      "close": "Close",
       "position": "(screen {current} of {total})"
     },
     "cards": [

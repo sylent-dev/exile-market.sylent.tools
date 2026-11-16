@@ -20,10 +20,15 @@
     "risk": "Connaître le risque pour votre compte",
     "alert": "Pourquoi Windows affiche-t-il une alerte ?"
   },
+  "lightbox": {
+    "close": "Fermer"
+  },
   "video": {
     "still": "La fenêtre d’Exile Market, qui affiche le prix de l’objet en trois monnaies, sous les mots « Son prix ».",
     "play": "Lancer la vidéo",
-    "pause": "Mettre la vidéo en pause"
+    "pause": "Mettre la vidéo en pause",
+    "enlarge": "Agrandir la vidéo",
+    "lightbox": "La vidéo d’Exile Market"
   },
   "afterDownload": [
     "N'oubliez pas de mettre le jeu",
@@ -35,7 +40,6 @@
       "label": "Les écrans d’Exile Market",
       "previous": "Écran précédent",
       "next": "Écran suivant",
-      "close": "Fermer",
       "position": "(écran {current} sur {total})"
     },
     "cards": [

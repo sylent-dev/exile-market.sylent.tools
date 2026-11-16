@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5f. The screens in a lightbox
+
+Pull request: [#29](https://github.com/sylent-dev/exile-market.sylent.tools/pull/29).
+
+On a computer with a mouse, a click (or Enter) on the card in front opens its screen in a lightbox, at most at its real size (420 × 720), with its title under it; ← → and two buttons go from one screen to the next, the deck following; Esc, a cross or a click beside it closes it. The card grows from its place in the deck and goes back there (owner, 2026-11-16, mock-up `docs/mockups/card-lightbox.html`). A phone or a tablet without a mouse keeps the tap that brings a card in front, and the zoom of two fingers. The larger image is downloaded only when the lightbox opens. Tools: mock-up, specifications, build, code review.
+
 ## 5d2. External links in a new tab
 
 Pull request: [#28](https://github.com/sylent-dev/exile-market.sylent.tools/pull/28).
