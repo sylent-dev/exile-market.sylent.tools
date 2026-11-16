@@ -76,6 +76,11 @@ export const createLightbox = ({
   let busy = false;
   // A close asked while something moves (Esc during the opening), done once it ends.
   let closeAsked = false;
+  // Kept at each opening: the close event, which the browser sends a moment after the dialog
+  // closed, however it closed. A move waits for it before it lets the page go, so that a mouse
+  // passing over the deck meanwhile doesn't change the card in front, nor a new opening start
+  // before the page is put back.
+  let shut = Promise.resolve();
 
   const fade = (from: number, to: number, options: KeyframeAnimationOptions) =>
     Promise.all(
@@ -122,6 +127,9 @@ export const createLightbox = ({
           await prepare?.();
           lockScroll(true);
           dialog.showModal();
+          shut = new Promise((resolve) =>
+            dialog.addEventListener("close", () => resolve(), { once: true }),
+          );
           if (!reducedMotion.matches) {
             const from = travel(origin(), traveller);
             away(true);
@@ -137,8 +145,11 @@ export const createLightbox = ({
               }).then(() => away(false)),
             ]);
           }
-          // Closed by the browser on its way: the close event has put the page back.
-          if (!dialog.open) return;
+          // Closed by the browser on its way: the close event puts the page back.
+          if (!dialog.open) {
+            await shut;
+            return;
+          }
           stopAll();
           away(false);
           opened?.();
@@ -165,15 +176,9 @@ export const createLightbox = ({
           easing: easeIn,
         });
       }
-      // Closed by the browser on its way: the close event has put the page back.
-      if (!dialog.open) return;
-      // The page stays still until the close event has put it back, which the browser sends a
-      // moment later: a mouse passing over the deck meanwhile would change the card in front.
-      const done = new Promise((resolve) =>
-        dialog.addEventListener("close", resolve, { once: true }),
-      );
-      dialog.close();
-      await done;
+      // Unless the browser closed it on its way.
+      if (dialog.open) dialog.close();
+      await shut;
     });
   };
 

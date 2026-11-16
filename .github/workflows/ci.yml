@@ -1,6 +1,7 @@
 # The checks run before every commit (docs/technical-choices.md, Commands), on every pull
-# request: format, lint, production build, internal links, former URLs and the width of the
-# pages on a phone, which needs the Chromium of Playwright.
+# request: format, lint, production build, internal links, former URLs, the width of the pages
+# on a phone, the red line of the buttons and the lightboxes, the last three in the Chromium of
+# Playwright.
 name: CI
 
 on:
