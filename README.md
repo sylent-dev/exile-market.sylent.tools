@@ -16,7 +16,7 @@ This product isn't affiliated with or endorsed by Grinding Gear Games in any way
 
 ```sh
 npm run dev            # http://localhost:4321
-npm run check          # format, lint, build, links and addresses, width on a phone
+npm run check          # format, lint, build, links and addresses, width, buttons, lightboxes
 npm run brand:images   # favicon and preview card, from src/assets/brand/
 ```
 
