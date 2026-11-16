@@ -1,18 +1,22 @@
 ---
 // The shell of a lightbox of the home page: its veil, the cross at the top right, and what it
 // shows in the middle, which closes it when clicked beside. Its moves are in src/lib/lightbox.ts.
+import en from "../content/en/home.json";
+import fr from "../content/fr/home.json";
+import type { Lang } from "../lib/i18n";
 import "../styles/lightbox.css";
 
 interface Props {
+  lang: Lang;
   // What screen readers hear when it opens.
   label: string;
-  // The name of the cross.
-  close: string;
   // The attribute its script finds it by.
   [data: `data-${string}`]: boolean;
 }
 
-const { label, close, ...data } = Astro.props;
+const { lang, label, ...data } = Astro.props;
+// The name of the cross, the same in every lightbox.
+const { close } = { en, fr }[lang].lightbox;
 ---
 
 <dialog class="lightbox" aria-label={label} {...data}>

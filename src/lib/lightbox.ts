@@ -15,11 +15,20 @@ export const easeOut = getComputedStyle(document.documentElement)
   .trim();
 const easeIn = "cubic-bezier(0.55, 0.06, 0.68, 0.19)";
 
+// An animation cancelled on its way (the lightbox closed by the browser, a move cut short) ends
+// there, without an error.
 export const play = (
   element: Element,
   keyframes: Keyframe[],
   options: KeyframeAnimationOptions,
-) => element.animate(keyframes, { fill: "both", ...options }).finished;
+) =>
+  element.animate(keyframes, { fill: "both", ...options }).finished.then(
+    () => undefined,
+    (error: unknown) => {
+      if (!(error instanceof DOMException && error.name === "AbortError"))
+        throw error;
+    },
+  );
 
 // The page doesn't scroll under the lightbox, and doesn't move when its scrollbar goes.
 const lockScroll = (isLocked: boolean) => {
@@ -65,6 +74,8 @@ export const createLightbox = ({
   // The buttons and texts, which fade in once the traveller has nearly landed.
   const parts = [...dialog.querySelectorAll("[data-lightbox-part]")];
   let busy = false;
+  // A close asked while something moves (Esc during the opening), done once it ends.
+  let closeAsked = false;
 
   const fade = (from: number, to: number, options: KeyframeAnimationOptions) =>
     Promise.all(
@@ -79,7 +90,7 @@ export const createLightbox = ({
   const away = (isAway: boolean) =>
     origin().classList.toggle("is-away", isAway);
 
-  // One move at a time: the others wait for it to end, or are dropped.
+  // One move at a time: another one is dropped, except a close, which waits for it to end.
   const run = async (task: () => Promise<void>) => {
     if (busy) return;
     busy = true;
@@ -87,6 +98,10 @@ export const createLightbox = ({
       await task();
     } finally {
       busy = false;
+      if (closeAsked) {
+        closeAsked = false;
+        void close();
+      }
     }
   };
 
@@ -112,34 +127,41 @@ export const createLightbox = ({
               }).then(() => away(false)),
             ]);
           }
+          // Closed by the browser on its way: the close event has put the page back.
+          if (!dialog.open) return;
           stopAll();
           away(false);
           opened?.();
         });
 
-  const close = () =>
-    dialog.open
-      ? run(async () => {
-          if (!reducedMotion.matches) {
-            const to = travel(origin(), traveller);
-            away(true);
-            void fade(1, 0, { duration: 140, easing: "ease-in" });
-            void play(veil, [{ opacity: 1 }, { opacity: 0 }], {
-              duration: 340,
-              delay: 40,
-              easing: "ease-in",
-            });
-            await play(traveller, [{ transform: "none" }, { transform: to }], {
-              duration: 380,
-              easing: easeIn,
-            });
-          }
-          dialog.close();
-        })
-      : Promise.resolve();
+  const close = (): Promise<void> => {
+    if (!dialog.open) return Promise.resolve();
+    if (busy) {
+      closeAsked = true;
+      return Promise.resolve();
+    }
+    return run(async () => {
+      if (!reducedMotion.matches) {
+        const to = travel(origin(), traveller);
+        away(true);
+        void fade(1, 0, { duration: 140, easing: "ease-in" });
+        void play(veil, [{ opacity: 1 }, { opacity: 0 }], {
+          duration: 340,
+          delay: 40,
+          easing: "ease-in",
+        });
+        await play(traveller, [{ transform: "none" }, { transform: to }], {
+          duration: 380,
+          easing: easeIn,
+        });
+      }
+      dialog.close();
+    });
+  };
 
   // However it closes, the page comes back as it was.
   dialog.addEventListener("close", () => {
+    closeAsked = false;
     stopAll();
     away(false);
     lockScroll(false);

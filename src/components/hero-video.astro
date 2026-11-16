@@ -48,38 +48,40 @@ const stillSizes = `min(100vw - 40px, clamp(400px, (100vh - ${firstScreenRest}px
       loading="eager"
       fetchpriority="high"
     />
-    <video
-      class="media-video"
-      muted
-      loop
-      playsinline
-      preload="none"
-      aria-hidden="true"
-    >
-      <source src={sources.webm} type='video/webm; codecs="vp9"' />
-      <source src={sources.mp4} type='video/mp4; codecs="avc1.64001f"' />
-    </video>
-    <button
-      type="button"
-      class="media-toggle"
-      aria-label={texts.play}
-      data-play={texts.play}
-      data-pause={texts.pause}
-      data-video-toggle
-      hidden
-    >
-      <span class="media-disc">
-        <svg
-          width="26"
-          height="26"
-          viewBox="0 0 26 26"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M8 4.5v17l14-8.5z"></path>
-        </svg>
-      </span>
-    </button>
+    <div class="media-player" data-video-player>
+      <video
+        class="media-video"
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-hidden="true"
+      >
+        <source src={sources.webm} type='video/webm; codecs="vp9"' />
+        <source src={sources.mp4} type='video/mp4; codecs="avc1.64001f"' />
+      </video>
+      <button
+        type="button"
+        class="media-toggle"
+        aria-label={texts.play}
+        data-play={texts.play}
+        data-pause={texts.pause}
+        data-video-toggle
+        hidden
+      >
+        <span class="media-disc">
+          <svg
+            width="26"
+            height="26"
+            viewBox="0 0 26 26"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M8 4.5v17l14-8.5z"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
     <button
       type="button"
       class="media-enlarge"
@@ -105,29 +107,8 @@ const stillSizes = `min(100vw - 40px, clamp(400px, (100vh - ${firstScreenRest}px
   </div>
 </div>
 
-<Lightbox label={texts.lightbox} close={texts.close} data-video-lightbox>
-  <div class="lightbox-video" data-lightbox-video>
-    <button
-      type="button"
-      class="media-toggle"
-      aria-label={texts.pause}
-      data-play={texts.play}
-      data-pause={texts.pause}
-      data-video-toggle
-    >
-      <span class="media-disc">
-        <svg
-          width="26"
-          height="26"
-          viewBox="0 0 26 26"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M8 4.5v17l14-8.5z"></path>
-        </svg>
-      </span>
-    </button>
-  </div>
+<Lightbox lang={lang} label={texts.lightbox} data-video-lightbox>
+  <div class="lightbox-video" data-lightbox-video></div>
 </Lightbox>
 
 <script>
@@ -136,18 +117,27 @@ const stillSizes = `min(100vw - 40px, clamp(400px, (100vh - ${firstScreenRest}px
   const box = document.querySelector<HTMLElement>(".hero-video");
   const frame = box?.querySelector<HTMLElement>(".media-frame");
   const video = box?.querySelector("video");
-  const button = box?.querySelector<HTMLButtonElement>("[data-video-toggle]");
+  // The video and its button, which go into the lightbox together.
+  const player = box?.querySelector<HTMLElement>("[data-video-player]");
+  const button = player?.querySelector<HTMLButtonElement>(
+    "[data-video-toggle]",
+  );
   const enlarge = box?.querySelector<HTMLButtonElement>("[data-video-enlarge]");
   const dialog = document.querySelector<HTMLDialogElement>(
     "[data-video-lightbox]",
   );
   const screen = dialog?.querySelector<HTMLElement>("[data-lightbox-video]");
-  // The button over the video on the page, and the one over it in the lightbox.
-  const toggles = [
-    ...document.querySelectorAll<HTMLButtonElement>("[data-video-toggle]"),
-  ];
 
-  if (box && frame && video && button && enlarge && dialog && screen) {
+  if (
+    box &&
+    frame &&
+    player &&
+    video &&
+    button &&
+    enlarge &&
+    dialog &&
+    screen
+  ) {
     // What the visitor wants, apart from what the screen shows: out of sight, the video stops but
     // its button still says it plays. Nothing is kept for the next visit.
     let wanted = !reducedMotion.matches;
@@ -156,13 +146,11 @@ const stillSizes = `min(100vw - 40px, clamp(400px, (100vh - ${firstScreenRest}px
     const seen = () => inSight || dialog.open;
 
     const showState = () => {
-      for (const toggle of toggles) {
-        toggle.classList.toggle("is-playing", wanted);
-        toggle.setAttribute(
-          "aria-label",
-          (wanted ? toggle.dataset.pause : toggle.dataset.play) ?? "",
-        );
-      }
+      button.classList.toggle("is-playing", wanted);
+      button.setAttribute(
+        "aria-label",
+        (wanted ? button.dataset.pause : button.dataset.play) ?? "",
+      );
     };
 
     const refuse = (error: DOMException) => {
@@ -208,23 +196,22 @@ const stillSizes = `min(100vw - 40px, clamp(400px, (100vh - ${firstScreenRest}px
     button.hidden = false;
     showState();
 
-    for (const toggle of toggles)
-      toggle.addEventListener("click", () => {
-        wanted = !wanted;
-        apply();
-      });
+    button.addEventListener("click", () => {
+      wanted = !wanted;
+      apply();
+    });
 
-    // The same video goes into the lightbox and comes back, so that it keeps playing where it was
-    // and is never downloaded twice; the still image waits in its place.
+    // The same video goes into the lightbox with its button and comes back, so that it keeps
+    // playing where it was and is never downloaded twice; the still image waits in its place.
     const lightbox = createLightbox({
       dialog,
       traveller: screen,
       origin: () => frame,
       prepare: () => {
-        screen.prepend(video);
+        screen.append(player);
       },
       closed: () => {
-        frame.insertBefore(video, button);
+        frame.insertBefore(player, enlarge);
         enlarge.focus({ preventScroll: true });
         apply();
       },
@@ -320,6 +307,7 @@ const stillSizes = `min(100vw - 40px, clamp(400px, (100vh - ${firstScreenRest}px
     object-fit: cover;
   }
 
+  .media-player,
   .media-video {
     position: absolute;
     inset: 0;
