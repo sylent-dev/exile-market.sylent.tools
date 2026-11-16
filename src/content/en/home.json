@@ -23,7 +23,10 @@
   "video": {
     "still": "The window of Exile Market, which shows the price of the item in three currencies, under the words “Its price”.",
     "play": "Play the video",
-    "pause": "Pause the video"
+    "pause": "Pause the video",
+    "enlarge": "Enlarge the video",
+    "lightbox": "The video of Exile Market",
+    "close": "Close"
   },
   "afterDownload": [
     "Do not forget to set the game in",

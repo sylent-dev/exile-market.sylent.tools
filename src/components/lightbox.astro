@@ -1,0 +1,44 @@
+---
+// The shell of a lightbox of the home page: its veil, the cross at the top right, and what it
+// shows in the middle, which closes it when clicked beside. Its moves are in src/lib/lightbox.ts.
+import "../styles/lightbox.css";
+
+interface Props {
+  // What screen readers hear when it opens.
+  label: string;
+  // The name of the cross.
+  close: string;
+  // The attribute its script finds it by.
+  [data: `data-${string}`]: boolean;
+}
+
+const { label, close, ...data } = Astro.props;
+---
+
+<dialog class="lightbox" aria-label={label} {...data}>
+  <div class="lightbox-veil" data-lightbox-close></div>
+  <div class="lightbox-top" data-lightbox-close>
+    <slot name="top" />
+    <button
+      class="lightbox-button"
+      type="button"
+      aria-label={close}
+      data-lightbox-part
+      data-lightbox-button="close"
+    >
+      <svg
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M5 5l10 10M15 5L5 15"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="lightbox-stage" data-lightbox-close>
+    <slot />
+  </div>
+</dialog>

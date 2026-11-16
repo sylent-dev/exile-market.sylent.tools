@@ -23,7 +23,10 @@
   "video": {
     "still": "La fenêtre d’Exile Market, qui affiche le prix de l’objet en trois monnaies, sous les mots « Son prix ».",
     "play": "Lancer la vidéo",
-    "pause": "Mettre la vidéo en pause"
+    "pause": "Mettre la vidéo en pause",
+    "enlarge": "Agrandir la vidéo",
+    "lightbox": "La vidéo d’Exile Market",
+    "close": "Fermer"
   },
   "afterDownload": [
     "N'oubliez pas de mettre le jeu",

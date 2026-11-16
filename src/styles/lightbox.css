@@ -1,0 +1,73 @@
+/* The lightbox of the home page, shared by the screens of the deck and the video
+   (src/lib/lightbox.ts). It covers the window; its veil, the page background at 92 %, lets the
+   page show. */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.lightbox::backdrop {
+  background: transparent;
+}
+
+.lightbox-veil {
+  position: absolute;
+  inset: 0;
+  background: var(--color-veil);
+}
+
+/* The cross at the top right, and what the lightbox may put at the top left. */
+.lightbox-top {
+  position: absolute;
+  z-index: 1;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--space-5);
+}
+
+.lightbox-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* The look of the back-to-top button, without its transparency: nothing lies under them. */
+.lightbox-button {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--size-top-button);
+  height: var(--size-top-button);
+  padding: 0;
+  border: 1px solid var(--color-button-line);
+  background: var(--color-control);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+}
+
+.lightbox-button:hover,
+.lightbox-button:focus-visible {
+  border-color: var(--color-text);
+  background: var(--color-control-hover);
+}
+
+.lightbox-button svg {
+  width: 20px;
+  height: 20px;
+}
