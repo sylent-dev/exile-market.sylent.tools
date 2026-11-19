@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5h1. The patch notes: specifications
+
+Pull request: [#33](https://github.com/sylent-dev/exile-market.sylent.tools/pull/33).
+
+What the page shows of the release notes of the application (`../rust-exile-market/docs/release-notes/`), one page or one per version, its addresses, the link to it (the current version number in the header, left of the flag, with an explicit accessible name), where the French notes come from, and how the site is rebuilt at each release; the services checked in `docs/external-services.md`, the choices in `docs/technical-choices.md`. Tool: specifications.
+
 ## Fix. A card of the deck lost after the lightbox
 
 Pull request: [#31](https://github.com/sylent-dev/exile-market.sylent.tools/pull/31).
