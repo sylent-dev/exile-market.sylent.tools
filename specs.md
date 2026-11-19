@@ -50,7 +50,7 @@ The wording about macOS says what the tool does, not what the game does: Steam l
 
 ## Content tree
 
-One page and its legal notice, in both languages. There is no navigation beyond the logo, the language link and the footer.
+The home page, the patch notes and the legal notice, in both languages. There is no navigation beyond the logo, the version number that leads to the patch notes, the language link and the footer.
 
 ## Pages
 
@@ -58,7 +58,7 @@ The mock-up (`docs/mockups/home-page.html`, approved by the owner on 2026-11-08)
 
 ### Home page
 
-1. **Header**: the logo and the name, the link to the other language.
+1. **Header**: the logo and the name, the number of the latest version that leads to the [patch notes](#patch-notes), the link to the other language.
 2. **First screen**: the headline, the subtitle, the download area, and a short silent video of the tool at work, the first thing seen.
    - Everything is centered on a computer, in one column: the headline, the subtitle, the buttons and their links, then the video.
    - The size of the video follows the height of the screen, about 600 × 338 px on a screen of 1280 × 720, with a ceiling on tall screens, so that it stays whole. No video is ever cut by the end of the screen.
@@ -106,6 +106,19 @@ The mock-up (`docs/mockups/home-page.html`, approved by the owner on 2026-11-08)
 7. **Help**: a problem goes to GitHub Issues, or to the bug report button of the application.
 8. **Footer**: the legal notice, the source code and its license (`GPL-3.0-or-later` from v0.1), the disclaimer, and the name with « by Sylent » / « par Sylent » under it, a discreet link to sylent.art.
 
+### Patch notes
+
+« Patch notes » / « Notes de version » (owner, 2026-11-18): what changed in each version of the application, for a player.
+
+- **What a note says**: only what a player notices, the interface first, in plain words and a few lines, simpler than the release notes on GitHub and than the pull requests they come from (owner, 2026-11-18). No technical detail: no names of files or functions, no tags of the game's grammar, nothing about the build. The first version says in a few lines what the tool does, since nothing changed before it.
+- **One page**, every version on it, the latest at the top (owner, 2026-11-18). Each version: its number as a title (« v0.1.2 »), the date of its release in the language of the page (« November 15, 2026 » / « 15 novembre 2026 »), and its list. Each version has its own anchor, a link to that place of the page: `/patch-notes/#v0.1.2`.
+- **Below the versions**: a link to the releases on GitHub, for the full notes, the checksums and the files of each version.
+- **The disclaimer** stays in the footer, as on every page: the notes don't repeat it (owner, 2026-11-18).
+- **The link to the page**: in the header of the home page, of the patch notes and of the legal notice, the number of the latest version, « v0.1.2 », left of the language link. Screen readers hear « Patch notes, version 0.1.2 » / « Notes de version, version 0.1.2 ». Its look, and whether the footer links to the page too, are compared in the mock-up (step 5h2). The not-found page has no header, so no link.
+- **Where the notes come from**: the repository of the application, where each version gets its note in English and in French at its release, next to its release notes. The site reads them at the build and copies nothing (`docs/technical-choices.md`, Patch notes). Only the versions published as releases appear (a tag `v<major>.<minor>.<patch>`, with no pre-release suffix).
+- **Updates**: the site is rebuilt every night by itself (owner, 2026-11-18), so a new version appears on the page and in the header the next day at the latest, or at once when the owner starts the build by hand. Until then, the download buttons already offer the new version, since they follow the latest release.
+- **A version without its French note** appears on the French page with its English note and the line « Cette version n’est pas encore traduite. ». A version without its English note doesn't appear, and the check of the build says so.
+
 ### Legal notice
 
 One column: the publisher, the host, the statistics of the site, the credits, then a button back to the home page. See [Contact details and legal information](#contact-details-and-legal-information).
@@ -120,6 +133,8 @@ Both languages on one page, one above the other, each with a button to its home 
 |---|---|
 | `/` | Home page, in English |
 | `/fr/` | Home page, in French |
+| `/patch-notes/` | Patch notes, in English |
+| `/fr/notes-de-version/` | Patch notes, in French |
 | `/legal/` | Legal notice, in English |
 | `/fr/mentions-legales/` | Legal notice, in French |
 
@@ -132,6 +147,7 @@ Each page links to the same page in the other language, without any automatic re
 - **Titles and descriptions**, for the search engines and the link previews:
   - « Exile Market: Path of Exile 2 price checker » / « Exile Market : le prix de vos objets dans Path of Exile 2 »
   - « Copy an item in Path of Exile 2 and see its price in a small window over the game. For Windows and Linux, free and open source. » / « Copiez un objet dans Path of Exile 2 et voyez son prix dans une petite fenêtre par-dessus le jeu. Pour Windows et Linux, gratuit et open source. »
+  - Patch notes: « Patch notes: Exile Market » / « Notes de version : Exile Market », and « What changed in each version of Exile Market, the Path of Exile 2 price checker. » / « Ce qui change à chaque version d’Exile Market, le prix de vos objets dans Path of Exile 2. »
 - **The disclaimer**, which the developer documentation of Grinding Gear Games asks of every public application (« some form of the following statement »), in the footer of every page. English pages: « This product isn't affiliated with or endorsed by Grinding Gear Games in any way. » French pages: the sentence of the application, alone, « Ce produit n’est ni affilié à Grinding Gear Games ni approuvé par ce studio, de quelque manière que ce soit. » (owner, 2026-11-06: everything translated).
 - **The screenshots and the video**, captured on 2026-11-13 from the application after its audit, each in English and in French, the tool and the item in the language of the page: the empty window, the price of a unique ring and the filters of a rare bow, and Headhunter in the video. Nothing was left for the owner to capture, since the page shows no image of the game. The window shows the currency icons of the game, which belong to Grinding Gear Games (`../rust-exile-market/docs/images.md`): the page shows them only there, inside the tool, and no other image of the game.
 - **Donations**: one thin line above the header of the home page and of the legal notice, in both languages: « Exile Market is free. » and the link « Support it on Ko-fi »; « Exile Market est gratuit. » and the link « Soutenez-le sur Ko-fi ». The link leads to the Ko-fi page of the application (step 18 of the application), in English like the other pages the site doesn't own. The not-found page, which holds both languages, has no banner. The donations are free gifts: nothing is paid, nothing is unlocked, and no image or logo of Grinding Gear Games stands near the link. No text says or implies that Grinding Gear Games approves or supports the donations. The legal notice must match them (Contact details and legal information).
