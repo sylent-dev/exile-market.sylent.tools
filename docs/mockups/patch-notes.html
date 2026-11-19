@@ -100,6 +100,8 @@
   .pn-changes { padding: var(--pn-card-padding); border: 1px solid var(--pn-card-line); background: var(--pn-card-fill); }
   .pn-change + .pn-change { margin-top: var(--space-3); }
   .pn-tag { display: inline-block; margin-right: var(--space-2); padding: 1px 7px; border: 1px solid var(--pn-tag-line); border-radius: var(--radius-small); background: var(--pn-tag-fill); color: var(--pn-tag-color); font: 700 11px / 1.6 var(--font-text); letter-spacing: 0.07em; text-transform: uppercase; vertical-align: 0.12em; }
+  /* On a phone, the text under its tag. */
+  .pn-text { display: block; margin-top: var(--space-1); }
   .pn-tag.is-new { border-color: var(--pn-tag-new-fill); background: var(--pn-tag-new-fill); color: var(--pn-tag-new-color); }
 
   @media (width >= 721px) {
@@ -112,6 +114,7 @@
     .pn-date, .pn-files { display: block; margin-top: var(--space-1); }
     .pn-change { display: grid; grid-template-columns: var(--pn-tag-width) 1fr; align-items: baseline; }
     .pn-tag { justify-self: start; margin-right: 0; }
+    .pn-text { margin-top: 0; }
   }
 
   /* The version number in the header, left of the flag: plain text (owner 2026-11-19). */
@@ -333,7 +336,7 @@
           <time class="pn-date" datetime="${note.date}">${formatDate(note.date, lang)}</time>
           <a class="pn-files" href="${RELEASES}${note.version}" target="_blank" rel="noopener">${t.files}<span class="visually-hidden">${t.newTab}</span></a>
         </div>
-        <ul class="pn-changes">${changes.map((ch) => `<li class="pn-change"><span class="pn-tag${t.order.indexOf(ch.tag) === 0 ? " is-new" : ""}">${ch.tag}</span><span>${typeset(ch.text, lang)}</span></li>`).join("")}</ul>
+        <ul class="pn-changes">${changes.map((ch) => `<li class="pn-change"><span class="pn-tag${t.order.indexOf(ch.tag) === 0 ? " is-new" : ""}">${ch.tag}</span><span class="pn-text">${typeset(ch.text, lang)}</span></li>`).join("")}</ul>
       </li>`;
     }).join("");
     $("mock-root").innerHTML = `${c.skip}${c.banner}${header}
