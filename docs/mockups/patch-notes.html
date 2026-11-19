@@ -41,7 +41,7 @@
 
   /* ===== The patch notes page: what the site will build (step 5h4). ===== */
 
-  /* The style tokens of the page: the two styles only set these. */
+  /* The tokens of the page (style « Sober », owner 2026-11-19). */
   :root {
     --pn-meta: 180px;
     --pn-rail-gap: var(--space-8);
@@ -53,11 +53,11 @@
     --pn-dot-glow: none;
     --pn-number-size: 24px;
     --pn-tag-width: 92px;
-    --pn-tag-fill: transparent;
-    --pn-tag-line: var(--color-button-line);
+    --pn-tag-fill: #262626;
+    --pn-tag-line: transparent;
     --pn-tag-color: var(--color-text-weak);
-    --pn-tag-new-color: var(--color-text-weak);
-    --pn-tag-new-fill: transparent;
+    --pn-tag-new-color: #ffffff;
+    --pn-tag-new-fill: var(--color-accent-deep);
     --pn-card-fill: transparent;
     --pn-card-line: transparent;
     --pn-card-padding: 0px;
@@ -65,35 +65,27 @@
     --pn-lead-style: normal;
     --pn-lead-size: var(--size-body);
   }
-  :root[data-style="lit"] {
-    --pn-rail-color: #ffffff17;
-    --pn-dot-fill: var(--color-surface);
-    --pn-dot-line: var(--color-button-line);
-    --pn-dot-latest: var(--color-accent);
-    --pn-dot-glow: 0 0 0 5px #e5383b2e, 0 0 18px #e5383b66;
-    --pn-number-size: 30px;
-    --pn-tag-fill: #ffffff0d;
-    --pn-tag-line: transparent;
-    --pn-tag-color: var(--color-text-weak);
-    --pn-tag-new-color: var(--color-text);
-    --pn-tag-new-fill: #ffffff1f;
-    --pn-card-fill: var(--color-card);
-    --pn-card-line: var(--color-card-line);
-    --pn-card-padding: var(--space-5);
-    --pn-lead-font: var(--font-subtitle);
-    --pn-lead-style: italic;
-    --pn-lead-size: calc(var(--size-subtitle) * var(--subtitle-scale));
-  }
 
-  .pn-head { padding-block: var(--space-16) var(--space-12); }
+  .pn-head { padding-block: var(--space-8) var(--space-12); }
+  .pn-back { display: inline-flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-8); color: var(--color-text-weak); font-size: var(--size-label); font-weight: 600; text-decoration: none; }
+  .pn-back:hover { color: var(--color-text); }
+  .pn-back svg { width: 16px; height: 16px; }
+  .pn-back-row { text-align: left; }
+  /* The grid of the top runs down over the first versions, then fades out; the veil stays behind the title. */
+  .grid-zone.pn-zone { --grid-fade: linear-gradient(to bottom, #000000 0, #000000 380px, transparent 820px); background: radial-gradient(760px 300px at 50% 190px, var(--grid-veil) 55%, transparent); }
+  /* The red fluid of sylent.art: a canvas over the grid, under the same fade (script below). */
+  .grid-zone > .pn-fluid { position: absolute; z-index: -1; inset: calc(-1 * var(--grid-overrun, 0px)) 0 0; mask-image: var(--grid-fade); pointer-events: none; }
+  .pn-fluid canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .grid-zone::after { display: none; }
   .pn-head h1 { font-size: var(--size-title); text-transform: uppercase; text-shadow: none; }
   .pn-lead { margin-top: var(--space-3); color: var(--color-text-weak); font-family: var(--pn-lead-font); font-size: var(--pn-lead-size); font-style: var(--pn-lead-style); }
+  /* On a phone, a short lead on one line; the long one from 721 px. */
+  .pn-lead-long { display: none; }
   .pn-body { padding-bottom: var(--band-padding); }
 
   /* The timeline: a vertical line, a dot per version; on a phone the line runs on the left. */
   .pn-timeline { --pn-rail: 5px; position: relative; max-width: 900px; margin-inline: auto; }
   .pn-timeline::before { content: ""; position: absolute; top: 12px; bottom: 12px; left: var(--pn-rail); width: 1px; background: var(--pn-rail-color); }
-  :root[data-style="lit"] .pn-timeline::before { background: linear-gradient(var(--color-accent-deep), var(--pn-rail-color) 260px); }
   .pn-version { position: relative; padding-left: calc(var(--pn-rail) + var(--space-6)); scroll-margin-top: var(--space-8); }
   .pn-version + .pn-version { margin-top: var(--space-12); }
   .pn-version::before { content: ""; position: absolute; top: 0.62em; left: calc(var(--pn-rail) - var(--pn-dot) / 2 + 0.5px); width: var(--pn-dot); height: var(--pn-dot); box-sizing: border-box; border: 1px solid var(--pn-dot-line); border-radius: 50%; background: var(--pn-dot-fill); }
@@ -102,15 +94,18 @@
   .pn-meta { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--space-3); margin-bottom: var(--space-4); }
   .pn-number { font-size: var(--pn-number-size); letter-spacing: -0.03em; text-transform: none; }
   .pn-date { color: var(--color-text-weak); font-size: var(--size-label); }
-  .pn-files { flex-basis: 100%; margin-top: var(--space-1); font-size: var(--size-label); font-weight: 600; }
+  .pn-files { flex-basis: 100%; margin-top: var(--space-1); color: var(--color-accent); font-size: calc(var(--size-label) - 2px); font-weight: 600; text-decoration: none; }
+  .pn-files:hover { color: var(--color-text); }
 
   .pn-changes { padding: var(--pn-card-padding); border: 1px solid var(--pn-card-line); background: var(--pn-card-fill); }
   .pn-change + .pn-change { margin-top: var(--space-3); }
   .pn-tag { display: inline-block; margin-right: var(--space-2); padding: 1px 7px; border: 1px solid var(--pn-tag-line); border-radius: var(--radius-small); background: var(--pn-tag-fill); color: var(--pn-tag-color); font: 700 11px / 1.6 var(--font-text); letter-spacing: 0.07em; text-transform: uppercase; vertical-align: 0.12em; }
-  .pn-tag.is-new { background: var(--pn-tag-new-fill); color: var(--pn-tag-new-color); }
+  .pn-tag.is-new { border-color: var(--pn-tag-new-fill); background: var(--pn-tag-new-fill); color: var(--pn-tag-new-color); }
 
   @media (width >= 721px) {
     .pn-head { text-align: center; }
+    .pn-lead-long { display: inline; }
+    .pn-lead-short { display: none; }
     .pn-timeline { --pn-rail: calc(var(--pn-meta) + var(--pn-rail-gap)); }
     .pn-version { display: grid; grid-template-columns: var(--pn-meta) 1fr; column-gap: calc(var(--pn-rail-gap) * 2); padding-left: 0; }
     .pn-meta { display: block; margin-bottom: 0; text-align: right; }
@@ -119,21 +114,17 @@
     .pn-tag { justify-self: start; margin-right: 0; }
   }
 
-  /* The version number in the header, left of the flag: three looks to compare. */
+  /* The version number in the header, left of the flag: plain text (owner 2026-11-19). */
   .site-header .wrap { gap: var(--space-2); }
   .pn-header-link { margin-left: auto; color: var(--color-text-weak); font-size: var(--size-label); font-weight: 700; text-decoration: none; letter-spacing: 0.01em; white-space: nowrap; }
   .pn-header-link:hover, .pn-header-link[aria-current="page"] { color: var(--color-text); }
-  :root[data-version="outline"] .pn-header-link { padding: 3px 9px; border: 1px solid var(--color-button-line); border-radius: var(--radius-small); }
-  :root[data-version="outline"] .pn-header-link:hover { border-color: var(--color-text-weak); }
-  :root[data-version="dot"] .pn-header-link::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--color-accent); vertical-align: 0.12em; }
-  :root[data-version="label"] .pn-header-link .pn-header-word { color: var(--color-text-faint); font-weight: 600; }
 </style>
 </head>
 <body>
 <div class="mock-tabs" id="mock-tabs"></div>
 <div class="mock-note">
   <p><strong>Patch notes, step 5h3.</strong> The banner, the header and the footer are those of the site; the timeline and the version number are new. The notes are those of <code>docs/patch-notes/</code> of the application; v0.2.0 is shown although not released yet.</p>
-  <p><strong>Style</strong>: « Sober » keeps lines only, like the legal notice; « Lit » puts the changes on cards, a red dot on the latest version and the lead in the italic of the home page. <strong>Number</strong>: the look of « v0.2.0 » in the header. <strong>View</strong>: « Phone » shows the page in a frame of 360 px.</p>
+  <p><strong>Grid</strong>: the red fluid of sylent.art runs along its lines under the pointer, in place of the red light of the site today (step 5h4 takes it to every grid of the site). <strong>View</strong>: « Phone » shows the page in a frame of 360 px.</p>
 </div>
 <div id="mock-root"></div>
 <script>
@@ -298,12 +289,10 @@
 };
   const RELEASES = "https://github.com/sylent-dev/rust-exile-market/releases/tag/v";
   const TEXT = {
-    en: { title: "Patch notes", lead: "What changed in each version of Exile Market.", files: "Files and checksums", newTab: " (opens in a new tab)", headerLabel: (v) => `Patch notes, version ${v}`, word: "Patch notes", order: ["New", "Changed", "Fixed"], months: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
-    fr: { title: "Notes de version", lead: "Ce qui change à chaque version d’Exile Market.", files: "Fichiers et sommes de contrôle", newTab: " (s’ouvre dans un nouvel onglet)", headerLabel: (v) => `Notes de version, version ${v}`, word: "Notes", order: ["Nouveau", "Modifié", "Corrigé"], months: ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"] },
+    en: { title: "Patch notes", lead: "What changed in each version of Exile Market.", leadShort: "What’s new", back: "Back to the home page", files: "Files and checksums", newTab: " (opens in a new tab)", headerLabel: (v) => `Patch notes, version ${v}`, word: "Patch notes", order: ["New", "Changed", "Fixed"], months: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
+    fr: { title: "Notes de version", lead: "Ce qui change à chaque version d’Exile Market.", leadShort: "Quoi de neuf ?", back: "Retour à l’accueil", files: "Fichiers et sommes de contrôle", newTab: " (s’ouvre dans un nouvel onglet)", headerLabel: (v) => `Notes de version, version ${v}`, word: "Notes", order: ["Nouveau", "Modifié", "Corrigé"], months: ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"] },
   };
   const VARIANTS = {
-    style: { label: "Style", options: { sober: "Sober", lit: "Lit" }, fallback: "sober" },
-    version: { label: "Number", options: { text: "Text", outline: "Outlined", dot: "Red dot", label: "With a word" }, fallback: "text" },
     lang: { label: "Language", options: { en: "English", fr: "Français" }, fallback: "en" },
     view: { label: "View", options: { page: "Page", phone: "Phone 360 px" }, fallback: "page" },
   };
@@ -334,7 +323,7 @@
     const c = CHROME[lang];
     const latest = NOTES[lang][0].version;
     document.documentElement.lang = lang;
-    const versionLink = `<a class="pn-header-link" href="#" aria-current="page" aria-label="${t.headerLabel(latest)}">${chosen.version === "label" ? `<span class="pn-header-word">${t.word}</span> ` : ""}v${latest}</a>`;
+    const versionLink = `<a class="pn-header-link" href="#" aria-current="page" aria-label="${t.headerLabel(latest)}">v${latest}</a>`;
     const header = c.header.replace(/(<a [^>]*class="site-language")/, `${versionLink}$1`);
     const versions = NOTES[lang].map((note) => {
       const changes = [...note.changes].sort((a, b) => t.order.indexOf(a.tag) - t.order.indexOf(b.tag));
@@ -349,8 +338,8 @@
     }).join("");
     $("mock-root").innerHTML = `${c.skip}${c.banner}${header}
       <main id="content" tabindex="-1">
-        <div class="grid-zone is-short"><div class="wrap pn-head"><h1>${t.title}</h1><p class="pn-lead">${t.lead}</p></div></div>
-        <div class="pn-body"><div class="wrap"><ol class="pn-timeline">${versions}</ol></div></div>
+        <div class="grid-zone pn-zone"><div class="wrap pn-head"><div class="pn-back-row"><a class="pn-back" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg>${t.back}</a></div><h1>${t.title}</h1><p class="pn-lead"><span class="pn-lead-long">${t.lead}</span><span class="pn-lead-short" data-one-line>${t.leadShort}</span></p></div>
+        <div class="pn-body"><div class="wrap"><ol class="pn-timeline">${versions}</ol></div></div></div>
       </main>${c.footer}${c.top}`;
   }
 
@@ -376,6 +365,102 @@
     $("mock-root").innerHTML = `<div class="mock-phone"><iframe title="The page at 360 px" src="?${inner}"></iframe></div>`;
   } else {
     renderPage();
+  }
+</script>
+<script>
+  // The red fluid of the grid, after src/scripts/grid-fluid.ts of sylent.art. Each crossing holds
+  // some energy: the pointer pours energy into the crossings around it as it moves, the energy
+  // spreads to the neighbor crossings and fades, and each line glows with the energy of its ends.
+  function gridFluid(host, cell, color) {
+    const layer = document.createElement("div");
+    layer.className = "pn-fluid";
+    layer.setAttribute("aria-hidden", "true");
+    const canvas = document.createElement("canvas");
+    layer.append(canvas);
+    host.prepend(layer);
+    const context = canvas.getContext("2d");
+    const [red, green, blue] = [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16));
+    let columns = 0, rows = 0, width = 0, height = 0, running = false, seen = false, pointer = null;
+    let energy = new Float32Array(0), next = new Float32Array(0);
+    function resize() {
+      const ratio = Math.min(devicePixelRatio, 2);
+      width = canvas.clientWidth; height = canvas.clientHeight;
+      canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      columns = Math.ceil(width / cell) + 1; rows = Math.ceil(height / cell) + 1;
+      energy = new Float32Array(columns * rows); next = new Float32Array(columns * rows);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    new IntersectionObserver(([entry]) => { seen = entry.isIntersecting; }).observe(canvas);
+    addEventListener("pointermove", (event) => {
+      const box = canvas.getBoundingClientRect();
+      const x = event.clientX - box.left, y = event.clientY - box.top;
+      if (x < 0 || y < 0 || x > box.width || y > box.height) { pointer = null; return; }
+      const moved = pointer ? Math.hypot(x - pointer.x, y - pointer.y) : 0;
+      pointer = { x, y };
+      const amount = Math.min(0.9, 0.12 + moved / 60);
+      const reach = cell * 1.6;
+      for (let row = Math.max(0, Math.floor((y - reach) / cell)); row <= Math.min(rows - 1, Math.ceil((y + reach) / cell)); row++) {
+        for (let column = Math.max(0, Math.floor((x - reach) / cell)); column <= Math.min(columns - 1, Math.ceil((x + reach) / cell)); column++) {
+          const distance = Math.hypot(column * cell - x, row * cell - y);
+          if (distance < reach) {
+            const index = row * columns + column;
+            energy[index] = Math.min(1, energy[index] + amount * (1 - distance / reach));
+          }
+        }
+      }
+      if (!running) { running = true; requestAnimationFrame(step); }
+    });
+    document.documentElement.addEventListener("pointerleave", () => { pointer = null; });
+    function line(x1, y1, x2, y2, a, b) {
+      if (a + b < 0.02) return;
+      const gradient = context.createLinearGradient(x1, y1, x2, y2);
+      gradient.addColorStop(0, `rgb(${red} ${green} ${blue} / ${Math.min(1, a * 1.3)})`);
+      gradient.addColorStop(1, `rgb(${red} ${green} ${blue} / ${Math.min(1, b * 1.3)})`);
+      context.strokeStyle = gradient;
+      context.beginPath(); context.moveTo(x1, y1); context.lineTo(x2, y2); context.stroke();
+    }
+    function step() {
+      let total = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++) {
+          const index = row * columns + column;
+          let sum = 0, count = 0;
+          if (column > 0) { sum += energy[index - 1]; count++; }
+          if (column < columns - 1) { sum += energy[index + 1]; count++; }
+          if (row > 0) { sum += energy[index - columns]; count++; }
+          if (row < rows - 1) { sum += energy[index + columns]; count++; }
+          const value = (energy[index] + (sum / count - energy[index]) * 0.42) * 0.968;
+          next[index] = value < 0.004 ? 0 : value;
+          total += next[index];
+        }
+      }
+      [energy, next] = [next, energy];
+      if (seen) {
+        context.clearRect(0, 0, width, height);
+        // A soft wide stroke for the glow, then the thin line itself.
+        for (const [lineWidth, alpha] of [[4, 0.22], [1, 1]]) {
+          context.lineWidth = lineWidth; context.globalAlpha = alpha;
+          for (let row = 0; row < rows; row++) {
+            for (let column = 0; column < columns; column++) {
+              const index = row * columns + column;
+              const x = column * cell + 0.5, y = row * cell + 0.5;
+              if (column < columns - 1) line(x, y, x + cell, y, energy[index], energy[index + 1]);
+              if (row < rows - 1) line(x, y, x, y + cell, energy[index], energy[index + columns]);
+            }
+          }
+        }
+        context.globalAlpha = 1;
+      }
+      if (total > 0.01) requestAnimationFrame(step);
+      else { running = false; context.clearRect(0, 0, width, height); }
+    }
+  }
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const styles = getComputedStyle(document.documentElement);
+    const cell = parseFloat(styles.getPropertyValue("--grid-step"));
+    const color = styles.getPropertyValue("--color-accent").trim();
+    document.querySelectorAll(".grid-zone").forEach((host) => gridFluid(host, cell, color));
   }
 </script>
 <script type="module">
