@@ -2,6 +2,18 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## Fix. A card of the deck lost after the lightbox
+
+Pull request: [#31](https://github.com/sylent-dev/exile-market.sylent.tools/pull/31).
+
+The card hidden while its screen travels is remembered, and the deck holds still until the close event; `scripts/check-lightbox.mjs` added to `npm run check`.
+
+## 5g. The video: click to pause, and in the lightbox
+
+Pull request: [#30](https://github.com/sylent-dev/exile-market.sylent.tools/pull/30).
+
+A click anywhere on the video pauses it or plays it again, and the video becomes reachable with the keyboard as one button, so the small pause button goes; in its place, bottom right, a button opens the video in the lightbox of 5f at its real size (1280 × 720, smaller on a small screen) rather than in full screen, which would blur it; that button only with a mouse (owner, 2026-11-16). Depends on: 5f. Tools: specifications, build, code review.
+
 ## 5f. The screens in a lightbox
 
 Pull request: [#29](https://github.com/sylent-dev/exile-market.sylent.tools/pull/29).

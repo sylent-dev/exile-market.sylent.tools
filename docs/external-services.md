@@ -85,6 +85,14 @@ Chosen by step 18 of the application (`../rust-exile-market/docs/technical-choic
 - Ko-fi takes no fee on one-off donations; Stripe takes its card fee.
 - **For this site**: a plain link, without a Ko-fi script, button image or widget, so the site loads nothing from Ko-fi and sends it nothing before the click; the notice of the statistics stays true.
 
+## GitHub Actions (nightly build)
+
+Source: [Events that trigger workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows) (schedule) and [Disabling and enabling a workflow](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/disabling-and-enabling-a-workflow), read on 2026-11-18. The minutes are free for a public repository.
+
+- A schedule runs on the default branch only, in UTC, at most every 5 minutes.
+- It can be delayed when GitHub Actions is busy, the start of each hour above all, and a run may even be dropped: the next night catches up, and the manual button stays.
+- **In a public repository, a schedule is turned off after 60 days without activity in the repository.** The page then stops following the releases: turn it back on in **Actions**, the workflow **Deploy**, **Enable workflow**, or with `gh workflow enable deploy.yml`. Accepted by the owner on 2026-11-18, to check at the retrospective of each cycle.
+
 ## Other services
 
 - **GitHub Releases** serves the download files; see the links in `specs.md`. `releases/latest` skips pre-releases and drafts, so `v0.1.0` must be published as a normal release for the buttons to work.

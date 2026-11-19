@@ -153,6 +153,14 @@ Step 5f for the screens (`src/components/feature-deck.astro`), step 5g for the v
 - **The video moves, it isn't copied**: the same `<video>` goes into the lightbox with its button and comes back, so that it keeps playing where it was and is never downloaded twice; a media element moved within the page isn't paused. The still image waits in its place. The button that opens it shows only once the video has a frame (`loadeddata`), so that the lightbox never opens on an empty video; with reduced motion, once the visitor has started it.
 - **The whole video is one button** (`<button>` over it, the full size of the frame): a click anywhere pauses it or plays it again, and the keyboard reaches it as one control, named « Pause the video » or « Play the video ». The button that opens the lightbox lies over it in the corner, beside it in the code, since a button can't hold another.
 
+## Patch notes
+
+- **Read, not copied** (owner, 2026-11-18): the notes of the page are files of the application's repository, one per version and language, written at its release next to its release notes (`specs.md`, Patch notes). The site reads them at the build: no pull request here at each release, and one source. Rejected: copying them here, which needs a session and a pull request at each release and leaves the page behind the header.
+- **An exception to the place of the content** (`CLAUDE.md`, Language): the notes are texts shown to visitors, yet they live outside `src/content/`. The session of the application writes them with the context of its pull requests, and the same files could one day show what changed inside the application after an update. The French typography of `CLAUDE.md` applies to them there too.
+- **The application at the build**: locally, the folder `../rust-exile-market`; in CI and in the deployment, a second `actions/checkout` of `sylent-dev/rust-exile-market` (public, about 44 MB with its history), with its tags, which give the list of the versions and their dates. The exact paths and the loader of the notes are chosen at step 5h3.
+- **Rebuilt every night** (owner, 2026-11-18): `deploy.yml` also runs on a `schedule`, a time written in the cron format (`17 4 * * *`: every day at 04:17 UTC), off the start of the hour, which GitHub says is the busiest; its manual button (`workflow_dispatch`) publishes a release at once. Rejected: a signal sent by the release workflow of the application (`repository_dispatch`), faster but which needs a secret token in the application's repository; and reading the notes through the API of GitHub, rate-limited without a token.
+- **The nightly build when nothing changed** publishes the same site again: harmless, and simpler than comparing.
+
 ## Commands
 
 Run `npm ci` first, and `npx playwright install --only-shell chromium` once. They are also in the `scripts` of `package.json`.
