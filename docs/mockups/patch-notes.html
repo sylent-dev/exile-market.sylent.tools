@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock-up · Patch notes</title>
+<!--
+  Mock-up of step 5h3 (html-mockups skill): the patch notes page, a timeline of the versions
+  (wireframe of step 5h2, specs.md, Patch notes). The banner, the header, the footer and their
+  styles are those of the built site (dist/legal/), copied as they are; only the timeline and the
+  version number in the header are new. The notes are those of docs/patch-notes/ of the
+  application. The tabs switch the style, the look of the version number, the language and the
+  view; the address keeps the choice (?style=lit&lang=fr).
+
+  Served from the repository root:
+    python3 docs/mockups/serve.py 8770
+  then open http://127.0.0.1:8770/docs/mockups/patch-notes.html
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Manrope:wght@400;600;700;800&display=block" rel="stylesheet">
+<style>
+.outline-button[data-astro-cid-nlrjc6tq]{--border-color:var(--color-button-line);min-height:var(--height-button);padding:0 var(--space-6);color:var(--color-text);font-family:var(--font-title);letter-spacing:var(--tracking-button);white-space:nowrap;isolation:isolate;border:1px solid #0000;justify-content:center;align-items:center;font-weight:600;text-decoration:none;display:inline-flex;position:relative}.outline-button[data-astro-cid-nlrjc6tq]:hover{color:var(--color-text)}.is-main[data-astro-cid-nlrjc6tq]{--border-color:var(--color-text)}.button-border[data-astro-cid-nlrjc6tq],.button-line[data-astro-cid-nlrjc6tq]{pointer-events:none;width:calc(100% + 2px);max-width:none;height:calc(100% + 2px);position:absolute;inset:-1px;overflow:visible}.button-line[data-astro-cid-nlrjc6tq].is-glow{z-index:-1;filter:drop-shadow(0 0 3px var(--color-accent-deep)) drop-shadow(0 0 10px var(--color-accent-deep))}.button-border[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq],.button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq]{x:.5px;y:.5px;fill:none;width:calc(100% - 1px);height:calc(100% - 1px)}.button-border[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq]{stroke:var(--border-color);stroke-width:1px}.button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq]{stroke:var(--color-accent-deep);stroke-width:2px;stroke-linecap:square;stroke-dasharray:1 1;stroke-dashoffset:1px;opacity:0;transition:stroke-dashoffset var(--draw-out), opacity 0s linear .25s}.outline-button[data-astro-cid-nlrjc6tq]:hover .button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq],.outline-button[data-astro-cid-nlrjc6tq]:focus-visible .button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq]{stroke-dashoffset:0;opacity:1;transition:stroke-dashoffset var(--draw-in), opacity 0s}@media (prefers-reduced-motion:reduce){.button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq],.outline-button[data-astro-cid-nlrjc6tq]:hover .button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq],.outline-button[data-astro-cid-nlrjc6tq]:focus-visible .button-line[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq]{transition:none}}@media (forced-colors:active){.button-border[data-astro-cid-nlrjc6tq] rect[data-astro-cid-nlrjc6tq]{stroke:linktext}}.site-top[data-astro-cid-m765rkco]{z-index:5;right:var(--space-5);bottom:var(--space-5);width:var(--size-top-button);height:var(--size-top-button);border:1px solid var(--color-button-line);background:var(--color-control);color:var(--color-text);cursor:pointer;opacity:.6;place-items:center;padding:0;transition:opacity .2s,border-color .2s,background-color .2s;display:none;position:fixed}.site-top[data-astro-cid-m765rkco]:hover,.site-top[data-astro-cid-m765rkco]:focus-visible{border-color:var(--color-text);background:var(--color-control-hover);opacity:1}.site-top[data-astro-cid-m765rkco].is-shown{display:grid}.donation-banner[data-astro-cid-4ddkjlvr]{z-index:2;min-height:var(--height-donation-banner);padding:var(--space-2) var(--space-4);border-bottom:1px solid var(--color-border);background:var(--color-background);color:var(--color-text-faint);font-size:var(--size-label);text-align:center;justify-content:center;align-items:center;line-height:1.2;display:flex;position:relative}p[data-astro-cid-4ddkjlvr]{gap:var(--space-1) var(--space-2);flex-wrap:wrap;justify-content:center;margin:0;display:flex}span[data-astro-cid-4ddkjlvr],a[data-astro-cid-4ddkjlvr]{white-space:nowrap}a[data-astro-cid-4ddkjlvr]{margin-block:calc(-1 * var(--space-2));padding-block:var(--space-2);color:var(--color-accent);font-weight:700;text-decoration:none}a[data-astro-cid-4ddkjlvr]:hover,a[data-astro-cid-4ddkjlvr]:focus-visible{color:var(--color-text)}.site-footer[data-astro-cid-7lhuyvjk]{padding-block:var(--space-8);background-image:var(--grid-image);color:var(--color-text-weak);font-size:var(--size-label);background-size:40px 40px;container-type:inline-size}.footer-row[data-astro-cid-7lhuyvjk]{justify-content:space-between;align-items:flex-end;gap:var(--space-4) var(--space-8);flex-wrap:wrap;display:flex}.footer-links[data-astro-cid-7lhuyvjk]{gap:var(--space-1) var(--space-4);margin-bottom:var(--space-2);flex-wrap:wrap;display:flex}a[data-astro-cid-7lhuyvjk]{color:var(--color-accent);text-decoration:none}a[data-astro-cid-7lhuyvjk]:hover{color:var(--color-text)}.footer-brand[data-astro-cid-7lhuyvjk]{margin:0 max(0px, calc(var(--size-top-button) + var(--space-5) + var(--space-4) - var(--gutter) - (100cqw - min(100cqw, var(--width-content) + 2 * var(--gutter))) / 2)) 0 auto;flex-direction:column;align-items:flex-end;gap:2px}.footer-brand[data-astro-cid-7lhuyvjk].is-alone{margin-right:0}.footer-by[data-astro-cid-7lhuyvjk]{color:var(--color-text-weak);font-family:var(--font-text);font-size:var(--size-label);font-weight:var(--weight-text);letter-spacing:0;text-transform:none}.footer-by[data-astro-cid-7lhuyvjk]:hover,.footer-by[data-astro-cid-7lhuyvjk]:focus-visible{color:var(--color-text)}.site-header[data-astro-cid-ihije3mh]{z-index:1;position:relative}.wrap[data-astro-cid-ihije3mh]{height:var(--height-header);justify-content:space-between;align-items:center;display:flex}.site-brand[data-astro-cid-ihije3mh] svg{width:26px;height:26px}.site-brand[data-astro-cid-ihije3mh]:hover,.site-brand[data-astro-cid-ihije3mh]:focus-visible{color:var(--color-text)}.site-brand-text[data-astro-cid-ihije3mh]{transform-origin:0;transition:transform .2s;display:inline-block}.site-brand[data-astro-cid-ihije3mh]:hover .site-brand-text[data-astro-cid-ihije3mh],.site-brand[data-astro-cid-ihije3mh]:focus-visible .site-brand-text[data-astro-cid-ihije3mh]{transform:scale(1.06)}.site-language[data-astro-cid-ihije3mh]{place-items:center;width:44px;height:44px;margin-right:-8px;display:grid}.site-language[data-astro-cid-ihije3mh] svg{width:28px;height:19px;transition:transform .15s;box-shadow:0 0 0 1px #fff3}.site-language[data-astro-cid-ihije3mh]:hover svg{transform:scale(1.1)}:root{--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-16:64px;--space-20:80px;--font-text:var(--font-manrope);--font-title:var(--font-manrope);--font-subtitle:var(--font-cormorant);--subtitle-style:italic;--subtitle-weight:500;--subtitle-scale:1.26;--weight-text:400;--weight-title:800;--tracking-title:-.045em;--tracking-button:.01em;--size-display:clamp(34px, 3.8vw, 54px);--size-title:clamp(26px, 2.6vw, 38px);--size-subtitle:19px;--size-brand:17px;--size-body:16px;--size-label:14px;--line-body:1.55;--line-title:1.15;--color-background:#0a0a0a;--color-band:#0d0d0d;--color-surface:#1a1a1a;--color-border:#262626;--color-text:#fff;--color-text-weak:#a3a3a3;--color-text-faint:#858585;--color-link-line:#858585;--color-focus:#fff;--color-frame-line:#ffffff17;--color-button-line:#404040;--color-card:#ffffff09;--color-card-line:#ffffff17;--color-accent-deep:#a80f18;--color-accent:#e5383b;--video-neutral:#161616;--color-media-button:#0f1216cc;--color-media-button-large:#0f1216e6;--color-control:#0a0a0ab3;--color-control-hover:#0a0a0af2;--color-veil:#0a0a0aeb;--shadow-screen:0 30px 80px #000000e6;--size-lightbox-title:22px;--ease-draw:cubic-bezier(.215, .61, .355, 1);--draw-in:.7s var(--ease-draw);--draw-out:.25s ease-out;--tilt-depth:1100px;--tilt-time:.12s;--entrance-time:1.2s;--entrance-gap:.12s;--width-content:1120px;--width-text:42.5em;--height-header:56px;--height-donation-banner:36px;--size-top-button:48px;--size-media-button:32px;--size-media-button-large:64px;--radius-media-button:3px;--gutter:var(--space-5);--card-padding:var(--space-6);--band-padding:var(--space-20);--heading-gap:var(--space-8);--download-rhythm:var(--space-3);--radius-small:2px;--grid-image:linear-gradient(#ffffff0d 1px, transparent 1px), linear-gradient(90deg, #ffffff0d 1px, transparent 1px);--grid-image-lit:linear-gradient(var(--color-accent-deep) 1px, transparent 1px), linear-gradient(90deg, var(--color-accent-deep) 1px, transparent 1px);--grid-step:32px;--grid-light-radius:190px;--height-button:46px;--grid-veil:#0a0a0af0;--opacity-burst-on-phone:.42;--shadow-on-grid:0 1px 10px #000, 0 0 3px #000;--grid-fade:linear-gradient(to bottom, #000 20%, transparent 50%);--first-screen-base:380px;--first-screen-rest:var(--first-screen-base);--video-ceiling:960px}:root:has(.donation-banner){--first-screen-rest:calc(var(--first-screen-base) + var(--height-donation-banner) + 1px)}@media (width<=720px){:root{--size-display:clamp(30px, 8.8vw, 37px);--size-title:25px;--size-subtitle:17px;--band-padding:var(--space-12);--card-padding:var(--space-4)}}*,:before,:after{box-sizing:border-box}html{color-scheme:dark;background:var(--color-background);color:var(--color-text);font:var(--weight-text) var(--size-body) / var(--line-body) var(--font-text);-webkit-font-smoothing:antialiased;text-size-adjust:100%}body{flex-direction:column;min-height:100svh;margin:0;display:flex}main{flex:1;overflow-x:clip}img,svg{max-width:100%;height:auto;display:block}h1,h2{color:var(--color-text);font-family:var(--font-title);font-weight:var(--weight-title);letter-spacing:var(--tracking-title);line-height:var(--line-title);margin:0}h1{font-size:var(--size-display);text-shadow:0 2px 18px #000;text-wrap:balance}h2{font-size:var(--size-title);text-transform:uppercase}h3{color:var(--color-text);font-size:var(--size-body);margin:0;font-weight:600;line-height:1.35}p{margin:0}ol,ul{margin:0;padding:0;list-style:none}kbd{border:1px solid var(--color-border);border-radius:var(--radius-small);background:var(--color-surface);font:600 .84em / 1 var(--font-text);white-space:nowrap;padding:1px 5px}code{font:700 1em var(--font-text)}a{color:var(--color-text);text-decoration-color:var(--color-link-line);text-underline-offset:3px;transition:color .2s}a:hover{color:var(--color-accent);text-decoration-color:currentColor}:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}.site-brand{align-items:center;gap:var(--space-2);color:var(--color-text);font-family:var(--font-title);font-size:var(--size-brand);font-weight:var(--weight-title);letter-spacing:var(--tracking-title);text-transform:uppercase;text-decoration:none;display:flex}.wrap{width:min(100% - 2 * var(--gutter), var(--width-content));margin-inline:auto}.grid-zone,.grid-band{isolation:isolate;position:relative}.grid-zone:before,.grid-zone:after,.grid-band:before,.grid-band:after{content:"";z-index:-1;inset:calc(-1 * var(--grid-overrun,0px)) 0 0;background-size:var(--grid-step) var(--grid-step);pointer-events:none;position:absolute;mask-composite:intersect}.grid-zone:before,.grid-band:before{background-image:var(--grid-image);mask-image:var(--grid-fade), linear-gradient(to right, #0006, #000 26%, #000 74%, #0006)}.grid-zone:after,.grid-band:after{background-image:var(--grid-image-lit);mask-image:var(--grid-fade), radial-gradient(var(--grid-light-radius) circle at var(--mx,50%) var(--my,50%), #000, transparent);opacity:0;transition:opacity .4s}.is-lit:after{opacity:1}.grid-zone{--grid-overrun:var(--height-header);background:radial-gradient(60% 44% at 50% 22%, var(--grid-veil) 55%, transparent)}.grid-zone.is-short{--grid-fade:linear-gradient(to bottom, #000 50%, transparent)}.grid-band{--grid-fade:linear-gradient(to top, #000 20%, transparent 50%)}.visually-hidden:not(:focus,:active){clip-path:inset(50%);white-space:nowrap;width:1px;height:1px;position:absolute;overflow:hidden}@media (prefers-reduced-motion:reduce){*,:before,:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}.skip-link[data-astro-cid-c5txklwa]:focus{z-index:10;top:var(--space-2);left:var(--space-2);padding:var(--space-2) var(--space-4);background:var(--color-background);position:fixed}main[data-astro-cid-c5txklwa]:focus{outline:none}
+
+</style>
+<style>
+  :root { --font-manrope: "Manrope", sans-serif; --font-cormorant: "Cormorant Garamond", serif; }
+
+  /* The bar of the mock-up: neutral, so that it doesn't compete with the site. */
+  .mock-tabs { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 10px 16px; background: #1b1d20; border-bottom: 1px solid #3a3f45; font: 14px/1.4 system-ui, sans-serif; }
+  .mock-tabs .group { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  .mock-tabs .group > span { margin-right: 4px; color: #adb5bd; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  .mock-tabs button { padding: 4px 10px; border: 1px solid #3a3f45; border-radius: 4px; background: #24272b; color: #dee2e6; font: inherit; cursor: pointer; }
+  .mock-tabs button[aria-pressed="true"] { background: #e9ecef; color: #1b1d20; border-color: #e9ecef; }
+  .mock-note { padding: 14px 16px; background: #2a2d31; color: #adb5bd; font: 14px/1.5 system-ui, sans-serif; }
+  .mock-note strong { color: #e9ecef; }
+  .mock-note p { max-width: 900px; margin: 0 0 4px; }
+  .mock-phone { display: flex; justify-content: center; padding: 24px 16px; background: #2a2d31; }
+  .mock-phone iframe { width: 360px; height: 760px; border: 0; border-radius: 18px; box-shadow: 0 0 0 10px #111, 0 20px 50px #000; background: #0a0a0a; }
+  html[data-framed] .mock-tabs, html[data-framed] .mock-note { display: none; }
+
+  /* ===== The patch notes page: what the site will build (step 5h4). ===== */
+
+  /* The tokens of the page (style « Sober », owner 2026-11-19). */
+  :root {
+    --pn-meta: 180px;
+    --pn-rail-gap: var(--space-8);
+    --pn-rail-color: var(--color-border);
+    --pn-dot: 11px;
+    --pn-dot-fill: var(--color-background);
+    --pn-dot-line: var(--color-text-faint);
+    --pn-dot-latest: var(--color-text);
+    --pn-dot-glow: none;
+    --pn-number-size: 24px;
+    --pn-tag-width: 92px;
+    --pn-tag-fill: #262626;
+    --pn-tag-line: transparent;
+    --pn-tag-color: var(--color-text-weak);
+    --pn-tag-new-color: #ffffff;
+    --pn-tag-new-fill: var(--color-accent-deep);
+    --pn-card-fill: transparent;
+    --pn-card-line: transparent;
+    --pn-card-padding: 0px;
+    --pn-lead-font: var(--font-text);
+    --pn-lead-style: normal;
+    --pn-lead-size: var(--size-body);
+  }
+
+  .pn-head { padding-block: var(--space-8) var(--space-12); }
+  .pn-back { display: inline-flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-8); color: var(--color-text-weak); font-size: var(--size-label); font-weight: 600; text-decoration: none; }
+  .pn-back:hover { color: var(--color-text); }
+  .pn-back svg { width: 16px; height: 16px; }
+  .pn-back-row { text-align: left; }
+  /* The grid of the top runs down over the first versions, then fades out; the veil stays behind the title. */
+  .grid-zone.pn-zone { --grid-fade: linear-gradient(to bottom, #000000 0, #000000 380px, transparent 820px); background: radial-gradient(760px 300px at 50% 190px, var(--grid-veil) 55%, transparent); }
+  /* The red fluid of sylent.art: a canvas over the grid, under the same fade (script below). */
+  .grid-zone > .pn-fluid { position: absolute; z-index: -1; inset: calc(-1 * var(--grid-overrun, 0px)) 0 0; mask-image: var(--grid-fade); pointer-events: none; }
+  .pn-fluid canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .grid-zone::after { display: none; }
+  .pn-head h1 { font-size: var(--size-title); text-transform: uppercase; text-shadow: none; }
+  .pn-lead { margin-top: var(--space-3); color: var(--color-text-weak); font-family: var(--pn-lead-font); font-size: var(--pn-lead-size); font-style: var(--pn-lead-style); }
+  /* On a phone, a short lead on one line; the long one from 721 px. */
+  .pn-lead-long { display: none; }
+  .pn-body { padding-bottom: var(--band-padding); }
+
+  /* The timeline: a vertical line, a dot per version; on a phone the line runs on the left. */
+  .pn-timeline { --pn-rail: 5px; position: relative; max-width: 900px; margin-inline: auto; }
+  .pn-timeline::before { content: ""; position: absolute; top: 12px; bottom: 12px; left: var(--pn-rail); width: 1px; background: var(--pn-rail-color); }
+  .pn-version { position: relative; padding-left: calc(var(--pn-rail) + var(--space-6)); scroll-margin-top: var(--space-8); }
+  .pn-version + .pn-version { margin-top: var(--space-12); }
+  .pn-version::before { content: ""; position: absolute; top: 0.62em; left: calc(var(--pn-rail) - var(--pn-dot) / 2 + 0.5px); width: var(--pn-dot); height: var(--pn-dot); box-sizing: border-box; border: 1px solid var(--pn-dot-line); border-radius: 50%; background: var(--pn-dot-fill); }
+  .pn-version:first-child::before { border-color: var(--pn-dot-latest); background: var(--pn-dot-latest); box-shadow: var(--pn-dot-glow); }
+
+  .pn-meta { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--space-3); margin-bottom: var(--space-4); }
+  .pn-number { font-size: var(--pn-number-size); letter-spacing: -0.03em; text-transform: none; }
+  .pn-date { color: var(--color-text-weak); font-size: var(--size-label); }
+  .pn-files { flex-basis: 100%; margin-top: var(--space-1); color: var(--color-accent); font-size: calc(var(--size-label) - 2px); font-weight: 600; text-decoration: none; }
+  .pn-files:hover { color: var(--color-text); }
+
+  .pn-changes { padding: var(--pn-card-padding); border: 1px solid var(--pn-card-line); background: var(--pn-card-fill); }
+  .pn-change + .pn-change { margin-top: var(--space-3); }
+  .pn-tag { display: inline-block; margin-right: var(--space-2); padding: 1px 7px; border: 1px solid var(--pn-tag-line); border-radius: var(--radius-small); background: var(--pn-tag-fill); color: var(--pn-tag-color); font: 700 11px / 1.6 var(--font-text); letter-spacing: 0.07em; text-transform: uppercase; vertical-align: 0.12em; }
+  /* On a phone, the text under its tag. */
+  .pn-text { display: block; margin-top: var(--space-1); }
+  .pn-tag.is-new { border-color: var(--pn-tag-new-fill); background: var(--pn-tag-new-fill); color: var(--pn-tag-new-color); }
+
+  @media (width >= 721px) {
+    .pn-head { text-align: center; }
+    .pn-lead-long { display: inline; }
+    .pn-lead-short { display: none; }
+    .pn-timeline { --pn-rail: calc(var(--pn-meta) + var(--pn-rail-gap)); }
+    .pn-version { display: grid; grid-template-columns: var(--pn-meta) 1fr; column-gap: calc(var(--pn-rail-gap) * 2); padding-left: 0; }
+    .pn-meta { display: block; margin-bottom: 0; text-align: right; }
+    .pn-date, .pn-files { display: block; margin-top: var(--space-1); }
+    .pn-change { display: grid; grid-template-columns: var(--pn-tag-width) 1fr; align-items: baseline; }
+    .pn-tag { justify-self: start; margin-right: 0; }
+    .pn-text { margin-top: 0; }
+  }
+
+  /* The version number in the header, left of the flag: plain text (owner 2026-11-19). */
+  .site-header .wrap { gap: var(--space-2); }
+  .pn-header-link { margin-left: auto; color: var(--color-text-weak); font-size: var(--size-label); font-weight: 700; text-decoration: none; letter-spacing: 0.01em; white-space: nowrap; }
+  .pn-header-link:hover, .pn-header-link[aria-current="page"] { color: var(--color-text); }
+</style>
+</head>
+<body>
+<div class="mock-tabs" id="mock-tabs"></div>
+<div class="mock-note">
+  <p><strong>Patch notes, step 5h3.</strong> The banner, the header and the footer are those of the site; the timeline and the version number are new. The notes are those of <code>docs/patch-notes/</code> of the application; v0.2.0 is shown although not released yet.</p>
+  <p><strong>Grid</strong>: the red fluid of sylent.art runs along its lines under the pointer, in place of the red light of the site today (step 5h4 takes it to every grid of the site). <strong>View</strong>: « Phone » shows the page in a frame of 360 px.</p>
+</div>
+<div id="mock-root"></div>
+<script>
+  const CHROME = {"en": {"banner": "<aside class=\"donation-banner\" aria-label=\"Support\" data-astro-cid-4ddkjlvr><p data-one-line=\"360\" data-astro-cid-4ddkjlvr><span data-astro-cid-4ddkjlvr>Exile Market is free.</span><a href=\"https://ko-fi.com/sylentdev\" data-astro-cid-4ddkjlvr=\"true\" target=\"_blank\" rel=\"noopener\">Support it on Ko-fi<span class=\"visually-hidden\"> (opens in a new tab)</span></a></p></aside>", "header": "<header class=\"site-header\" data-astro-cid-ihije3mh><div class=\"wrap\" data-astro-cid-ihije3mh><a class=\"site-brand\" href=\"/\" data-astro-cid-ihije3mh><span aria-hidden=\"true\" data-astro-cid-ihije3mh><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"12 12 76 76\" fill=\"#ffffff\">\n  <!-- Exile Market emblem: the ring and blades of the logo, without the text.\n       The blade tips barely pass the ring, so that it is as tall as wide.\n       White, so that the application can tint it to any color. -->\n  <defs>\n    <!-- One blade, pointing up. -->\n    <path id=\"blade\" d=\"M50 13 L54.6 21 L50 31 L45.4 21 Z\"/>\n    <path id=\"small-blade\" d=\"M50 14 L53 22 L50 28 L47 22 Z\"/>\n  </defs>\n  <!-- Ring. -->\n  <circle cx=\"50\" cy=\"50\" r=\"28\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"5\"/>\n  <circle cx=\"50\" cy=\"50\" r=\"21.5\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"1.5\" opacity=\".55\"/>\n  <!-- Blades on the axes. -->\n  <use href=\"#blade\"/>\n  <use href=\"#blade\" transform=\"rotate(90 50 50)\"/>\n  <use href=\"#blade\" transform=\"rotate(180 50 50)\"/>\n  <use href=\"#blade\" transform=\"rotate(270 50 50)\"/>\n  <!-- Small blades on the diagonals. -->\n  <use href=\"#small-blade\" transform=\"rotate(45 50 50)\"/>\n  <use href=\"#small-blade\" transform=\"rotate(135 50 50)\"/>\n  <use href=\"#small-blade\" transform=\"rotate(225 50 50)\"/>\n  <use href=\"#small-blade\" transform=\"rotate(315 50 50)\"/>\n  <!-- Center stone. -->\n  <path d=\"M50 39 L58 50 L50 61 L42 50 Z\"/>\n</svg>\n</span><span class=\"site-brand-text\" data-astro-cid-ihije3mh>Exile Market</span></a><a href=\"/fr/mentions-legales/\" hreflang=\"fr\" class=\"site-language\" lang=\"fr\" aria-label=\"Français\" title=\"Français\" data-astro-cid-ihije3mh><svg viewBox=\"0 0 3 2\" aria-hidden=\"true\"><path fill=\"#002654\" d=\"M0 0h1v2H0z\"/><path fill=\"#fff\" d=\"M1 0h1v2H1z\"/><path fill=\"#ce1126\" d=\"M2 0h1v2H2z\"/></svg>\n</a></div></header>", "footer": "<footer class=\"site-footer\" data-astro-cid-7lhuyvjk><div class=\"wrap footer-row\" data-astro-cid-7lhuyvjk><div data-astro-cid-7lhuyvjk><ul class=\"footer-links\" data-astro-cid-7lhuyvjk><li data-astro-cid-7lhuyvjk><a href=\"/legal/\" data-astro-cid-7lhuyvjk>Legal notice</a></li><li data-astro-cid-7lhuyvjk><a href=\"https://github.com/sylent-dev/rust-exile-market\" data-astro-cid-7lhuyvjk=\"true\" target=\"_blank\" rel=\"noopener\">Source code<span class=\"visually-hidden\"> (opens in a new tab)</span></a></li><li data-astro-cid-7lhuyvjk><a href=\"https://github.com/sylent-dev/rust-exile-market/blob/main/LICENSE\" data-astro-cid-7lhuyvjk=\"true\" target=\"_blank\" rel=\"noopener\">License GPL-3.0-or-later<span class=\"visually-hidden\"> (opens in a new tab)</span></a></li></ul><p data-astro-cid-7lhuyvjk>This product isn’t affiliated with or endorsed by Grinding Gear Games in any way.</p></div><p class=\"site-brand footer-brand\" data-astro-cid-7lhuyvjk>Exile Market<a class=\"footer-by\" href=\"https://sylent.art\" hreflang=\"fr\" data-astro-cid-7lhuyvjk=\"true\" target=\"_blank\" rel=\"noopener\">by Sylent<span class=\"visually-hidden\"> (opens in a new tab)</span></a></p></div></footer>", "top": "<button class=\"site-top\" type=\"button\" aria-label=\"Back to top\" data-astro-cid-m765rkco><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\" data-astro-cid-m765rkco><path d=\"m4 10 4-4 4 4\" data-astro-cid-m765rkco></path></svg></button>", "skip": "<a class=\"skip-link visually-hidden\" href=\"#content\" data-astro-cid-c5txklwa>Skip to content</a>"}, "fr": {"banner": "<aside class=\"donation-banner\" aria-label=\"Soutien\" data-astro-cid-4ddkjlvr><p data-one-line=\"360\" data-astro-cid-4ddkjlvr><span data-astro-cid-4ddkjlvr>Exile Market est gratuit.</span><a href=\"https://ko-fi.com/sylentdev\" data-astro-cid-4ddkjlvr=\"true\" target=\"_blank\" rel=\"noopener\">Soutenez-le sur Ko-fi<span class=\"visually-hidden\"> (s’ouvre dans un nouvel onglet)</span></a></p></aside>", "header": "<header class=\"site-header\" data-astro-cid-ihije3mh><div class=\"wrap\" data-astro-cid-ihije3mh><a class=\"site-brand\" href=\"/fr/\" data-astro-cid-ihije3mh><span aria-hidden=\"true\" data-astro-cid-ihije3mh><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"12 12 76 76\" fill=\"#ffffff\">\n  <!-- Exile Market emblem: the ring and blades of the logo, without the text.\n       The blade tips barely pass the ring, so that it is as tall as wide.\n       White, so that the application can tint it to any color. -->\n  <defs>\n    <!-- One blade, pointing up. -->\n    <path id=\"blade\" d=\"M50 13 L54.6 21 L50 31 L45.4 21 Z\"/>\n    <path id=\"small-blade\" d=\"M50 14 L53 22 L50 28 L47 22 Z\"/>\n  </defs>\n  <!-- Ring. -->\n  <circle cx=\"50\" cy=\"50\" r=\"28\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"5\"/>\n  <circle cx=\"50\" cy=\"50\" r=\"21.5\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"1.5\" opacity=\".55\"/>\n  <!-- Blades on the axes. -->\n  <use href=\"#blade\"/>\n  <use href=\"#blade\" transform=\"rotate(90 50 50)\"/>\n  <use href=\"#blade\" transform=\"rotate(180 50 50)\"/>\n  <use href=\"#blade\" transform=\"rotate(270 50 50)\"/>\n  <!-- Small blades on the diagonals. -->\n  <use href=\"#small-blade\" transform=\"rotate(45 50 50)\"/>\n  <use href=\"#small-blade\" transform=\"rotate(135 50 50)\"/>\n  <use href=\"#small-blade\" transform=\"rotate(225 50 50)\"/>\n  <use href=\"#small-blade\" transform=\"rotate(315 50 50)\"/>\n  <!-- Center stone. -->\n  <path d=\"M50 39 L58 50 L50 61 L42 50 Z\"/>\n</svg>\n</span><span class=\"site-brand-text\" data-astro-cid-ihije3mh>Exile Market</span></a><a href=\"/legal/\" hreflang=\"en\" class=\"site-language\" lang=\"en\" aria-label=\"English\" title=\"English\" data-astro-cid-ihije3mh><svg viewBox=\"0 0 60 40\" aria-hidden=\"true\"><path fill=\"#012169\" d=\"M0 0h60v40H0z\"/><path stroke=\"#fff\" stroke-width=\"8\" d=\"m0 0 60 40M60 0 0 40\"/><path stroke=\"#c8102e\" stroke-width=\"3\" d=\"m0 0 60 40M60 0 0 40\"/><path stroke=\"#fff\" stroke-width=\"13\" d=\"M30 0v40M0 20h60\"/><path stroke=\"#c8102e\" stroke-width=\"8\" d=\"M30 0v40M0 20h60\"/></svg>\n</a></div></header>", "footer": "<footer class=\"site-footer\" data-astro-cid-7lhuyvjk><div class=\"wrap footer-row\" data-astro-cid-7lhuyvjk><div data-astro-cid-7lhuyvjk><ul class=\"footer-links\" data-astro-cid-7lhuyvjk><li data-astro-cid-7lhuyvjk><a href=\"/fr/mentions-legales/\" data-astro-cid-7lhuyvjk>Mentions légales</a></li><li data-astro-cid-7lhuyvjk><a href=\"https://github.com/sylent-dev/rust-exile-market\" data-astro-cid-7lhuyvjk=\"true\" target=\"_blank\" rel=\"noopener\">Code source<span class=\"visually-hidden\"> (s’ouvre dans un nouvel onglet)</span></a></li><li data-astro-cid-7lhuyvjk><a href=\"https://github.com/sylent-dev/rust-exile-market/blob/main/LICENSE\" data-astro-cid-7lhuyvjk=\"true\" target=\"_blank\" rel=\"noopener\">Licence GPL-3.0-or-later<span class=\"visually-hidden\"> (s’ouvre dans un nouvel onglet)</span></a></li></ul><p data-astro-cid-7lhuyvjk>Ce produit n’est ni affilié à Grinding Gear Games ni approuvé par ce studio, de quelque manière que ce soit.</p></div><p class=\"site-brand footer-brand\" data-astro-cid-7lhuyvjk>Exile Market<a class=\"footer-by\" href=\"https://sylent.art\" hreflang=\"fr\" data-astro-cid-7lhuyvjk=\"true\" target=\"_blank\" rel=\"noopener\">par Sylent<span class=\"visually-hidden\"> (s’ouvre dans un nouvel onglet)</span></a></p></div></footer>", "top": "<button class=\"site-top\" type=\"button\" aria-label=\"Revenir en haut\" data-astro-cid-m765rkco><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\" data-astro-cid-m765rkco><path d=\"m4 10 4-4 4 4\" data-astro-cid-m765rkco></path></svg></button>", "skip": "<a class=\"skip-link visually-hidden\" href=\"#content\" data-astro-cid-c5txklwa>Aller au contenu</a>"}};
+  const NOTES = {
+ "en": [
+  {
+   "version": "0.2.0",
+   "date": "2026-11-19",
+   "changes": [
+    {
+     "tag": "New",
+     "text": "a setting closes Exile Market when the game closes. Another one hides the added-up resistances, life, mana and attributes from the filters."
+    },
+    {
+     "tag": "New",
+     "text": "search a waystone between two tiers, to see the offers of nearby tiers too."
+    },
+    {
+     "tag": "New",
+     "text": "hover the orb of a price to read its name and its rate."
+    },
+    {
+     "tag": "Changed",
+     "text": "a price based on few trades or offers says so, and an offer that doesn't count in the estimate is shown faint."
+    },
+    {
+     "tag": "Changed",
+     "text": "a line without tier now says why: its tier is uncertain, or no known modifier holds its value."
+    },
+    {
+     "tag": "Changed",
+     "text": "clearer messages when the price database answers something unreadable, and when the trade site refuses a search."
+    }
+   ]
+  },
+  {
+   "version": "0.1.2",
+   "date": "2026-11-15",
+   "changes": [
+    {
+     "tag": "Fixed",
+     "text": "on the French trade site, the name of a rare item in the tooltip of an offer, and the whisper copied from an offer, no longer show bits of the game's grammar."
+    }
+   ]
+  },
+  {
+   "version": "0.1.1",
+   "date": "2026-11-15",
+   "changes": [
+    {
+     "tag": "Fixed",
+     "text": "the name of a rare item in the tooltip of an offer no longer begins with strange tags."
+    },
+    {
+     "tag": "New",
+     "text": "a link to the Ko-fi page of Exile Market at the end of the settings. The application stays free."
+    }
+   ]
+  },
+  {
+   "version": "0.1.0",
+   "date": "2026-11-14",
+   "changes": [
+    {
+     "tag": "New",
+     "text": "the first version of Exile Market. Press Ctrl+D over an item in the game to see its price in a small window over the game, or Ctrl+C to see it in the main window."
+    },
+    {
+     "tag": "New",
+     "text": "currencies and uniques get their price at once, in three currencies."
+    },
+    {
+     "tag": "New",
+     "text": "rare, magic and normal items and jewels show their stats and tiers. Tick the stats you care about, then search similar offers on the official trade site for an estimated price."
+    },
+    {
+     "tag": "New",
+     "text": "the game in English or French, and the interface in both."
+    }
+   ]
+  }
+ ],
+ "fr": [
+  {
+   "version": "0.2.0",
+   "date": "2026-11-19",
+   "changes": [
+    {
+     "tag": "Nouveau",
+     "text": "un réglage ferme Exile Market quand le jeu se ferme. Un autre retire des filtres les résistances, la vie, le mana et les attributs additionnés."
+    },
+    {
+     "tag": "Nouveau",
+     "text": "cherchez une pierre de téléportation entre deux paliers, pour voir aussi les offres des paliers voisins."
+    },
+    {
+     "tag": "Nouveau",
+     "text": "survolez l'orbe d'un prix pour lire son nom et son cours."
+    },
+    {
+     "tag": "Modifié",
+     "text": "un prix fondé sur peu d'échanges ou d'offres le signale, et une offre qui ne compte pas dans l'estimation apparaît en pâle."
+    },
+    {
+     "tag": "Modifié",
+     "text": "une ligne sans palier dit maintenant pourquoi : son palier est incertain, ou aucun modificateur connu ne contient sa valeur."
+    },
+    {
+     "tag": "Modifié",
+     "text": "des messages plus clairs quand la base des prix envoie une réponse illisible, et quand le site d'échange refuse une recherche."
+    }
+   ]
+  },
+  {
+   "version": "0.1.2",
+   "date": "2026-11-15",
+   "changes": [
+    {
+     "tag": "Corrigé",
+     "text": "sur le site d'échange français, le nom d'un objet rare dans l'infobulle d'une offre, et le whisper copié depuis une offre, ne montrent plus de morceaux de la grammaire du jeu."
+    }
+   ]
+  },
+  {
+   "version": "0.1.1",
+   "date": "2026-11-15",
+   "changes": [
+    {
+     "tag": "Corrigé",
+     "text": "le nom d'un objet rare dans l'infobulle d'une offre ne commence plus par des balises étranges."
+    },
+    {
+     "tag": "Nouveau",
+     "text": "un lien vers la page Ko-fi d'Exile Market à la fin des réglages. L'application reste gratuite."
+    }
+   ]
+  },
+  {
+   "version": "0.1.0",
+   "date": "2026-11-14",
+   "changes": [
+    {
+     "tag": "Nouveau",
+     "text": "la première version d'Exile Market. Appuyez sur Ctrl+D au-dessus d'un objet dans le jeu pour voir son prix dans une petite fenêtre par-dessus le jeu, ou sur Ctrl+C pour le voir dans la fenêtre principale."
+    },
+    {
+     "tag": "Nouveau",
+     "text": "les monnaies et les uniques ont leur prix tout de suite, en trois monnaies."
+    },
+    {
+     "tag": "Nouveau",
+     "text": "les objets rares, magiques et normaux et les joyaux montrent leurs statistiques et leurs paliers. Cochez celles qui comptent pour vous, puis cherchez des offres semblables sur le site d'échange officiel pour obtenir un prix estimé."
+    },
+    {
+     "tag": "Nouveau",
+     "text": "le jeu en anglais ou en français, et l'interface dans les deux langues."
+    }
+   ]
+  }
+ ]
+};
+  const RELEASES = "https://github.com/sylent-dev/rust-exile-market/releases/tag/v";
+  const TEXT = {
+    en: { title: "Patch notes", lead: "What changed in each version of Exile Market.", leadShort: "What’s new", back: "Back to the home page", files: "Files and checksums", newTab: " (opens in a new tab)", headerLabel: (v) => `Patch notes, version ${v}`, word: "Patch notes", order: ["New", "Changed", "Fixed"], months: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
+    fr: { title: "Notes de version", lead: "Ce qui change à chaque version d’Exile Market.", leadShort: "Quoi de neuf ?", back: "Retour à l’accueil", files: "Fichiers et sommes de contrôle", newTab: " (s’ouvre dans un nouvel onglet)", headerLabel: (v) => `Notes de version, version ${v}`, word: "Notes", order: ["Nouveau", "Modifié", "Corrigé"], months: ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"] },
+  };
+  const VARIANTS = {
+    lang: { label: "Language", options: { en: "English", fr: "Français" }, fallback: "en" },
+    view: { label: "View", options: { page: "Page", phone: "Phone 360 px" }, fallback: "page" },
+  };
+  const params = new URLSearchParams(location.search);
+  const chosen = Object.fromEntries(Object.entries(VARIANTS).map(([key, variant]) =>
+    [key, variant.options[params.get(key)] ? params.get(key) : variant.fallback]));
+  const framed = params.has("frame");
+  const $ = (id) => document.getElementById(id);
+  const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+  // What the build will do to a note: a capital after the tag, and in French the apostrophe and
+  // the non-breaking spaces of the site.
+  const typeset = (text, lang) => {
+    let t = text.charAt(0).toUpperCase() + text.slice(1);
+    t = t.replace(/'/g, "’");
+    if (lang === "fr") t = t.replace(/ ([:;?!»])/g, " $1").replace(/« /g, "« ");
+    return escape(t);
+  };
+  const formatDate = (iso, lang) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    const month = TEXT[lang].months[m - 1];
+    return lang === "en" ? `${month} ${d}, ${y}` : `${d === 1 ? "1er" : d} ${month} ${y}`;
+  };
+
+  function renderPage() {
+    const lang = chosen.lang;
+    const t = TEXT[lang];
+    const c = CHROME[lang];
+    const latest = NOTES[lang][0].version;
+    document.documentElement.lang = lang;
+    const versionLink = `<a class="pn-header-link" href="#" aria-current="page" aria-label="${t.headerLabel(latest)}">v${latest}</a>`;
+    const header = c.header.replace(/(<a [^>]*class="site-language")/, `${versionLink}$1`);
+    const versions = NOTES[lang].map((note) => {
+      const changes = [...note.changes].sort((a, b) => t.order.indexOf(a.tag) - t.order.indexOf(b.tag));
+      return `<li class="pn-version" id="v${note.version}">
+        <div class="pn-meta">
+          <h2 class="pn-number">v${note.version}</h2>
+          <time class="pn-date" datetime="${note.date}">${formatDate(note.date, lang)}</time>
+          <a class="pn-files" href="${RELEASES}${note.version}" target="_blank" rel="noopener">${t.files}<span class="visually-hidden">${t.newTab}</span></a>
+        </div>
+        <ul class="pn-changes">${changes.map((ch) => `<li class="pn-change"><span class="pn-tag${t.order.indexOf(ch.tag) === 0 ? " is-new" : ""}">${ch.tag}</span><span class="pn-text">${typeset(ch.text, lang)}</span></li>`).join("")}</ul>
+      </li>`;
+    }).join("");
+    $("mock-root").innerHTML = `${c.skip}${c.banner}${header}
+      <main id="content" tabindex="-1">
+        <div class="grid-zone pn-zone"><div class="wrap pn-head"><div class="pn-back-row"><a class="pn-back" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4"/></svg>${t.back}</a></div><h1>${t.title}</h1><p class="pn-lead"><span class="pn-lead-long">${t.lead}</span><span class="pn-lead-short" data-one-line>${t.leadShort}</span></p></div>
+        <div class="pn-body"><div class="wrap"><ol class="pn-timeline">${versions}</ol></div></div></div>
+      </main>${c.footer}${c.top}`;
+  }
+
+  function renderTabs() {
+    for (const key of Object.keys(VARIANTS)) document.documentElement.dataset[key] = chosen[key];
+    $("mock-tabs").innerHTML = Object.entries(VARIANTS).map(([key, variant]) =>
+      `<div class="group"><span>${variant.label}</span>${Object.entries(variant.options).map(([value, label]) =>
+        `<button type="button" data-key="${key}" data-value="${value}" aria-pressed="${chosen[key] === value}">${label}</button>`).join("")}</div>`).join("");
+  }
+
+  $("mock-tabs").addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (!button) return;
+    params.set(button.dataset.key, button.dataset.value);
+    // A reload keeps the scripts of the site (the light of the grid) bound to the new page.
+    location.search = params.toString();
+  });
+
+  if (framed) document.documentElement.dataset.framed = "";
+  renderTabs();
+  if (chosen.view === "phone" && !framed) {
+    const inner = new URLSearchParams(params); inner.set("frame", "1"); inner.delete("view");
+    $("mock-root").innerHTML = `<div class="mock-phone"><iframe title="The page at 360 px" src="?${inner}"></iframe></div>`;
+  } else {
+    renderPage();
+  }
+</script>
+<script>
+  // The red fluid of the grid, after src/scripts/grid-fluid.ts of sylent.art. Each crossing holds
+  // some energy: the pointer pours energy into the crossings around it as it moves, the energy
+  // spreads to the neighbor crossings and fades, and each line glows with the energy of its ends.
+  function gridFluid(host, cell, color) {
+    const layer = document.createElement("div");
+    layer.className = "pn-fluid";
+    layer.setAttribute("aria-hidden", "true");
+    const canvas = document.createElement("canvas");
+    layer.append(canvas);
+    host.prepend(layer);
+    const context = canvas.getContext("2d");
+    const [red, green, blue] = [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16));
+    let columns = 0, rows = 0, width = 0, height = 0, running = false, seen = false, pointer = null;
+    let energy = new Float32Array(0), next = new Float32Array(0);
+    function resize() {
+      const ratio = Math.min(devicePixelRatio, 2);
+      width = canvas.clientWidth; height = canvas.clientHeight;
+      canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      columns = Math.ceil(width / cell) + 1; rows = Math.ceil(height / cell) + 1;
+      energy = new Float32Array(columns * rows); next = new Float32Array(columns * rows);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    new IntersectionObserver(([entry]) => { seen = entry.isIntersecting; }).observe(canvas);
+    addEventListener("pointermove", (event) => {
+      const box = canvas.getBoundingClientRect();
+      const x = event.clientX - box.left, y = event.clientY - box.top;
+      if (x < 0 || y < 0 || x > box.width || y > box.height) { pointer = null; return; }
+      const moved = pointer ? Math.hypot(x - pointer.x, y - pointer.y) : 0;
+      pointer = { x, y };
+      const amount = Math.min(0.9, 0.12 + moved / 60);
+      const reach = cell * 1.6;
+      for (let row = Math.max(0, Math.floor((y - reach) / cell)); row <= Math.min(rows - 1, Math.ceil((y + reach) / cell)); row++) {
+        for (let column = Math.max(0, Math.floor((x - reach) / cell)); column <= Math.min(columns - 1, Math.ceil((x + reach) / cell)); column++) {
+          const distance = Math.hypot(column * cell - x, row * cell - y);
+          if (distance < reach) {
+            const index = row * columns + column;
+            energy[index] = Math.min(1, energy[index] + amount * (1 - distance / reach));
+          }
+        }
+      }
+      if (!running) { running = true; requestAnimationFrame(step); }
+    });
+    document.documentElement.addEventListener("pointerleave", () => { pointer = null; });
+    function line(x1, y1, x2, y2, a, b) {
+      if (a + b < 0.02) return;
+      const gradient = context.createLinearGradient(x1, y1, x2, y2);
+      gradient.addColorStop(0, `rgb(${red} ${green} ${blue} / ${Math.min(1, a * 1.3)})`);
+      gradient.addColorStop(1, `rgb(${red} ${green} ${blue} / ${Math.min(1, b * 1.3)})`);
+      context.strokeStyle = gradient;
+      context.beginPath(); context.moveTo(x1, y1); context.lineTo(x2, y2); context.stroke();
+    }
+    function step() {
+      let total = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++) {
+          const index = row * columns + column;
+          let sum = 0, count = 0;
+          if (column > 0) { sum += energy[index - 1]; count++; }
+          if (column < columns - 1) { sum += energy[index + 1]; count++; }
+          if (row > 0) { sum += energy[index - columns]; count++; }
+          if (row < rows - 1) { sum += energy[index + columns]; count++; }
+          const value = (energy[index] + (sum / count - energy[index]) * 0.42) * 0.968;
+          next[index] = value < 0.004 ? 0 : value;
+          total += next[index];
+        }
+      }
+      [energy, next] = [next, energy];
+      if (seen) {
+        context.clearRect(0, 0, width, height);
+        // A soft wide stroke for the glow, then the thin line itself.
+        for (const [lineWidth, alpha] of [[4, 0.22], [1, 1]]) {
+          context.lineWidth = lineWidth; context.globalAlpha = alpha;
+          for (let row = 0; row < rows; row++) {
+            for (let column = 0; column < columns; column++) {
+              const index = row * columns + column;
+              const x = column * cell + 0.5, y = row * cell + 0.5;
+              if (column < columns - 1) line(x, y, x + cell, y, energy[index], energy[index + 1]);
+              if (row < rows - 1) line(x, y, x, y + cell, energy[index], energy[index + columns]);
+            }
+          }
+        }
+        context.globalAlpha = 1;
+      }
+      if (total > 0.01) requestAnimationFrame(step);
+      else { running = false; context.clearRect(0, 0, width, height); }
+    }
+  }
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const styles = getComputedStyle(document.documentElement);
+    const cell = parseFloat(styles.getPropertyValue("--grid-step"));
+    const color = styles.getPropertyValue("--color-accent").trim();
+    document.querySelectorAll(".grid-zone").forEach((host) => gridFluid(host, cell, color));
+  }
+</script>
+<script type="module">
+var e=document.querySelector(`.site-top`),t=600,n=()=>{e?.classList.toggle(`is-shown`,window.scrollY>t)};n(),window.addEventListener(`scroll`,n,{passive:!0}),e?.addEventListener(`click`,()=>{let e=window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;window.scrollTo({top:0,behavior:e?`auto`:`smooth`}),document.querySelector(`.site-header .site-brand`)?.focus({preventScroll:!0})});
+var e=window.matchMedia(`(prefers-reduced-motion: reduce)`),t=[...document.querySelectorAll(`.grid-zone, .grid-band`)].map(e=>({element:e,overrun:parseFloat(getComputedStyle(e).getPropertyValue(`--grid-overrun`))||0})),n=null,r=0,i=()=>{if(r=0,n)for(let{element:e,overrun:r}of t){let t=e.getBoundingClientRect(),i=t.top-r,a=n.y>=i&&n.y<=t.bottom;e.classList.toggle(`is-lit`,a),a&&(e.style.setProperty(`--mx`,`${n.x-t.left}px`),e.style.setProperty(`--my`,`${n.y-i}px`))}},a=()=>{n&&!r&&(r=requestAnimationFrame(i))},o=()=>{n=null;for(let{element:e}of t)e.classList.remove(`is-lit`)},s=t=>{t.pointerType!==`mouse`||e.matches?o():(n={x:t.clientX,y:t.clientY},a())};document.addEventListener(`pointermove`,s),document.addEventListener(`pointerdown`,s),window.addEventListener(`scroll`,a,{passive:!0}),document.documentElement.addEventListener(`mouseleave`,o);
+</script>
+</body>
+</html>

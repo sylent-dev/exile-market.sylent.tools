@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5h2. The patch notes: wireframe
+
+Pull request: [#34](https://github.com/sylent-dev/exile-market.sylent.tools/pull/34).
+
+The timeline at phone and computer width, in both languages, from the notes of the application (`docs/wireframes/patch-notes.excalidraw`, owner, 2026-11-19), the layout in `specs.md`; the wireframe and the mock-up split in two pull requests by the owner on 2026-11-19. Tool: wireframe.
+
 ## 5h1. The patch notes: specifications
 
 Pull request: [#33](https://github.com/sylent-dev/exile-market.sylent.tools/pull/33).
