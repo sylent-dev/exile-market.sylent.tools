@@ -131,8 +131,8 @@ a:hover {
   margin-inline: auto;
 }
 
-/* The grid: grey in ::before, red in ::after, which only shows around the pointer (the script of
-   src/layouts/site-layout.astro sets --mx, --my and .is-lit). */
+/* The grid: grey lines in ::before, and the red fluid that runs along them under a mouse in a
+   canvas laid over them, under the same mask (.grid-fluid, src/lib/grid-fluid.ts). */
 .grid-zone,
 .grid-band {
   position: relative;
@@ -140,42 +140,30 @@ a:hover {
 }
 
 .grid-zone::before,
-.grid-zone::after,
 .grid-band::before,
-.grid-band::after {
-  content: "";
+.grid-fluid {
   position: absolute;
   z-index: -1;
   inset: calc(-1 * var(--grid-overrun, 0px)) 0 0;
-  background-size: var(--grid-step) var(--grid-step);
+  mask-image:
+    var(--grid-fade),
+    linear-gradient(to right, #00000066, #000000 26%, #000000 74%, #00000066);
   mask-composite: intersect;
   pointer-events: none;
 }
 
 .grid-zone::before,
 .grid-band::before {
+  content: "";
   background-image: var(--grid-image);
-  mask-image:
-    var(--grid-fade),
-    linear-gradient(to right, #00000066, #000000 26%, #000000 74%, #00000066);
+  background-size: var(--grid-step) var(--grid-step);
 }
 
-.grid-zone::after,
-.grid-band::after {
-  background-image: var(--grid-image-lit);
-  mask-image:
-    var(--grid-fade),
-    radial-gradient(
-      var(--grid-light-radius) circle at var(--mx, 50%) var(--my, 50%),
-      #000000,
-      transparent
-    );
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
-.is-lit::after {
-  opacity: 1;
+.grid-fluid canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* At the top of a page: it runs under the header and fades out towards its middle. */

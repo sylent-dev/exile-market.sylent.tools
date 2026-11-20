@@ -130,7 +130,7 @@ The stack above is confirmed for this site. The JavaScript libraries, if any, an
 
 ## Light motion
 
-- **The red of the grid** is a `::after` of the grid, next to its grey `::before` (`src/styles/global.css`), so that the pages hold no extra element and the first screen, the band « What it does », the legal notice and the not-found page share one rule. The script is in `src/layouts/site-layout.astro`, since every page with a grid goes through it. A mouse only, never with reduced motion. It keeps the last place of the mouse, so that the red also follows a scroll under a still mouse, with one update per frame at most and none without a mouse; a finger or a pen drops that place.
+- **The red fluid of the grid** (step 5h4a, owner, 2026-11-20): a port of `src/scripts/grid-fluid.ts` of sylent.art, in `src/lib/grid-fluid.ts`, in `--color-accent`, started by `src/layouts/site-layout.astro`, since every page with a grid goes through it. Each grid (`.grid-zone`, `.grid-band`) gets a canvas laid over its grey lines, under the same mask (`.grid-fluid`, `src/styles/global.css`), which draws a line only while the fluid runs and stops once it has faded. A mouse only, never with reduced motion: a finger or a pen would leave it lit while they scroll. It replaces the red light of a `::after` of the grid, a circle of 190 px around the pointer.
 - **The entrance of the large sentences** is two inline scripts in `src/components/home-page.astro`: one before the sentences, which moves them out of the screen before the first paint, for the reason of the download buttons (a bundled script runs later, and a sentence already on the screen would jump); one right after the last sentence, which brings them in. Inline, they can't fail to download while the sentences wait out of the screen, and the second doesn't wait for `DOMContentLoaded`, which a script to download would delay (code review of 4d). Without JavaScript, or with reduced motion, the sentences never leave their place. On paper too.
 
 ## Burst of shards
@@ -180,7 +180,8 @@ Run `npm ci` first, and `npx playwright install --only-shell chromium` once. The
 | `npm run check:overflow` | The width of every page on a phone and a computer (after `npm run build`). |
 | `npm run check:buttons` | The red line of the outlined buttons covers their border under the pointer (after `npm run build`). |
 | `npm run check:lightbox` | The lightboxes of the home page put the page back however they close (after `npm run build`). |
-| `npm run check` | Everything run before a commit and in CI: format, lint, build, links, patch notes, width, buttons, lightboxes. |
+| `npm run check:fluid` | The red fluid runs on every grid under a mouse, and never with reduced motion (after `npm run build`). |
+| `npm run check` | Everything run before a commit and in CI: format, lint, build, links, patch notes, width, buttons, lightboxes, fluid. |
 | `npm run brand:images` | The favicon, the iPhone icon and the preview card, from the brand assets. |
 | `python3 docs/mockups/serve.py <port>` | Serves the repository root without cache for the mock-up. The port of this project: `8770`. |
 

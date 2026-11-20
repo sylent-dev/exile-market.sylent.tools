@@ -130,6 +130,7 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
   - `scripts/check-overflow.mjs`: no page is wider than a phone or computer screen, and no element marked `data-one-line` breaks on two lines.
   - `scripts/check-button-line.mjs`: the red line of the outlined buttons covers their border under the pointer.
   - `scripts/check-lightbox.mjs`: the lightboxes of the home page put the page back however they close (no card of the deck left hidden).
+  - `scripts/check-grid-fluid.mjs`: the red fluid runs on every grid under a mouse, and never with reduced motion.
   - `scripts/check-patch-notes.mjs`: every version released has its English note and shows on both patch notes pages, and every header shows the latest one.
 - The same checks run in CI (`.github/workflows/ci.yml`) on every pull request.
 - When a bug reaches the owner that a check could have caught, add the check in the same pull request as the fix.

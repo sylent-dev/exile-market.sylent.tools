@@ -1,7 +1,7 @@
 # The checks run before every commit (docs/technical-choices.md, Commands), on every pull
 # request: format, lint, production build, internal links, former URLs, the width of the pages
-# on a phone, the red line of the buttons and the lightboxes, the last three in the Chromium of
-# Playwright. The patch notes come from the repository of the application.
+# on a phone, the red line of the buttons, the lightboxes and the fluid of the grids, the last
+# four in the Chromium of Playwright. The patch notes come from the repository of the application.
 name: CI
 
 on:
