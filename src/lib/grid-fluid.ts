@@ -4,8 +4,9 @@
 // pours energy into the crossings around it as it moves, more as it moves faster, the energy
 // spreads to the neighbor crossings and fades out in about a second, and each line glows with the
 // energy of its two ends. The fluid is drawn in a canvas laid over the grey grid of the host, under
-// the same mask (.grid-fluid, src/styles/global.css). Never with reduced motion, nor for a finger
-// or a pen, which would leave it lit while they scroll the page.
+// the same mask (.grid-fluid, src/styles/global.css). A mouse only, as on sylent.art: the fluid
+// follows a pointer that hovers, which a finger or a pen doesn't; never with reduced motion, and
+// not under an open lightbox, whose veil hides the grid.
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function gridFluid(host: HTMLElement, cell: number, color: string) {
@@ -50,7 +51,9 @@ function gridFluid(host: HTMLElement, cell: number, color: string) {
   // Pour energy into the crossings within 1.6 cells of the pointer, more as it moves faster. The
   // pointer is followed over the whole page, since the canvas lies under the content of the host.
   addEventListener("pointermove", (event) => {
-    if (event.pointerType !== "mouse" || reducedMotion.matches) {
+    const overDialog =
+      event.target instanceof Element && event.target.closest("dialog[open]");
+    if (event.pointerType !== "mouse" || reducedMotion.matches || overDialog) {
       pointer = null;
       return;
     }

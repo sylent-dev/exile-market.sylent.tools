@@ -1,7 +1,8 @@
 // Checks the red fluid of the grids (src/lib/grid-fluid.ts) in the Chromium of Playwright, on
 // every page with a grid of the built site (dist/):
 // - each grid gets its canvas, laid over it;
-// - a mouse that moves over the first grid lights some of its lines;
+// - a mouse that moves over a grid lights some of its lines, on every grid of the page;
+// - a finger lights nothing;
 // - with reduced motion, no grid gets a canvas.
 // Run after `npm run build`: `node scripts/check-grid-fluid.mjs [dist]`.
 import { chromium } from "playwright";
@@ -13,44 +14,70 @@ const server = await serveDist(dist);
 const browser = await chromium.launch();
 const errors = [];
 
-/* global document */
-/** Whether a canvas of the page has any pixel that isn't transparent. */
-const lit = (page) =>
-  page.evaluate(() =>
-    [...document.querySelectorAll(".grid-fluid canvas")].some((canvas) => {
-      const { data } = canvas
-        .getContext("2d")
-        .getImageData(0, 0, canvas.width, canvas.height);
-      for (let i = 3; i < data.length; i += 4) if (data[i] > 0) return true;
-      return false;
-    }),
-  );
+/* global document, PointerEvent */
+/** Whether the canvas of a grid of the page has any pixel that isn't transparent. */
+const lit = (page, index) =>
+  page.evaluate((index) => {
+    const canvas = document.querySelectorAll(".grid-fluid canvas")[index];
+    const { data } = canvas
+      .getContext("2d")
+      .getImageData(0, 0, canvas.width, canvas.height);
+    for (let i = 3; i < data.length; i += 4) if (data[i] > 0) return true;
+    return false;
+  }, index);
 
-for (const path of urls.pages) {
+/** Moves a pointer across the middle of a grid, in sight. */
+const sweep = async (page, grid, move) => {
+  await grid.scrollIntoViewIfNeeded();
+  const box = await grid.boundingBox();
+  const y = box.y + Math.min(box.height / 2, 120);
+  for (let i = 0; i <= 12; i += 1) {
+    await move(box.x + 300 + i * 30, Math.max(1, y));
+    await page.waitForTimeout(16);
+  }
+  await page.waitForTimeout(100);
+};
+
+// The pages, and the not-found page, which no link leads to.
+for (const path of [...urls.pages, "/404.html"]) {
   const page = await browser.newPage({
     viewport: { width: 1440, height: 900 },
   });
   await page.goto(server.origin + path);
-  const grids = await page.locator(".grid-zone, .grid-band").count();
-  const layers = await page.locator(".grid-fluid canvas").count();
-  if (grids === 0) {
+  const grids = page.locator(".grid-zone, .grid-band");
+  const count = await grids.count();
+  if (count === 0) {
     await page.close();
     continue;
   }
-  if (layers !== grids) {
-    errors.push(`${path}: ${grids} grids and ${layers} canvases of the fluid`);
+  const layers = await page.locator(".grid-fluid canvas").count();
+  if (layers !== count) {
+    errors.push(`${path}: ${count} grids and ${layers} canvases of the fluid`);
   }
-  const box = await page
-    .locator(".grid-zone, .grid-band")
-    .first()
-    .boundingBox();
-  const y = box.y + Math.min(box.height / 2, 120);
-  for (let i = 0; i <= 12; i += 1) {
-    await page.mouse.move(box.x + 300 + i * 30, y);
-    await page.waitForTimeout(16);
+
+  // A finger first, on the first grid, while nothing is lit yet.
+  await sweep(page, grids.first(), (x, y) =>
+    page.evaluate(
+      ([x, y]) =>
+        document.dispatchEvent(
+          new PointerEvent("pointermove", {
+            pointerType: "touch",
+            clientX: x,
+            clientY: y,
+            bubbles: true,
+          }),
+        ),
+      [x, y],
+    ),
+  );
+  if (await lit(page, 0)) errors.push(`${path}: a finger lights the grid`);
+
+  for (let index = 0; index < count; index += 1) {
+    await sweep(page, grids.nth(index), (x, y) => page.mouse.move(x, y));
+    if (!(await lit(page, index))) {
+      errors.push(`${path}: the mouse lights no line of grid ${index + 1}`);
+    }
   }
-  await page.waitForTimeout(100);
-  if (!(await lit(page))) errors.push(`${path}: the mouse lights no line`);
   await page.close();
 
   const still = await browser.newPage({ reducedMotion: "reduce" });

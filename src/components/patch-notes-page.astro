@@ -107,11 +107,14 @@ const formatDate = (iso: string) => {
   /* The grid of the top runs down over the first versions, then fades out; the veil stays behind
      the title (docs/branding.md, Components, Patch notes). */
   .notes-zone {
+    /* Where the grid has faded out: the canvas of the red fluid stops there, rather than run
+       down the whole timeline, which grows with each version. */
+    --notes-grid-end: 820px;
     --grid-fade: linear-gradient(
       to bottom,
       #000000 0,
       #000000 380px,
-      transparent 820px
+      transparent var(--notes-grid-end)
     );
 
     padding-bottom: var(--band-padding);
@@ -120,6 +123,11 @@ const formatDate = (iso: string) => {
       var(--grid-veil) 55%,
       transparent
     );
+  }
+
+  .notes-zone > :global(.grid-fluid) {
+    bottom: auto;
+    height: var(--notes-grid-end);
   }
 
   .notes-head {
