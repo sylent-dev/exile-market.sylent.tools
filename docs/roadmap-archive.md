@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5h3. The patch notes: mock-up
+
+Pull request: [#35](https://github.com/sylent-dev/exile-market.sylent.tools/pull/35).
+
+The page in `docs/mockups/patch-notes.html`, style « Sober », the number as plain text, the red fluid of sylent.art on the grid; the decisions in `docs/branding.md`. Depends on: 5h2. Tool: mock-up.
+
 ## 5h2. The patch notes: wireframe
 
 Pull request: [#34](https://github.com/sylent-dev/exile-market.sylent.tools/pull/34).

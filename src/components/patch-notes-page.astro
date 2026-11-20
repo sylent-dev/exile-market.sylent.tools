@@ -1,0 +1,347 @@
+---
+// The patch notes, in the language of its route (src/pages/patch-notes.astro,
+// src/pages/fr/notes-de-version.astro), along the timeline of docs/mockups/patch-notes.html:
+// on a computer, the number, the date and the link to the release left of a vertical line, the
+// changes right of it; on a phone, the line on the left and the changes under the number. The
+// notes come from the repository of the application (src/lib/patch-notes.ts), the texts around
+// them from src/content/<lang>/patch-notes.json.
+import en from "../content/en/patch-notes.json";
+import fr from "../content/fr/patch-notes.json";
+import SiteLayout from "../layouts/site-layout.astro";
+import { releases } from "../lib/application";
+import { type Lang, routes } from "../lib/i18n";
+import { patchNotes } from "../lib/patch-notes";
+import { href } from "../lib/url";
+import ExternalLink from "./external-link.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const pages: Record<Lang, typeof en> = { en, fr };
+const page = pages[lang];
+
+const dates: Record<Lang, Intl.DateTimeFormat> = {
+  en: new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }),
+  fr: new Intl.DateTimeFormat("fr-FR", { dateStyle: "long", timeZone: "UTC" }),
+};
+/** « November 19, 2026 » / « 19 novembre 2026 », and « 1er décembre 2026 » in French. */
+const formatDate = (iso: string) => {
+  const text = dates[lang].format(new Date(`${iso}T00:00:00Z`));
+  return lang === "fr" ? text.replace(/^1 /, "1er ") : text;
+};
+---
+
+<SiteLayout
+  lang={lang}
+  page="patchNotes"
+  title={page.title}
+  description={page.description}
+>
+  <div class="grid-zone notes-zone">
+    <div class="wrap notes-head">
+      <a class="notes-back" href={href(routes.home[lang])}>
+        <svg
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M13 8H3M7 4 3 8l4 4"></path>
+        </svg>
+        {page.back}
+      </a>
+      <h1>{page.heading}</h1>
+      <p class="notes-lead" data-one-line>
+        <span class="lead-long">{page.lead}</span>
+        <span class="lead-short">{page.leadShort}</span>
+      </p>
+    </div>
+    <div class="wrap notes-body">
+      <ol class="timeline">
+        {patchNotes[lang].map(({ version, date, changes, translated }) => (
+          <li class="version" id={`v${version}`}>
+            <div class="version-meta">
+              <h2>v{version}</h2>
+              <time datetime={date}>{formatDate(date)}</time>
+              <ExternalLink
+                class="version-files"
+                href={`${releases}/tag/v${version}`}
+                pageLang={lang}
+              >
+                {page.files}
+                <span class="visually-hidden">
+                  {page.filesOf.replace("{version}", version)}
+                </span>
+              </ExternalLink>
+            </div>
+            <div>
+              {!translated && <p class="untranslated">{page.untranslated}</p>}
+              <ul class="changes" lang={translated ? undefined : "en"}>
+                {changes.map(({ kind, text }) => (
+                  <li class="change">
+                    <span
+                      class:list={["tag", { "is-new": kind === "new" }]}
+                      lang={translated ? undefined : lang}
+                    >
+                      {page.tags[kind]}
+                      <span class="visually-hidden">{page.separator}</span>
+                    </span>
+                    <span class="text">{text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</SiteLayout>
+
+<style>
+  /* The grid of the top runs down over the first versions, then fades out; the veil stays behind
+     the title (docs/branding.md, Components, Patch notes). */
+  .notes-zone {
+    /* Where the grid has faded out: the canvas of the red fluid stops there, rather than run
+       down the whole timeline, which grows with each version. */
+    --notes-grid-end: 820px;
+    --grid-fade: linear-gradient(
+      to bottom,
+      #000000 0,
+      #000000 380px,
+      transparent var(--notes-grid-end)
+    );
+
+    padding-bottom: var(--band-padding);
+    background: radial-gradient(
+      760px 300px at 50% 190px,
+      var(--grid-veil) 55%,
+      transparent
+    );
+  }
+
+  .notes-zone > :global(.grid-fluid) {
+    bottom: auto;
+    height: var(--notes-grid-end);
+  }
+
+  .notes-head {
+    padding-block: var(--space-8) var(--space-12);
+  }
+
+  .notes-back {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-bottom: var(--space-8);
+    color: var(--color-text-weak);
+    font-size: var(--size-label);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .notes-back:hover,
+  .notes-back:focus-visible {
+    color: var(--color-text);
+  }
+
+  .notes-back svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  h1 {
+    font-size: var(--size-title);
+    text-transform: uppercase;
+  }
+
+  .notes-lead {
+    margin-top: var(--space-3);
+    color: var(--color-text-weak);
+  }
+
+  /* On a phone, a short lead on one line; the long one from 721 px. */
+  .lead-long {
+    display: none;
+  }
+
+  /* The timeline: a vertical line, a dot per version, the latest filled in white. On a phone, the
+     line runs on the left. */
+  .timeline {
+    --rail: 5px;
+    --dot: 11px;
+
+    position: relative;
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    bottom: 12px;
+    left: var(--rail);
+    width: 1px;
+    background: var(--color-border);
+  }
+
+  .version {
+    position: relative;
+    padding-left: calc(var(--rail) + var(--space-6));
+    scroll-margin-top: var(--space-8);
+  }
+
+  .version + .version {
+    margin-top: var(--space-12);
+  }
+
+  .version::before {
+    content: "";
+    position: absolute;
+    top: 0.62em;
+    left: calc(var(--rail) - var(--dot) / 2 + 0.5px);
+    box-sizing: border-box;
+    width: var(--dot);
+    height: var(--dot);
+    border: 1px solid var(--color-text-faint);
+    border-radius: 50%;
+    background: var(--color-background);
+  }
+
+  .version:first-child::before {
+    border-color: var(--color-text);
+    background: var(--color-text);
+  }
+
+  .version-meta {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-3);
+    align-items: baseline;
+    margin-bottom: var(--space-4);
+  }
+
+  h2 {
+    font-size: var(--size-version);
+    letter-spacing: -0.03em;
+    text-transform: none;
+  }
+
+  time {
+    color: var(--color-text-weak);
+    font-size: var(--size-label);
+  }
+
+  .version-meta :global(.version-files) {
+    flex-basis: 100%;
+    margin-top: var(--space-1);
+    color: var(--color-accent);
+    font-size: var(--size-small);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .version-meta :global(.version-files:hover),
+  .version-meta :global(.version-files:focus-visible) {
+    color: var(--color-text);
+  }
+
+  .untranslated {
+    margin-bottom: var(--space-3);
+    color: var(--color-text-weak);
+    font-size: var(--size-label);
+  }
+
+  .change + .change {
+    margin-top: var(--space-3);
+  }
+
+  /* Small capitals in a box: « New » in white on the deep red, the others in grey on a dark grey
+     (6:1). The separator after the word is read by screen readers only. */
+  .tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: var(--radius-small);
+    background: var(--color-tag);
+    color: var(--color-text-weak);
+    font: 700 var(--size-tag) / 1.6 var(--font-text);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .tag.is-new {
+    background: var(--color-accent-deep);
+    color: var(--color-text);
+  }
+
+  /* On a phone, the text under its tag. */
+  .text {
+    display: block;
+    margin-top: var(--space-1);
+  }
+
+  @media (width >= 721px) {
+    .notes-head {
+      text-align: center;
+    }
+
+    .notes-back {
+      display: flex;
+      width: fit-content;
+      margin-right: auto;
+    }
+
+    .lead-long {
+      display: inline;
+    }
+
+    .lead-short {
+      display: none;
+    }
+
+    .timeline {
+      --meta: 180px;
+      --rail-gap: var(--space-8);
+      --rail: calc(var(--meta) + var(--rail-gap));
+    }
+
+    .version {
+      display: grid;
+      grid-template-columns: var(--meta) 1fr;
+      column-gap: calc(var(--rail-gap) * 2);
+      padding-left: 0;
+    }
+
+    .version-meta {
+      display: block;
+      margin-bottom: 0;
+      text-align: right;
+    }
+
+    time,
+    .version-meta :global(.version-files) {
+      display: block;
+      margin-top: var(--space-1);
+    }
+
+    .change {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      align-items: baseline;
+    }
+
+    .tag {
+      justify-self: start;
+    }
+
+    .text {
+      margin-top: 0;
+    }
+  }
+</style>

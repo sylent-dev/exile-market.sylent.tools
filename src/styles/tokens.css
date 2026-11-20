@@ -44,6 +44,7 @@
   --color-band: #0d0d0d;
   --color-surface: #1a1a1a;
   --color-border: #262626;
+  --color-tag: #262626;
   --color-text: #ffffff;
   --color-text-weak: #a3a3a3;
 
@@ -71,6 +72,11 @@
   --color-veil: #0a0a0aeb;
   --shadow-screen: 0 30px 80px #000000e6;
   --size-lightbox-title: 22px;
+
+  /* The patch notes: the number of a version, its tags, and the link to its files. */
+  --size-version: 24px;
+  --size-tag: 11px;
+  --size-small: 12px;
 
   /* What moves starts fast and slows down: the line around a download button, the cards. */
   --ease-draw: cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -108,11 +114,7 @@
   --grid-image:
     linear-gradient(#ffffff0d 1px, transparent 1px),
     linear-gradient(90deg, #ffffff0d 1px, transparent 1px);
-  --grid-image-lit:
-    linear-gradient(var(--color-accent-deep) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-accent-deep) 1px, transparent 1px);
   --grid-step: 32px;
-  --grid-light-radius: 190px;
   --height-button: 46px;
   --grid-veil: #0a0a0af0;
   --opacity-burst-on-phone: 0.42;

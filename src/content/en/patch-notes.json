@@ -1,0 +1,18 @@
+{
+  "$comment": "The texts of the patch notes page (specs.md, Patch notes). The notes themselves are read from the repository of the application (src/lib/patch-notes.ts); `tags` are the words that lead a change in its notes, shown on the page too, and `separator` follows them for screen readers and a copy of the text only. `filesOf` ends the link to the files of a version for screen readers, so that each link has its own name. `untranslated` never shows in English, where every version has its note.",
+  "title": "Patch notes · Exile Market",
+  "description": "What changed in each version of Exile Market, the Path of Exile 2 price checker.",
+  "heading": "Patch notes",
+  "lead": "What changed in each version of Exile Market.",
+  "leadShort": "What’s new",
+  "back": "Back to the home page",
+  "files": "Files and checksums",
+  "filesOf": " of v{version}",
+  "untranslated": "This version isn’t translated yet.",
+  "separator": ": ",
+  "tags": {
+    "new": "New",
+    "changed": "Changed",
+    "fixed": "Fixed"
+  }
+}

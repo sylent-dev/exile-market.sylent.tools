@@ -11,12 +11,13 @@ This product isn't affiliated with or endorsed by Grinding Gear Games in any way
 - Node.js 24 or later (see `.nvmrc`), npm
 - Python 3, for the skills (wireframes and mock-up server)
 - Firefox, for the headless screenshots of the mock-up
+- The repository of the application cloned beside this one, with its tags, for the patch notes: `git clone https://github.com/sylent-dev/rust-exile-market.git ../rust-exile-market`
 
 ## Development
 
 ```sh
 npm run dev            # http://localhost:4321
-npm run check          # format, lint, build, links and addresses, width, buttons, lightboxes
+npm run check          # format, lint, build, links and addresses, patch notes, width, buttons, lightboxes, fluid
 npm run brand:images   # favicon and preview card, from src/assets/brand/
 ```
 

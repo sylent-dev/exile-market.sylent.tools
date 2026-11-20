@@ -1,11 +1,13 @@
 ---
-// The header of every page: the emblem and the name, which lead to the home page, and the flag of
-// the other language, which links to the same page in that language, without any automatic
-// redirect. The not-found page holds both languages and has no such link.
+// The header of every page: the emblem and the name, which lead to the home page, the number of the
+// latest version, which leads to the patch notes, and the flag of the other language, which links
+// to the same page in that language, without any automatic redirect. The not-found page holds both
+// languages and has neither link.
 import emblem from "../assets/brand/emblem.svg?raw";
 import flagEn from "../assets/flags/en.svg?raw";
 import flagFr from "../assets/flags/fr.svg?raw";
 import { type Lang, otherLang, type PageId, routes, ui } from "../lib/i18n";
+import { latestVersion } from "../lib/patch-notes";
 import { href } from "../lib/url";
 
 interface Props {
@@ -28,6 +30,16 @@ const flags: Record<Lang, string> = { en: flagEn, fr: flagFr };
       </span>
       <span class="site-brand-text">{ui(lang).site.name}</span>
     </a>
+    {page && latestVersion && (
+      <a
+        href={href(routes.patchNotes[lang])}
+        class="site-version"
+        aria-label={ui(lang).patchNotesLink.replace("{version}", latestVersion)}
+        aria-current={page === "patchNotes" ? "page" : undefined}
+      >
+        v{latestVersion}
+      </a>
+    )}
     {page && (
       <a
         href={href(routes[page][other])}
@@ -51,9 +63,14 @@ const flags: Record<Lang, string> = { en: flagEn, fr: flagFr };
 
   .wrap {
     display: flex;
+    gap: var(--space-2);
     align-items: center;
-    justify-content: space-between;
     height: var(--height-header);
+  }
+
+  /* The links that follow it go to the right. */
+  .site-brand {
+    margin-right: auto;
   }
 
   .site-brand :global(svg) {
@@ -77,6 +94,27 @@ const flags: Record<Lang, string> = { en: flagEn, fr: flagFr };
   .site-brand:hover .site-brand-text,
   .site-brand:focus-visible .site-brand-text {
     transform: scale(1.06);
+  }
+
+  /* Plain text, like the flag beside it; 44 px high for a finger (docs/branding.md, Components,
+     Patch notes). */
+  .site-version {
+    display: grid;
+    place-items: center;
+    height: 44px;
+    padding-inline: var(--space-1);
+    color: var(--color-text-weak);
+    font-size: var(--size-label);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .site-version:hover,
+  .site-version:focus-visible,
+  .site-version[aria-current="page"] {
+    color: var(--color-text);
   }
 
   .site-language {

@@ -1,10 +1,15 @@
 # Builds the site and deploys it to GitHub Pages on every push to main, that is when a pull
-# request is merged. From the Astro guide: https://docs.astro.build/en/guides/deploy/github/
+# request is merged, and every night, so that a new version of the application shows on the patch
+# notes the next day at the latest; the button Run workflow publishes it at once (docs/technical-
+# choices.md, Patch notes). From the Astro guide: https://docs.astro.build/en/guides/deploy/github/
 name: Deploy
 
 on:
   push:
     branches: [main]
+  # Every day at 04:17 UTC, off the start of the hour, which GitHub says is the busiest.
+  schedule:
+    - cron: "17 4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -22,6 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # The patch notes are read from the repository of the application, beside this one as on
+      # the owner's computer, with its tags, which tell the versions released (docs/technical-
+      # choices.md, Patch notes); the history comes without the former contents of its files.
+      - run: git clone --quiet --filter=blob:none https://github.com/sylent-dev/rust-exile-market.git ../rust-exile-market
       - uses: withastro/action@v6
         with:
           node-version: 24 # The version of .nvmrc, which the action can't read.
