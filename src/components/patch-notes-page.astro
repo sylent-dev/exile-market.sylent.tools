@@ -74,6 +74,9 @@ const formatDate = (iso: string) => {
                 pageLang={lang}
               >
                 {page.files}
+                <span class="visually-hidden">
+                  {page.filesOf.replace("{version}", version)}
+                </span>
               </ExternalLink>
             </div>
             <div>
@@ -86,6 +89,7 @@ const formatDate = (iso: string) => {
                       lang={translated ? undefined : lang}
                     >
                       {page.tags[kind]}
+                      <span class="visually-hidden">{page.separator}</span>
                     </span>
                     <span class="text">{text}</span>
                   </li>
@@ -216,7 +220,7 @@ const formatDate = (iso: string) => {
   }
 
   h2 {
-    font-size: 24px;
+    font-size: var(--size-version);
     letter-spacing: -0.03em;
     text-transform: none;
   }
@@ -230,7 +234,7 @@ const formatDate = (iso: string) => {
     flex-basis: 100%;
     margin-top: var(--space-1);
     color: var(--color-accent);
-    font-size: calc(var(--size-label) - 2px);
+    font-size: var(--size-small);
     font-weight: 600;
     text-decoration: none;
   }
@@ -251,14 +255,14 @@ const formatDate = (iso: string) => {
   }
 
   /* Small capitals in a box: « New » in white on the deep red, the others in grey on a dark grey
-     (#262626, 6:1). */
+     (6:1). The separator after the word is read by screen readers only. */
   .tag {
     display: inline-block;
     padding: 1px 7px;
     border-radius: var(--radius-small);
-    background: #262626;
+    background: var(--color-tag);
     color: var(--color-text-weak);
-    font: 700 11px / 1.6 var(--font-text);
+    font: 700 var(--size-tag) / 1.6 var(--font-text);
     letter-spacing: 0.07em;
     text-transform: uppercase;
   }

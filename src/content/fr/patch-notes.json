@@ -1,13 +1,15 @@
 {
   "$comment": "Les textes de la page des notes de version, avec les mêmes clés que en/patch-notes.json.",
-  "title": "Notes de version : Exile Market",
+  "title": "Notes de version · Exile Market",
   "description": "Ce qui change à chaque version d’Exile Market, le prix de vos objets dans Path of Exile 2.",
   "heading": "Notes de version",
   "lead": "Ce qui change à chaque version d’Exile Market.",
   "leadShort": "Quoi de neuf ?",
   "back": "Retour à l’accueil",
   "files": "Fichiers et sommes de contrôle",
+  "filesOf": " de la v{version}",
   "untranslated": "Cette version n’est pas encore traduite.",
+  "separator": " : ",
   "tags": {
     "new": "Nouveau",
     "changed": "Modifié",

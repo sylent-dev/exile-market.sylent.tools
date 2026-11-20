@@ -76,4 +76,5 @@ Done in the application's repository, before its tag, and not by a pull request 
 - `v0.1.0` published as a normal release, never a pre-release, since `releases/latest` skips them: confirmed by the owner on 2026-11-13.
 - Its README (step 17d) states the risk for the account with the same words as the page (`specs.md`, The risk for your account), and the audit (step 17e) reads Ctrl + D against the macro rules of the developer documentation.
 - The patch notes of the site (step 5h of this page), one note per version and language in `docs/patch-notes/en/` and `docs/patch-notes/fr/`: done by its pull request 260, merged on 2026-11-19, with the notes of v0.1.0 to v0.2.0; a new note at each release.
+- A check of the format of the patch notes in its CI (front matter, `- **Tag**: text` lines, known tags, a real date), the same as `src/lib/patch-notes.ts` here: a note that doesn't follow it fails the build of this site, and with it the CI of every pull request here (code review of step 5h4a, 2026-11-20).
 - The launch plan is only in Claude Code's memory: write it as a document there, with the steps and without the names of the streamers.

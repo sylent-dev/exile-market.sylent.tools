@@ -39,7 +39,8 @@ The values below are in `src/styles/tokens.css`, taken from the `:root` of the m
 | `--color-background` | `#0a0a0a` | The page. White text on it: 19.8:1. Weak text: 7.9:1. |
 | `--color-band` | `#0d0d0d` | Every other block. |
 | `--color-surface` | `#1a1a1a` | Keys, grey frames. |
-| `--color-border` | `#262626` | Separators. |
+| `--color-border` | `#262626` | Separators, the line of the timeline of the patch notes. |
+| `--color-tag` | `#262626` | The background of the tags « Changed » and « Fixed » of the patch notes, with `--color-text-weak` (6:1). |
 | `--color-text` | `#ffffff` | Main text. |
 | `--color-text-weak` | `#a3a3a3` | Secondary text. |
 | `--color-text-faint` | `#858585` | The text around a link without an underline: 5.3:1 on the page, 3.7:1 against the white link. |
@@ -50,7 +51,7 @@ The values below are in `src/styles/tokens.css`, taken from the `:root` of the m
 
 ## Typography
 
-Two fonts only (owner, 2026-11-06 and 2026-11-08), under the SIL Open Font License: Manrope for everything, titles, text, buttons, keys and commands, which only a heavier weight marks; Cormorant Garamond in italics for the subtitle only. The sizes per role are the `--size-*` tokens of the mock-up. The headline is white, its last words « Its price. » / « Son prix. » in red (owner, 2026-11-06). The section titles are in capitals and keep their accents in French, over a large faded word.
+Two fonts only (owner, 2026-11-06 and 2026-11-08), under the SIL Open Font License: Manrope for everything, titles, text, buttons, keys and commands, which only a heavier weight marks; Cormorant Garamond in italics for the subtitle only. The sizes per role are the `--size-*` tokens of the mock-up; the patch notes add `--size-version` (24 px, the number of a version), `--size-tag` (11 px, its tags) and `--size-small` (12 px, the link to its files). The headline is white, its last words « Its price. » / « Son prix. » in red (owner, 2026-11-06). The section titles are in capitals and keep their accents in French, over a large faded word.
 
 Apostrophe of the titles (owner, 2026-11-09): the straight one (') in the French titles and large sentences set in Manrope, compared on the whole page; the text of the page keeps the typographic one (’), as French typography asks. Manrope has only these two, and replaces a straight one by the curved one through its `calt` feature in a few sequences of lowercase letters (`l'e`, English contractions): a new title with an apostrophe is checked by eye.
 
