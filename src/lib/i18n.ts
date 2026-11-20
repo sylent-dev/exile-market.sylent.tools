@@ -23,6 +23,7 @@ export const ui = (lang: Lang) => texts[lang];
 export const routes = {
   home: { en: "/", fr: "/fr/" },
   legal: { en: "/legal/", fr: "/fr/mentions-legales/" },
+  patchNotes: { en: "/patch-notes/", fr: "/fr/notes-de-version/" },
 } as const satisfies Record<string, Record<Lang, string>>;
 
 export type PageId = keyof typeof routes;

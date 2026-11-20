@@ -15,10 +15,11 @@
     "format:check": "prettier --check .",
     "lint": "astro check && eslint . && stylelint \"**/*.{css,astro}\"",
     "check:links": "linkinator dist && node scripts/check-urls.mjs",
+    "check:notes": "node scripts/check-patch-notes.mjs",
     "check:overflow": "node scripts/check-overflow.mjs",
     "check:buttons": "node scripts/check-button-line.mjs",
     "check:lightbox": "node scripts/check-lightbox.mjs",
-    "check": "npm run format:check && npm run lint && npm run build && npm run check:links && npm run check:overflow && npm run check:buttons && npm run check:lightbox",
+    "check": "npm run format:check && npm run lint && npm run build && npm run check:links && npm run check:notes && npm run check:overflow && npm run check:buttons && npm run check:lightbox",
     "brand:images": "node scripts/brand-images.mjs"
   },
   "dependencies": {

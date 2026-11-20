@@ -1,7 +1,7 @@
 # The checks run before every commit (docs/technical-choices.md, Commands), on every pull
 # request: format, lint, production build, internal links, former URLs, the width of the pages
 # on a phone, the red line of the buttons and the lightboxes, the last three in the Chromium of
-# Playwright.
+# Playwright. The patch notes come from the repository of the application.
 name: CI
 
 on:
@@ -20,6 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # The patch notes are read from the repository of the application, beside this one as on
+      # the owner's computer, with its tags, which tell the versions released (docs/technical-
+      # choices.md, Patch notes); the history comes without the former contents of its files.
+      - run: git clone --quiet --filter=blob:none https://github.com/sylent-dev/rust-exile-market.git ../rust-exile-market
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc

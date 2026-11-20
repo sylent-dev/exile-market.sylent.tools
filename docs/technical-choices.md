@@ -157,13 +157,14 @@ Step 5f for the screens (`src/components/feature-deck.astro`), step 5g for the v
 
 - **Read, not copied** (owner, 2026-11-18): the notes of the page are files of the application's repository, one per version and language, written at its release next to its release notes (`specs.md`, Patch notes). The site reads them at the build: no pull request here at each release, and one source. Rejected: copying them here, which needs a session and a pull request at each release and leaves the page behind the header.
 - **An exception to the place of the content** (`CLAUDE.md`, Language): the notes are texts shown to visitors, yet they live outside `src/content/`. The session of the application writes them with the context of its pull requests, and the same files could one day show what changed inside the application after an update. The French typography of `CLAUDE.md` applies to them there too.
-- **The application at the build**: locally, the folder `../rust-exile-market`; in CI and in the deployment, a second `actions/checkout` of `sylent-dev/rust-exile-market` (public, about 44 MB with its history), with its tags, which give the list of the versions released; the date of each version is in the front matter of its note. The exact paths and the loader of the notes are chosen at step 5h3.
+- **The application at the build** (step 5h4a): the folder `../rust-exile-market`, beside this one, on the owner's computer as in CI and in the deployment, where a step clones it there (`git clone --filter=blob:none`: its history and tags without the former contents of its files, about 5 MB in 2 s). Its tags give the versions released; the date of each version is in the front matter of its note. Rejected: a second `actions/checkout`, which can only write inside the folder of this repository, where Prettier, ESLint and Stylelint would read the application too.
+- **The loader**: `src/lib/patch-notes.ts`, run once at the build, reads the notes and the tags, typesets the French, sorts the changes, and gives the versions to the page and the latest number to the header. A note that doesn't follow the format fails the build, with its name; a version released without its English note is left out with a warning, which GitHub shows on the run of the deployment, and `scripts/check-patch-notes.mjs` fails on it in `npm run check`. It imports only Node and JSON, so that the check runs it as it is, with the types removed by Node.
 - **Rebuilt every night** (owner, 2026-11-18): `deploy.yml` also runs on a `schedule`, a time written in the cron format (`17 4 * * *`: every day at 04:17 UTC), off the start of the hour, which GitHub says is the busiest; its manual button (`workflow_dispatch`) publishes a release at once. Rejected: a signal sent by the release workflow of the application (`repository_dispatch`), faster but which needs a secret token in the application's repository; and reading the notes through the API of GitHub, rate-limited without a token.
 - **The nightly build when nothing changed** publishes the same site again: harmless, and simpler than comparing.
 
 ## Commands
 
-Run `npm ci` first, and `npx playwright install --only-shell chromium` once. They are also in the `scripts` of `package.json`.
+Run `npm ci` first, and `npx playwright install --only-shell chromium` once. The build needs the repository of the application beside this one, `../rust-exile-market`, with its tags (Patch notes). They are also in the `scripts` of `package.json`.
 
 | Command | What it does |
 |---|---|
@@ -174,10 +175,11 @@ Run `npm ci` first, and `npx playwright install --only-shell chromium` once. The
 | `npm run format:check` | Checks the formatting without changing files. |
 | `npm run lint` | `astro check`, ESLint and Stylelint. |
 | `npm run check:links` | linkinator and `scripts/check-urls.mjs` on `dist/` (after `npm run build`). |
+| `npm run check:notes` | Every version released is on both patch notes pages, and every header shows the latest one (after `npm run build`). |
 | `npm run check:overflow` | The width of every page on a phone and a computer (after `npm run build`). |
 | `npm run check:buttons` | The red line of the outlined buttons covers their border under the pointer (after `npm run build`). |
 | `npm run check:lightbox` | The lightboxes of the home page put the page back however they close (after `npm run build`). |
-| `npm run check` | Everything run before a commit and in CI: format, lint, build, links, width, buttons, lightboxes. |
+| `npm run check` | Everything run before a commit and in CI: format, lint, build, links, patch notes, width, buttons, lightboxes. |
 | `npm run brand:images` | The favicon, the iPhone icon and the preview card, from the brand assets. |
 | `python3 docs/mockups/serve.py <port>` | Serves the repository root without cache for the mock-up. The port of this project: `8770`. |
 
