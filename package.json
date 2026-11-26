@@ -24,7 +24,7 @@
     "brand:images": "node scripts/brand-images.mjs"
   },
   "dependencies": {
-    "astro": "^7.4.12",
+    "astro": "^7.4.13",
     "three": "^0.187.0"
   },
   "devDependencies": {
@@ -45,6 +45,6 @@
     "stylelint-config-html": "^2.0.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.72.2"
+    "typescript-eslint": "^8.73.0"
   }
 }
