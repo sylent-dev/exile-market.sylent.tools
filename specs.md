@@ -38,11 +38,13 @@ Download the application. The buttons link straight to the file (`releases/lates
 | Before the tag `v0.1.0` | « Coming soon » / « Bientôt disponible » in a single frame with the shape of the main button, in place of the buttons: a text, never a link to `#` |
 | Windows, Linux, system not detected, or no JavaScript | Two outlined buttons of the same size, side by side, Windows with a white border then Linux with a grey one: this is the HTML of the page, which works alone; the script only replaces them for macOS or a phone |
 | macOS | No button. « Exile Market isn't available on macOS. » / « Exile Market n’est pas disponible sur macOS. » |
-| Phone or tablet | No button. « Exile Market runs on a computer. Open exile-market.sylent.tools on yours. » / « Exile Market s’installe sur un ordinateur. Ouvrez exile-market.sylent.tools sur le vôtre. » The address never breaks on two lines. |
+| Phone or tablet | No button. « Exile Market runs on a computer. Open exile-market.sylent.tools on yours. » / « Exile Market s’installe sur un ordinateur. Ouvrez exile-market.sylent.tools sur le vôtre. » Each sentence on its own line, whole, from a phone of 360 px (owner, 2026-11-28). |
 
 The buttons read « Download for Windows », « Download for Linux » / « Télécharger pour Windows », « Télécharger pour Linux ». The detection must test Android before Linux, since Android also calls itself Linux, and tell an iPad from a Mac by its touch screen.
 
-Under the buttons, one link per line, centered on a computer (owner, 2026-11-08): all the versions and their checksums (the release page), « All versions and checksums » / « Toutes les versions et leurs checksums »: players who know the subject say checksum, not « somme de contrôle »; the risk, « Know the risk for your account » / « Connaître le risque pour votre compte », linked to [that passage](#home-page); then « Why does Windows show an alert? » / « Pourquoi Windows affiche-t-il une alerte ? », linked to that question. On a phone or a tablet, without buttons: the risk, then the versions. They are absent on macOS and before the tag. The page shows no version number nor file size, which it couldn't keep up to date without a change at each release.
+Under the buttons, one link per line, centered (owner, 2026-11-08; on a phone too, like the whole first screen, owner, 2026-11-28): all the versions and their checksums (the release page), « All versions and checksums » / « Toutes les versions et leurs checksums »: players who know the subject say checksum, not « somme de contrôle »; the risk, « Know the risk for your account » / « Connaître le risque pour votre compte », linked to [that passage](#home-page); then « Why does Windows show an alert? » / « Pourquoi Windows affiche-t-il une alerte ? », linked to that question. On a phone or a tablet, without buttons: the risk, then the versions. They are absent on macOS and before the tag. The page shows no version number nor file size, which it couldn't keep up to date without a change at each release.
+
+**Join us on Discord** (owner, 2026-11-28, step 5i): last in the download area, on every system once the downloads are open, a link to the channel `#em-help` of the Discord server « Sylent », the owner's server for their tools of Path of Exile 2 (`https://discord.gg/nYRxbNankS`, an invite that never expires). It comes after the links, since they all belong to the download (the other versions are downloads too, the risk and the alert come before or right after it), and the community comes once the rest is seen. It shows as a message of the server, « Sylent · #em-help » above « Join us on Discord » / « Rejoins-nous sur Discord »; screen readers hear both lines, in that order (`docs/branding.md`, Components). It opens in a new tab. « Rejoins-nous » says « tu », as Discord does: the only French text of the site that does, by the owner's choice, against the « vous » of the rest.
 
 The wording about macOS says what the tool does, not what the game does: Steam lists the game for Windows only (checked on 2026-11-06), but a third-party source speaks of a Mac client, and the standalone client wasn't checked.
 
@@ -60,7 +62,7 @@ The mock-up (`docs/mockups/home-page.html`, approved by the owner on 2026-11-08)
 
 1. **Header**: the logo and the name, the number of the latest version that leads to the [patch notes](#patch-notes), the link to the other language.
 2. **First screen**: the headline, the subtitle, the download area, and a short silent video of the tool at work, the first thing seen.
-   - Everything is centered on a computer, in one column: the headline, the subtitle, the buttons and their links, then the video.
+   - Everything is centered, in one column: the headline, the subtitle, the buttons and their links, then the video; on a phone too, where the video comes before the download area (owner, 2026-11-28: the text on the left there looked odd).
    - The size of the video follows the height of the screen, about 600 × 338 px on a screen of 1280 × 720, with a ceiling on tall screens, so that it stays whole. No video is ever cut by the end of the screen.
    - The video is « The deck » (`docs/branding.md`, Motion): a card with a real unique, Ctrl + D, the card turns over on the real window of the application and its price, a fan of real screens, the name. No image of the game beyond what the window of the tool shows: clause 8 of the terms of Grinding Gear Games covers streams and video sharing sites, not clearly a video hosted on this page.
    - The video has no sound, loops, and plays only when the visitor hasn't asked to reduce motion; otherwise it shows a still image, with a way to play it. It weighs about 3 MB at most (`docs/external-services.md`, GitHub Pages).
@@ -104,7 +106,7 @@ The mock-up (`docs/mockups/home-page.html`, approved by the owner on 2026-11-08)
    The words « developer documentation » link to the official page. The forum reply is cited without a link: its thread names another application in its title.
 
 7. **Help**: a problem goes to GitHub Issues, or to the bug report button of the application.
-8. **Footer**: the legal notice, the source code and its license (`GPL-3.0-or-later` from v0.1), the disclaimer, and the name with « by Sylent » / « par Sylent » under it, a discreet link to sylent.art.
+8. **Footer**: the legal notice, the source code and its license (`GPL-3.0-or-later` from v0.1), « Join us on Discord » / « Rejoins-nous sur Discord » (the link of [Main action](#main-action), as plain text, on every page with a footer), the disclaimer, and the name with « by Sylent » / « par Sylent » under it, a discreet link to sylent.art.
 
 ### Patch notes
 

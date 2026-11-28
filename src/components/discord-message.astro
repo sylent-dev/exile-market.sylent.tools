@@ -1,0 +1,208 @@
+---
+// The link to the Discord server « Sylent », under the links of the download area (specs.md, Main
+// action; docs/branding.md, Components, mock-up docs/mockups/discord-link.html): a message of the
+// server, as in Discord, with the logo of Discord as its avatar and the channel above the words.
+// The logo stays white and whole, as the brand guidelines of Discord ask
+// (docs/external-services.md, Discord). The script of the download area (download-area.astro)
+// plays its entrance once, when it comes into sight: three dots type, then the words, then a red
+// dot as an unread message. Without that script, or with reduced motion, it shows as it ends.
+// The words come in one step per letter, so that the English and the French type alike.
+import logo from "../assets/icons/discord.svg?raw";
+import { discordInvite } from "../lib/application";
+import { type Lang, ui } from "../lib/i18n";
+import ExternalLink from "./external-link.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { discord } = ui(lang);
+---
+
+<ExternalLink class="discord-message" href={discordInvite} pageLang={lang}>
+  <span class="discord-avatar" aria-hidden="true">
+    <Fragment set:html={logo} />
+  </span>
+  <span class="discord-lines">
+    <span class="discord-channel">
+      {discord.channel}
+      <span class="visually-hidden">,</span>
+    </span>
+    <span class="discord-typed">
+      <span class="discord-dots" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <span
+        class="discord-words"
+        data-one-line
+        style={`--letters: ${[...discord.join].length}`}
+      >
+        {discord.join}
+      </span>
+    </span>
+  </span>
+  <span class="discord-unread" aria-hidden="true"></span>
+</ExternalLink>
+
+<style>
+  /* Square, on the dark grey of the cards; its border turns deep red under the pointer or the
+     keyboard focus. ExternalLink draws the link, and Astro gives it the scope of this file. */
+  .discord-message {
+    position: relative;
+    display: inline-flex;
+    gap: var(--space-3);
+    align-items: center;
+    min-height: var(--height-discord);
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-title);
+    line-height: 1.2;
+    text-align: left;
+    text-decoration: none;
+    transition: border-color 0.25s;
+  }
+
+  .discord-message:hover,
+  .discord-message:focus-visible {
+    border-color: var(--color-accent-deep);
+  }
+
+  /* The logo, white on the deep red, as the « New » tags of the patch notes. */
+  .discord-avatar {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--size-discord-avatar);
+    height: var(--size-discord-avatar);
+    background: var(--color-accent-deep);
+    color: var(--color-text);
+  }
+
+  .discord-avatar :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .discord-lines {
+    display: grid;
+    gap: 3px;
+  }
+
+  .discord-channel {
+    color: var(--color-text-faint);
+    font-size: var(--size-small);
+    font-weight: 600;
+  }
+
+  /* The dots and the words share one place: the dots while « typing », then the words. */
+  .discord-typed {
+    display: grid;
+  }
+
+  .discord-typed > * {
+    grid-area: 1 / 1;
+  }
+
+  .discord-words {
+    font-size: var(--size-link-small);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .discord-dots {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    opacity: 0;
+  }
+
+  .discord-dots > span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-text-weak);
+  }
+
+  .discord-unread {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-background);
+  }
+
+  /* The entrance, once seen: the dots type for 2.1 s, the words come letter by letter in 0.9 s,
+     then the red dot. */
+  .discord-message.is-in .discord-dots {
+    animation: discord-dots-show 2.1s steps(1) both;
+  }
+
+  .discord-message.is-in .discord-dots > span {
+    animation: discord-dot 0.6s ease-in-out 4 alternate;
+  }
+
+  .discord-message.is-in .discord-dots > span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .discord-message.is-in .discord-dots > span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .discord-message.is-in .discord-words {
+    animation: discord-type 0.9s steps(var(--letters)) 2.1s both;
+  }
+
+  .discord-message.is-in .discord-unread {
+    animation: discord-unread 0.4s var(--ease-bounce) 3.1s both;
+  }
+
+  /* Waiting out of sight, the message shows its avatar and its channel only. Never on paper,
+     where words not seen yet would be missing. */
+  @media screen {
+    .discord-message.is-waiting:not(.is-in) .discord-words {
+      clip-path: inset(0 100% 0 0);
+    }
+
+    .discord-message.is-waiting:not(.is-in) .discord-unread {
+      transform: scale(0);
+    }
+  }
+
+  @keyframes discord-dots-show {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes discord-dot {
+    to {
+      opacity: 0.4;
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes discord-type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+
+  @keyframes discord-unread {
+    from {
+      transform: scale(0);
+    }
+  }
+</style>

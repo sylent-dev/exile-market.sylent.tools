@@ -12,6 +12,8 @@ What is noted and not being done: an evolving list, read when the next work is c
 
 - A new shape for the emblem, for a stronger identity than a new color alone: too long and uncertain before the tag, so step 4g keeps the current shape (owner, 2026-11-09). Depends on: the feedback after v0.1. Noted on 2026-11-09.
 
+- The help block of the home page (« A problem? Open an issue on GitHub, or use the « Report a bug » button of the application. ») could name the channel `#em-help` of the Discord server too, since it is there for help. Kind: a text. Depends on: step 5i, and how much help comes through Discord. Noted on 2026-11-28.
+
 - The screens of the deck zoomed with two fingers on a phone: the largest image served is 520 px wide, a little soft once zoomed; a larger one would weigh on every phone. Kind: a small touch. Depends on: players saying so. Noted on 2026-11-16.
 
 ## Edge cases
@@ -42,6 +44,8 @@ What is noted and not being done: an evolving list, read when the next work is c
 - Move the build to Node.js 26 LTS: `.nvmrc`, `engines`, `node-version` in `deploy.yml`, `@types/node` 26 and `docs/technical-choices.md`. Cost: one small pull request, about an hour with the checks. Node.js 24 is supported until 2028-04-30, so nothing urgent. If Dependabot proposes `@types/node` 25, post `@dependabot ignore this major version`: Node.js 25 is no longer maintained. Depends on: the launch of 2026-12-11, not to change the build just before it. Noted on 2026-11-06.
 - Move to TypeScript 7 once the tools accept it, by hand since Dependabot ignores the 7.x line: `typescript` 7.1 or later, `typescript-eslint` with its support, and `tsc` with `@astrojs/ts-content-mapper` in place of `astro check`. Cost: about half a day (dependencies, `npm run lint`, the editor, `docs/technical-choices.md`), for little gain on a site this small. Depends on: a stable TypeScript 7.1, and the support of typescript-eslint and Astro. Noted on 2026-11-06.
 - Move to Stylelint 18 and `stylelint-config-standard` 41 together, by hand: each needs the other, so the two pull requests of Dependabot failed at `npm ci` one without the other (#19 and #20, closed by the owner on 2026-11-14). Installed together, they pass every check without changing `.stylelintrc.json`. Add a `stylelint` group to `.github/dependabot.yml` in the same pull request, so that their next major versions come as one pull request. Cost: one small pull request, about 30 minutes. Depends on: nothing. Noted on 2026-11-14.
+
+- An invite to Discord that dies goes unnoticed: linkinator skips the links to other sites, so a deleted invite or server would turn the link of the home page and the footer into a dead end. The scheduled nightly build could ask the public API of Discord (`https://discord.com/api/v10/invites/<code>`) and fail unless it answers 200, a call from CI without any data of a visitor; never in `npm run check`, where a call over the network would make the local check and the pull requests fragile. Kind: a check. Depends on: nothing; the owner manages the server. Noted on 2026-11-28 (code review of step 5i).
 
 ## Waiting on others
 
