@@ -143,8 +143,10 @@ const { lang, texts } = Astro.props;
     font-weight: 600;
   }
 
+  /* Below 360 px, the longer sentence takes two lines: balanced, never a word left alone. */
   .download-message > span {
     display: block;
+    text-wrap: balance;
   }
 
   .download-address {
@@ -157,7 +159,7 @@ const { lang, texts } = Astro.props;
     gap: var(--space-1);
     justify-items: center;
     font-family: var(--font-title);
-    font-size: 13px;
+    font-size: var(--size-link-small);
     font-weight: 700;
     line-height: 1.3;
     text-shadow: var(--shadow-on-grid);

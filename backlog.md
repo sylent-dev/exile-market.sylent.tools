@@ -45,6 +45,8 @@ What is noted and not being done: an evolving list, read when the next work is c
 - Move to TypeScript 7 once the tools accept it, by hand since Dependabot ignores the 7.x line: `typescript` 7.1 or later, `typescript-eslint` with its support, and `tsc` with `@astrojs/ts-content-mapper` in place of `astro check`. Cost: about half a day (dependencies, `npm run lint`, the editor, `docs/technical-choices.md`), for little gain on a site this small. Depends on: a stable TypeScript 7.1, and the support of typescript-eslint and Astro. Noted on 2026-11-06.
 - Move to Stylelint 18 and `stylelint-config-standard` 41 together, by hand: each needs the other, so the two pull requests of Dependabot failed at `npm ci` one without the other (#19 and #20, closed by the owner on 2026-11-14). Installed together, they pass every check without changing `.stylelintrc.json`. Add a `stylelint` group to `.github/dependabot.yml` in the same pull request, so that their next major versions come as one pull request. Cost: one small pull request, about 30 minutes. Depends on: nothing. Noted on 2026-11-14.
 
+- An invite to Discord that dies goes unnoticed: linkinator skips the links to other sites, so a deleted invite or server would turn the link of the home page and the footer into a dead end. The scheduled nightly build could ask the public API of Discord (`https://discord.com/api/v10/invites/<code>`) and fail unless it answers 200, a call from CI without any data of a visitor; never in `npm run check`, where a call over the network would make the local check and the pull requests fragile. Kind: a check. Depends on: nothing; the owner manages the server. Noted on 2026-11-28 (code review of step 5i).
+
 ## Waiting on others
 
 ## Explorations kept

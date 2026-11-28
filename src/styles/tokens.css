@@ -35,6 +35,9 @@
   --size-brand: 17px;
   --size-body: 16px;
   --size-label: 14px;
+
+  /* The links under the download buttons, and the words of the Discord link under them. */
+  --size-link-small: 13px;
   --line-body: 1.55;
   --line-title: 1.15;
 

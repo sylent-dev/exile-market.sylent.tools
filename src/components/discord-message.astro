@@ -6,6 +6,7 @@
 // (docs/external-services.md, Discord). The script of the download area (download-area.astro)
 // plays its entrance once, when it comes into sight: three dots type, then the words, then a red
 // dot as an unread message. Without that script, or with reduced motion, it shows as it ends.
+// The words come in one step per letter, so that the English and the French type alike.
 import logo from "../assets/icons/discord.svg?raw";
 import { discordInvite } from "../lib/application";
 import { type Lang, ui } from "../lib/i18n";
@@ -34,7 +35,11 @@ const { discord } = ui(lang);
         <span></span>
         <span></span>
       </span>
-      <span class="discord-words" data-one-line>
+      <span
+        class="discord-words"
+        data-one-line
+        style={`--letters: ${[...discord.join].length}`}
+      >
         {discord.join}
       </span>
     </span>
@@ -44,14 +49,14 @@ const { discord } = ui(lang);
 
 <style>
   /* Square, on the dark grey of the cards; its border turns deep red under the pointer or the
-     keyboard focus. The link is drawn by ExternalLink, out of the scope of this file. */
-  :global(.discord-message) {
+     keyboard focus. ExternalLink draws the link, and Astro gives it the scope of this file. */
+  .discord-message {
     position: relative;
     display: inline-flex;
     gap: var(--space-3);
     align-items: center;
     min-height: var(--height-discord);
-    padding: 6px var(--space-4) 6px var(--space-2);
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
     color: var(--color-text);
@@ -62,8 +67,8 @@ const { discord } = ui(lang);
     transition: border-color 0.25s;
   }
 
-  :global(.discord-message:hover),
-  :global(.discord-message:focus-visible) {
+  .discord-message:hover,
+  .discord-message:focus-visible {
     border-color: var(--color-accent-deep);
   }
 
@@ -104,7 +109,7 @@ const { discord } = ui(lang);
   }
 
   .discord-words {
-    font-size: 13px;
+    font-size: var(--size-link-small);
     font-weight: 700;
     white-space: nowrap;
   }
@@ -134,39 +139,42 @@ const { discord } = ui(lang);
     box-shadow: 0 0 0 3px var(--color-background);
   }
 
-  /* The entrance, once seen: the dots type for 1.8 s, the words come letter by letter, then the
-     red dot. */
-  :global(.discord-message.is-in) .discord-dots {
-    animation: discord-dots-show 1.8s steps(1) 0.3s both;
+  /* The entrance, once seen: the dots type for 2.1 s, the words come letter by letter in 0.9 s,
+     then the red dot. */
+  .discord-message.is-in .discord-dots {
+    animation: discord-dots-show 2.1s steps(1) both;
   }
 
-  :global(.discord-message.is-in) .discord-dots > span {
+  .discord-message.is-in .discord-dots > span {
     animation: discord-dot 0.6s ease-in-out 4 alternate;
   }
 
-  :global(.discord-message.is-in) .discord-dots > span:nth-child(2) {
+  .discord-message.is-in .discord-dots > span:nth-child(2) {
     animation-delay: 0.2s;
   }
 
-  :global(.discord-message.is-in) .discord-dots > span:nth-child(3) {
+  .discord-message.is-in .discord-dots > span:nth-child(3) {
     animation-delay: 0.4s;
   }
 
-  :global(.discord-message.is-in) .discord-words {
-    animation: discord-type 0.9s steps(24) 2.1s both;
+  .discord-message.is-in .discord-words {
+    animation: discord-type 0.9s steps(var(--letters)) 2.1s both;
   }
 
-  :global(.discord-message.is-in) .discord-unread {
+  .discord-message.is-in .discord-unread {
     animation: discord-unread 0.4s var(--ease-bounce) 3.1s both;
   }
 
-  /* Waiting out of sight, the message shows its avatar and its channel only. */
-  :global(.discord-message.is-waiting:not(.is-in)) .discord-words {
-    clip-path: inset(0 100% 0 0);
-  }
+  /* Waiting out of sight, the message shows its avatar and its channel only. Never on paper,
+     where words not seen yet would be missing. */
+  @media screen {
+    .discord-message.is-waiting:not(.is-in) .discord-words {
+      clip-path: inset(0 100% 0 0);
+    }
 
-  :global(.discord-message.is-waiting:not(.is-in)) .discord-unread {
-    transform: scale(0);
+    .discord-message.is-waiting:not(.is-in) .discord-unread {
+      transform: scale(0);
+    }
   }
 
   @keyframes discord-dots-show {
