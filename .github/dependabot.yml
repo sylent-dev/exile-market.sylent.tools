@@ -1,5 +1,7 @@
 # Weekly pull requests to update the npm packages and the GitHub Actions; the minor and patch
-# updates of npm come grouped in one pull request.
+# updates of npm come grouped in one pull request, and every update of Stylelint, its configs and
+# postcss-html comes in a pull request of its own, all together, since a major version of one may
+# need the same of another.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -7,6 +9,12 @@ updates:
     schedule:
       interval: weekly
     groups:
+      stylelint:
+        patterns:
+          - stylelint
+          - stylelint-config-standard
+          - stylelint-config-html
+          - postcss-html
       npm-minor:
         update-types: [minor, patch]
   - package-ecosystem: github-actions
