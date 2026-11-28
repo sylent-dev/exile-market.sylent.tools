@@ -1,10 +1,13 @@
 ---
 // The main action of the page. The HTML holds the two buttons, which work alone; a small script
 // only replaces them for macOS or a phone (specs.md, Main action). It runs right after the block,
-// before the first paint, so that a phone never sees the buttons appear then leave.
+// before the first paint, so that a phone never sees the buttons appear then leave. Last, on every
+// system, the link to Discord (discord-message.astro), whose entrance the same script plays once
+// it comes into sight: set before the first paint, its waiting state never flashes.
 import type en from "../content/en/home.json";
 import { downloads, downloadsOpen, releases } from "../lib/application";
 import type { Lang } from "../lib/i18n";
+import DiscordMessage from "./discord-message.astro";
 import ExternalLink from "./external-link.astro";
 import OutlineButton from "./outline-button.astro";
 
@@ -38,16 +41,19 @@ const { lang, texts } = Astro.props;
           <a href="#windows-alert">{texts.alert}</a>
         </li>
       </ul>
+      <DiscordMessage lang={lang} />
       <template data-system="macos">
         <p class="download-message">{texts.macos}</p>
+        <DiscordMessage lang={lang} />
       </template>
       <template data-system="phone">
         <p class="download-message">
-          {texts.phone.before}{" "}
-          <span class="download-address" data-one-line>
-            {texts.phone.address}
-          </span>{" "}
-          {texts.phone.after}
+          <span data-one-line="360">{texts.phone.computer}</span>{" "}
+          <span data-one-line="360">
+            {texts.phone.before}{" "}
+            <span class="download-address">{texts.phone.address}</span>{" "}
+            {texts.phone.after}
+          </span>
         </p>
         <ul class="download-links">
           <li>
@@ -59,6 +65,7 @@ const { lang, texts } = Astro.props;
             </ExternalLink>
           </li>
         </ul>
+        <DiscordMessage lang={lang} />
       </template>
     </div>
     <script is:inline>
@@ -74,6 +81,23 @@ const { lang, texts } = Astro.props;
         const area = document.currentScript.previousElementSibling;
         const template = area.querySelector(`[data-system="${system}"]`);
         if (template) area.replaceChildren(template.content);
+
+        const message = area.querySelector(".discord-message");
+        const still = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        if (message && !still && "IntersectionObserver" in window) {
+          message.classList.add("is-waiting");
+          const watch = new IntersectionObserver(
+            ([entry]) => {
+              if (!entry?.isIntersecting) return;
+              message.classList.add("is-in");
+              watch.disconnect();
+            },
+            { threshold: 0.6 },
+          );
+          watch.observe(message);
+        }
       }
     </script>
   </>
@@ -114,9 +138,13 @@ const { lang, texts } = Astro.props;
     white-space: nowrap;
   }
 
+  /* On a phone, one sentence per line (owner, 2026-11-28). */
   .download-message {
-    max-width: 27.5em;
     font-weight: 600;
+  }
+
+  .download-message > span {
+    display: block;
   }
 
   .download-address {
@@ -164,9 +192,20 @@ const { lang, texts } = Astro.props;
       grid-template-columns: 1fr;
     }
 
+    /* At 14 px, the longer sentence, the French one, holds on one line from 344 px; at 16 px it
+       needed 391 px (owner, 2026-11-28). */
+    .download-message {
+      font-size: var(--size-label);
+    }
+
     .download-links {
       gap: var(--space-2);
-      justify-items: start;
+    }
+
+    /* The link to Discord, centered as on a computer, as far below the links. */
+    .download > :global(.discord-message) {
+      align-self: center;
+      margin-top: calc(var(--download-rhythm) - var(--space-2));
     }
   }
 </style>

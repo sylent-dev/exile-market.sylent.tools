@@ -21,3 +21,8 @@ export const donationPage = "https://ko-fi.com/sylentdev";
 // The banner above the header links to it while this is true (docs/external-services.md, Legal
 // notice, for the notice it calls for).
 export const donationsOpen: boolean = true;
+
+// The Discord server « Sylent », the owner's server for their tools of Path of Exile 2: an invite to
+// its channel #em-help that never expires (checked on 2026-11-28; docs/external-services.md,
+// Discord). The download area and the footer link to it.
+export const discordInvite = "https://discord.gg/nYRxbNankS";

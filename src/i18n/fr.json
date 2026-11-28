@@ -13,6 +13,10 @@
     "free": "Exile Market est gratuit.",
     "support": "Soutenez-le sur Ko-fi"
   },
+  "discord": {
+    "join": "Rejoins-nous sur Discord",
+    "channel": "Sylent · #em-help"
+  },
   "footer": {
     "legal": "Mentions légales",
     "sourceCode": "Code source",

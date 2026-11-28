@@ -289,19 +289,15 @@ const page = pages[lang];
     }
   }
 
+  /* On a phone, the first screen stays centered, as on a computer (owner, 2026-11-28); the video
+     takes the whole width. */
   @media (width <= 720px) {
     .hero {
       align-items: stretch;
-      text-align: left;
-    }
-
-    h1 {
-      text-wrap: pretty;
     }
 
     .hero-subtitle {
       max-width: none;
-      text-wrap: pretty;
     }
 
     .band-statement {

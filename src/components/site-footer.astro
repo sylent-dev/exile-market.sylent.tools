@@ -1,8 +1,9 @@
 ---
-// The footer of every page: the legal notice, the source code, its license and the disclaimer
+// The footer of every page: the legal notice, the source code, its license, the Discord server
+// (as plain text, like the other links: the logo stays by the downloads), and the disclaimer
 // asked by the developer documentation of Grinding Gear Games, then the name and the author. The
 // not-found page, which holds both languages and has no twin, keeps only the name and the author.
-import { repository } from "../lib/application";
+import { discordInvite, repository } from "../lib/application";
 import { type Lang, type PageId, routes, ui } from "../lib/i18n";
 import ExternalLink from "./external-link.astro";
 import { href } from "../lib/url";
@@ -35,6 +36,11 @@ const texts = ui(lang);
               pageLang={lang}
             >
               {texts.footer.license}
+            </ExternalLink>
+          </li>
+          <li>
+            <ExternalLink href={discordInvite} pageLang={lang}>
+              {texts.discord.join}
             </ExternalLink>
           </li>
         </ul>

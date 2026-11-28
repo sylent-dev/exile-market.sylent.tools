@@ -85,6 +85,14 @@ Chosen by step 18 of the application (`../rust-exile-market/docs/technical-choic
 - Ko-fi takes no fee on one-off donations; Stripe takes its card fee.
 - **For this site**: a plain link, without a Ko-fi script, button image or widget, so the site loads nothing from Ko-fi and sends it nothing before the click; the notice of the statistics stays true.
 
+## Discord (the community)
+
+The server « Sylent », the owner's server for their tools of Path of Exile 2, set up from the guide written in the application's repository on 2026-11-26. Its brand guidelines read on 2026-11-28 at [discord.com/branding](https://discord.com/branding).
+
+- **The invite** `https://discord.gg/nYRxbNankS` leads to the channel `#em-help` and never expires (its `expires_at` is empty in the public API of invites, checked on 2026-11-28). If it is deleted, or the server is, the link of the download area and of the footer leads nowhere: change it in `src/lib/application.ts` (`discordInvite`). Linkinator skips the links to other sites, so no check sees it.
+- **The logo**: « Feel free to use our logo in color, black or white », and « Please do not edit, change, distort, recolor, or reconfigure the Discord logo ». The marks may be used to say that one has a Discord server, without implying that Discord sponsors it. So the logo of the site is white, whole, on a red square that is the site's own, never red itself nor faded; it moves only as one piece. Its drawing comes from Simple Icons (CC0), `src/assets/icons/discord.svg`.
+- **For this site**: a plain link, without a widget of the server nor a call to its API, so the site loads nothing from Discord and sends it nothing before the click; the notice of the statistics stays true.
+
 ## GitHub Actions (nightly build)
 
 Source: [Events that trigger workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows) (schedule) and [Disabling and enabling a workflow](https://docs.github.com/en/actions/managing-workflow-runs-and-deployments/managing-workflow-runs/disabling-and-enabling-a-workflow), read on 2026-11-18. The minutes are free for a public repository.

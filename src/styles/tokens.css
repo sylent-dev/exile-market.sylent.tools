@@ -78,10 +78,18 @@
   --size-tag: 11px;
   --size-small: 12px;
 
+  /* The link to Discord under the download area: a message of the server, as high as a finger
+     needs, its avatar the logo of Discord. */
+  --height-discord: 44px;
+  --size-discord-avatar: 30px;
+
   /* What moves starts fast and slows down: the line around a download button, the cards. */
   --ease-draw: cubic-bezier(0.215, 0.61, 0.355, 1);
   --draw-in: 0.7s var(--ease-draw);
   --draw-out: 0.25s ease-out;
+
+  /* What lands goes a little past its place, then comes back: the red dot of the Discord link. */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* The tilt of the video under the pointer: how far the eye stands, and how fast it follows. */
   --tilt-depth: 1100px;

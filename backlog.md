@@ -12,6 +12,8 @@ What is noted and not being done: an evolving list, read when the next work is c
 
 - A new shape for the emblem, for a stronger identity than a new color alone: too long and uncertain before the tag, so step 4g keeps the current shape (owner, 2026-11-09). Depends on: the feedback after v0.1. Noted on 2026-11-09.
 
+- The help block of the home page (« A problem? Open an issue on GitHub, or use the « Report a bug » button of the application. ») could name the channel `#em-help` of the Discord server too, since it is there for help. Kind: a text. Depends on: step 5i, and how much help comes through Discord. Noted on 2026-11-28.
+
 - The screens of the deck zoomed with two fingers on a phone: the largest image served is 520 px wide, a little soft once zoomed; a larger one would weigh on every phone. Kind: a small touch. Depends on: players saying so. Noted on 2026-11-16.
 
 ## Edge cases

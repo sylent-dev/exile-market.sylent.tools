@@ -12,7 +12,8 @@
     "soon": "Coming soon",
     "macos": "Exile Market isn’t available on macOS.",
     "phone": {
-      "before": "Exile Market runs on a computer. Open",
+      "computer": "Exile Market runs on a computer.",
+      "before": "Open",
       "address": "exile-market.sylent.tools",
       "after": "on yours."
     },

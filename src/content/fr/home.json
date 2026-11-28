@@ -12,7 +12,8 @@
     "soon": "Bientôt disponible",
     "macos": "Exile Market n’est pas disponible sur macOS.",
     "phone": {
-      "before": "Exile Market s’installe sur un ordinateur. Ouvrez",
+      "computer": "Exile Market s’installe sur un ordinateur.",
+      "before": "Ouvrez",
       "address": "exile-market.sylent.tools",
       "after": "sur le vôtre."
     },
