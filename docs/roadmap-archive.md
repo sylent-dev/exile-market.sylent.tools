@@ -2,6 +2,12 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5i. Join us on Discord
+
+Pull request: [#41](https://github.com/sylent-dev/exile-market.sylent.tools/pull/41).
+
+A link to the channel `#em-help` of the Discord server « Sylent », the owner's server for their tools of Path of Exile 2 (invite checked on 2026-11-28), last in the download area as a message of the server (mock-up `docs/mockups/discord-link.html`, variant « P2 · Message », owner, 2026-11-28), and as plain text in the footer, « Join us on Discord » / « Rejoins-nous sur Discord »; on a phone, each sentence of the message that replaces the buttons on its own line; before Path of Exile 2 1.0 (2026-12-11). Pathweaver gets the same link afterwards, in its own repository (owner, 2026-11-26). Tools: mock-up, specifications, build, code review.
+
 ## 5h4. The patch notes: the page
 
 Pull request: [#36](https://github.com/sylent-dev/exile-market.sylent.tools/pull/36).
