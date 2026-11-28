@@ -19,7 +19,7 @@ The technical choices of the [roadmap](../roadmap.md), with their reasons and th
 | Audience measurement | [GoatCounter](https://www.goatcounter.com/), pinned script | No cookie, no banner, as on sylent.art. See [external-services.md](external-services.md#goatcounter-audience-measurement). |
 | Deployment | GitHub Actions (`.github/workflows/deploy.yml`) on every push to `main`, with `withastro/action` and `actions/deploy-pages` | A merged pull request is deployed without a manual step. See [Deployment](#deployment). |
 | Checks in CI | GitHub Actions (`.github/workflows/ci.yml`) on every pull request | Runs `npm run check`, the same command as before a commit. |
-| Updates | Dependabot (`.github/dependabot.yml`), weekly | npm packages (minor and patch grouped) and GitHub Actions. The `dependency-reviewer` subagent reads its pull requests on demand and recommends, for each, to merge or to set aside (kept on 2026-10-31 to see how it works, before deciding between it and manual updates with security alerts only). |
+| Updates | Dependabot (`.github/dependabot.yml`), weekly | npm packages (minor and patch grouped; Stylelint and `stylelint-config-standard` grouped apart, every update type, since each major version of one needs the same of the other: Dependabot's separate pull requests failed at `npm ci`, #19 and #20, #38 and #39) and GitHub Actions. The `dependency-reviewer` subagent reads its pull requests on demand and recommends, for each, to merge or to set aside (kept on 2026-10-31 to see how it works, before deciding between it and manual updates with security alerts only). |
 
 Rejected:
 
