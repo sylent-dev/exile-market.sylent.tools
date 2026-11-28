@@ -2,6 +2,16 @@
 
 The detail of the steps of [roadmap.md](../roadmap.md) whose pull request is merged, the most recent first. `roadmap.md` keeps one line per step done.
 
+## 5h4. The patch notes: the page
+
+Pull request: [#36](https://github.com/sylent-dev/exile-market.sylent.tools/pull/36).
+
+The notes of the application read at build time (only the released versions, the French typography, the line of a version not translated yet), `/patch-notes/` and `/fr/notes-de-version/` along the timeline of the mock-up, the number of the latest version in the header, the application cloned in CI and in the deployment, the nightly build, the red fluid of sylent.art on every grid of the site in place of the red light, and their checks. Split in two on 2026-11-20, then the fluid brought back into the pull request of the page by the owner the same day, who wanted it on the page at once. Depends on: 5h3. Tools: build, code review.
+
+## 5h. The patch notes
+
+A page with the notes of each version of the application, in both languages, before Path of Exile 2 1.0 (2026-12-11); chosen from the backlog by the owner on 2026-11-18. A new page type with new addresses, so four steps: 5h1 to 5h4, below.
+
 ## 5h3. The patch notes: mock-up
 
 Pull request: [#35](https://github.com/sylent-dev/exile-market.sylent.tools/pull/35).
